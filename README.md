@@ -1,5 +1,13 @@
 ## Prerequisites
 
+you must have npm installed
+
+install packages:
+
+```shell
+npm install
+```
+
 use git hook:
 
 ```shell
