@@ -1,5 +1,3 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
 ## Prerequisites
 
 use git hook:
@@ -8,17 +6,9 @@ use git hook:
 npx husky init
 ```
 
-use git hook
+## About project
 
-```shell
-git config core.hooksPath '.git-hooks'
-```
-
-Verify right hook directory:
-
-```shell
-git rev-parse --git-path hooks
-```
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
 
