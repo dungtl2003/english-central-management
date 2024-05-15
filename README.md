@@ -8,6 +8,14 @@ install packages:
 npm install
 ```
 
+in clerk's session token, add:
+
+```json
+{
+	"metadata": "{{user.public_metadata}}"
+}
+```
+
 ## About project
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
