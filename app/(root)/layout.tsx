@@ -6,22 +6,16 @@ const MainLayout: React.FC<{children: React.ReactNode}> = ({
 }): ReactElement => {
     return (
         <div className="relative z-0 h-full flex flex-col">
-            <nav className="fixed w-full h-14 p-4 border-b shadow-sm flex items-center">
+            <nav className="fixed w-full h-18 p-4 border-b shadow-sm flex items-center">
                 <div className="ml-auto flex items-center gap-x-2">
                     <UserButton
                         afterSignOutUrl="/"
                         appearance={{
-                            elements: {
-                                avatarBox: {
-                                    height: 30,
-                                    width: 30,
-                                },
-                            },
+                            elements: {avatarBox: {height: 55, width: 55}},
                         }}
                     />
                 </div>
             </nav>
-            This is main layout
             {children}
         </div>
     );
