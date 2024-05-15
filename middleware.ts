@@ -24,7 +24,9 @@ export default clerkMiddleware(
     (auth, req) => {
         const jwt: UserJwtSessionClaims | null = auth().sessionClaims;
         const role: string | null =
-            jwt && jwt!.metadata!.role ? jwt!.metadata!.role : null;
+            jwt && jwt!.metadata && jwt!.metadata!.role
+                ? jwt!.metadata!.role
+                : null;
 
         //if the user isn't authenticated
         if (!auth().userId && isProtectedRoute(req)) {
