@@ -1,9 +1,16 @@
-export default function Home() {
+import {ReactElement} from "react";
+
+const HomeLayout: React.FC = (): ReactElement => {
     return (
-        <main className="flex min-h-screen flex-col items-center justify-between p-24">
-            <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-                This is home page
-            </div>
-        </main>
+        <div className="relative z-0 h-full flex flex-col">
+            <nav className="fixed w-full h-18 p-4 border-b shadow-sm flex items-center">
+                <div className="ml-auto flex items-center gap-x-2">
+                    <a href="/sign-in">Sign in</a> /{" "}
+                    <a href="/sign-up">Sign up</a>
+                </div>
+            </nav>
+        </div>
     );
-}
+};
+
+export default HomeLayout;
