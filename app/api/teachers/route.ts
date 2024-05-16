@@ -8,7 +8,7 @@ export async function GET(req: Request) {
     console.log("GET ", req.url);
 
     try {
-        await authHandler([UserRole.admin, UserRole.teacher]);
+        await authHandler([UserRole.ADMIN, UserRole.TEACHER]);
     } catch (error) {
         console.log("Error: ", (<Error>error).message);
         return new NextResponse((<Error>error).message, {status: 401});

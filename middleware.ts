@@ -22,7 +22,7 @@ const isProtectedRoute = (req: NextRequest): boolean => {
 export default clerkMiddleware(
     (auth, req) => {
         const jwt: UserJwtSessionClaims | null = auth().sessionClaims;
-        const role: string | null = jwt?.metadata?.role ?? null;
+        const role: string | null = jwt?.metadata?.role.toUpperCase() ?? null;
 
         //if the user isn't authenticated
         if (!auth().userId && isProtectedRoute(req)) {
@@ -32,16 +32,16 @@ export default clerkMiddleware(
         //user doesn't have right permission
         //the user must have signed in in order to try to access protected routes,
         //no need to check userId
-        if (role !== UserRole.admin && isAdminProtectedRoute(req)) {
+        if (role !== UserRole.ADMIN && isAdminProtectedRoute(req)) {
             return NextResponse.redirect(new URL("/404", req.url));
         }
-        if (role !== UserRole.teacher && isTeacherProtectedRoute(req)) {
+        if (role !== UserRole.TEACHER && isTeacherProtectedRoute(req)) {
             return NextResponse.redirect(new URL("/404", req.url));
         }
-        if (role !== UserRole.student && isStudentProtectedRoute(req)) {
+        if (role !== UserRole.STUDENT && isStudentProtectedRoute(req)) {
             return NextResponse.redirect(new URL("/404", req.url));
         }
-        if (role !== UserRole.parent && isParentProtectedRoute(req)) {
+        if (role !== UserRole.PARENT && isParentProtectedRoute(req)) {
             return NextResponse.redirect(new URL("/404", req.url));
         }
 
@@ -63,16 +63,16 @@ function skipHomePage(
     req: NextRequest
 ): NextResponse<unknown> | null {
     switch (role) {
-        case UserRole.admin:
+        case UserRole.ADMIN:
             req.nextUrl.pathname = `/admins/${userId}`;
             break;
-        case UserRole.teacher:
+        case UserRole.TEACHER:
             req.nextUrl.pathname = `/teachers/${userId}`;
             break;
-        case UserRole.student:
+        case UserRole.STUDENT:
             req.nextUrl.pathname = `/students/${userId}`;
             break;
-        case UserRole.parent:
+        case UserRole.PARENT:
             req.nextUrl.pathname = `/parents/${userId}`;
             break;
         default:
