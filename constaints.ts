@@ -1,9 +1,4 @@
-export enum UserRole {
-    ADMIN = "admin",
-    TEACHER = "teacher",
-    STUDENT = "student",
-    PARENT = "parent",
-}
+import {UserRole} from "@prisma/client";
 
 export interface UserJwtSessionClaims extends CustomJwtSessionClaims {
     metadata?: {

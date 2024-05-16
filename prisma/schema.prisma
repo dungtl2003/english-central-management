@@ -13,6 +13,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+    admin
+    teacher
+    student
+    parent
+}
+
+enum TeacherStatus {
+    pending
+}
+
 model User {
     id String @id @db.Uuid @default(uuid())
     referId String @db.Text
@@ -22,15 +33,12 @@ model User {
     phoneNumber String? @db.Text
     identifyCard String? @db.Text
     imageUrl String? @db.Text
+    role UserRole?
 
     teacher Teacher?
 
     createdAt DateTime @default(now())
     updatedAt DateTime?
-}
-
-enum TeacherStatus {
-    PENDING
 }
 
 model Teacher {
