@@ -24,6 +24,12 @@ enum TeacherStatus {
     PENDING
 }
 
+enum AttendanceStatus {
+    PRESENT
+    ABSENT
+    LATE
+}
+
 model User {
     id String @id @db.Uuid @default(uuid())
     referId String @db.Text
@@ -51,6 +57,20 @@ model Teacher {
     status TeacherStatus
     baseSalary Int @db.Integer
     acceptedAt DateTime?
+
+    monthlyPayments MonthlyPayment[]
+    classes TeachersInClasses[]
+    attendances Attendance[]
+}
+
+model MonthlyPayment {
+    id String @id @db.Uuid @default(uuid())
+    teacher Teacher @relation(fields: [teacherId], references: [id])
+    teacherId String @db.Uuid
+    salary Int @db.Integer
+    year Int @db.Integer
+    month Int @db.Integer
+    paidAt DateTime @default(now())
 }
 
 model Admin {
@@ -66,6 +86,7 @@ model Parent {
     discount Int @db.Integer
 
     children ChildrenParents[]
+    tuitions Tuition[]
 }
 
 model Student {
@@ -74,6 +95,9 @@ model Student {
     userId String @db.Uuid @unique
 
     parents ChildrenParents[]
+    tuitions Tuition[]
+    classes StudentsInClasses[]
+    attendances Attendance[]
 }
 
 model ChildrenParents {
@@ -84,4 +108,115 @@ model ChildrenParents {
     createdAt DateTime @default(now())
 
     @@id([childId, parentId])
+}
+
+model Tuition {
+    id String @id @db.Uuid @default(uuid())
+    child Student @relation(fields: [childId], references: [id])
+    childId String @db.Uuid
+    parent Parent @relation(fields: [parentId], references: [id])
+    parentId String @db.Uuid
+    class Class @relation(fields: [classId], references: [id])
+    classId String @db.Uuid
+    year Int @db.Integer
+    month Int @db.Integer
+    amount Int @db.Integer
+    discount Int @db.Integer
+    paidAt DateTime @default(now())
+}
+
+model Unit {
+    id String @id @db.Uuid @default(uuid())
+    year Int @db.Integer
+    grade Int @db.Integer
+    max_sessions Int @db.Integer
+    max_students Int @db.Integer
+    max_teachers Int @db.Integer
+    price_per_session Int @db.Integer
+
+    classes Class[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime?
+
+    @@unique([year, grade])
+}
+
+model Class {
+    id String @id @db.Uuid @default(uuid())
+    unit Unit @relation(fields: [unitId], references: [id])
+    unitId String @db.Uuid
+    index Int @db.Integer
+    startTime DateTime
+    endTime DateTime
+
+    sessions Session[]
+    schedules Schedule[]
+    teachers TeachersInClasses[]
+    students StudentsInClasses[]
+    tuitions Tuition[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime?
+    closedAt DateTime?
+}
+
+model Session {
+    id String @id @db.Uuid @default(uuid())
+    class Class @relation(fields: [classId], references: [id])
+    classId String @db.Uuid
+    startTime DateTime @default(now())
+    endTime DateTime
+    location String?
+
+    attendances Attendance[]
+
+    createdAt DateTime @default(now())
+}
+
+model Schedule {
+    id String @id @db.Uuid @default(uuid())
+    class Class @relation(fields: [classId], references: [id])
+    classId String @db.Uuid
+    dayOfWeek Int @db.Integer
+    startTime DateTime
+    endTime DateTime
+    location String?
+}
+
+model TeachersInClasses {
+    class Class @relation(fields: [classId], references: [id])
+    classId String @db.Uuid
+    teacher Teacher @relation(fields: [teacherId], references: [id])
+    teacherId String @db.Uuid
+    joinedAt DateTime @default(now())
+    leftAt DateTime
+
+    @@id([classId, teacherId])
+}
+
+model StudentsInClasses {
+    class Class @relation(fields: [classId], references: [id])
+    classId String @db.Uuid
+    student Student @relation(fields: [studentId], references: [id])
+    studentId String @db.Uuid
+    joinedAt DateTime @default(now())
+    leftAt DateTime
+
+    @@id([classId, studentId])
+}
+
+model Attendance {
+    id String @id @db.Uuid @default(uuid())
+    session Session @relation(fields: [sessionId], references: [id])
+    sessionId String @db.Uuid
+    teacher Teacher @relation(fields: [checkedBy], references: [id])
+    checkedBy String @db.Uuid
+    student Student @relation(fields: [studentId], references: [id])
+    studentId String @db.Uuid
+    status AttendanceStatus
+    description String?
+    attendanceDate DateTime @default(now())
+
+    updatedAt DateTime?
 }
