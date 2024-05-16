@@ -10,7 +10,8 @@ export async function GET(req: Request) {
     try {
         await authHandler([UserRole.admin, UserRole.teacher]);
     } catch (error) {
-        return new NextResponse(JSON.stringify(error), {status: 401});
+        console.log("Error: ", (<Error>error).message);
+        return new NextResponse((<Error>error).message, {status: 401});
     }
 
     try {
