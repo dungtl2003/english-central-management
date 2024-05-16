@@ -10,13 +10,13 @@ const isRoleValid = (permittedRoles: UserRole[], role: UserRole): boolean => {
 export async function authHandler(permittedRoles: UserRole[]) {
     const clerkUserId = auth().userId;
     if (!clerkUserId) {
-        return new Error("No signed in user");
+        throw new Error("No signed in user");
     }
 
     const jwt: UserJwtSessionClaims | null = auth().sessionClaims;
     const role: string | null = jwt?.metadata?.role ?? null;
     if (!role || !isRoleValid(permittedRoles, role as UserRole)) {
-        return new Error("No right permission");
+        throw new Error("No right permission");
     }
 
     const user = await db.user.findFirst({
@@ -27,7 +27,7 @@ export async function authHandler(permittedRoles: UserRole[]) {
     });
 
     if (!user) {
-        return new Error(
+        throw new Error(
             `Cannot find account with id ${clerkUserId} in database`
         );
     }
