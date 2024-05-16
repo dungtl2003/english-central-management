@@ -14,14 +14,21 @@ export async function GET(req: Request) {
     }
 
     const teacherId = req.url.substring(req.url.lastIndexOf("/") + 1);
-    const teacher = await db.user.findFirst({
-        where: {
-            referId: teacherId,
-        },
-        include: {
-            teacher: true,
-        },
-    });
+
+    let teacher;
+    try {
+        teacher = await db.user.findFirst({
+            where: {
+                referId: teacherId,
+            },
+            include: {
+                teacher: true,
+            },
+        });
+    } catch (error) {
+        console.log("Error: ", error);
+        return new NextResponse("Error: Failed to get teacher", {status: 500});
+    }
 
     return new NextResponse(JSON.stringify(teacher), {status: 200});
 }
