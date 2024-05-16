@@ -39,5 +39,5 @@ model Teacher {
     userId String @db.Uuid @unique
     status TeacherStatus
     baseSalary Int @db.Integer
-    acceptedAt DateTime 
+    acceptedAt DateTime?
 }
