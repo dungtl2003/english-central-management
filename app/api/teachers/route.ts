@@ -8,10 +8,7 @@ export async function GET(req: Request) {
         const teachers = await db.teacher.findMany();
         return new NextResponse(JSON.stringify(teachers), {status: 200});
     } catch (error) {
-        console.log(error);
-        return new NextResponse(
-            JSON.stringify({error: "Failed to get teachers"}),
-            {status: 500}
-        );
+        console.log("Error: ", error);
+        return new NextResponse("Error: Failed to get teachers", {status: 500});
     }
 }
