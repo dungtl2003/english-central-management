@@ -1,5 +1,5 @@
 "use-client";
 
 export default function CompleteProfilePage() {
-    return "";
+    return <div>This is complete profile page</div>;
 }
