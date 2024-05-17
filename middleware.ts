@@ -4,6 +4,8 @@ import {UserJwtSessionClaims} from "./constaints";
 import {UserRole} from "@prisma/client";
 
 const homepage = "/";
+const errorPage = "/404";
+const completeProfilePage = "";
 const isNonRoleProtectedRoute = createRouteMatcher(["/dashboard(.*)"]);
 const isAdminProtectedRoute = createRouteMatcher(["/admins(.*)"]);
 const isTeacherProtectedRoute = createRouteMatcher(["/teachers(.*)"]);
@@ -19,49 +21,20 @@ const isProtectedRoute = (req: NextRequest): boolean => {
     );
 };
 
-export default clerkMiddleware(
-    (auth, req) => {
-        const jwt: UserJwtSessionClaims | null = auth().sessionClaims;
-        const role: string | null = jwt?.metadata?.role.toUpperCase() ?? null;
+const isRightPermission = (role: string | null, req: NextRequest): boolean => {
+    return !(
+        (role !== UserRole.ADMIN && isAdminProtectedRoute(req)) ||
+        (role !== UserRole.TEACHER && isTeacherProtectedRoute(req)) ||
+        (role !== UserRole.STUDENT && isStudentProtectedRoute(req)) ||
+        (role !== UserRole.PARENT && isParentProtectedRoute(req))
+    );
+};
 
-        //if the user isn't authenticated
-        if (!auth().userId && isProtectedRoute(req)) {
-            return auth().redirectToSignIn({returnBackUrl: req.url});
-        }
-
-        //user doesn't have right permission
-        //the user must have signed in in order to try to access protected routes,
-        //no need to check userId
-        if (role !== UserRole.ADMIN && isAdminProtectedRoute(req)) {
-            return NextResponse.redirect(new URL("/404", req.url));
-        }
-        if (role !== UserRole.TEACHER && isTeacherProtectedRoute(req)) {
-            return NextResponse.redirect(new URL("/404", req.url));
-        }
-        if (role !== UserRole.STUDENT && isStudentProtectedRoute(req)) {
-            return NextResponse.redirect(new URL("/404", req.url));
-        }
-        if (role !== UserRole.PARENT && isParentProtectedRoute(req)) {
-            return NextResponse.redirect(new URL("/404", req.url));
-        }
-
-        //user is authorized and in homepage
-        if (auth().userId && role && req.nextUrl.pathname === homepage) {
-            const response = skipHomePage(auth().userId!, role!, req);
-            if (response !== null) return response;
-        }
-
-        //public route or the user is authorized
-        return NextResponse.next();
-    },
-    {debug: true}
-);
-
-function skipHomePage(
+const skipHomePage = (
     userId: string,
-    role: string,
-    req: NextRequest
-): NextResponse<unknown> | null {
+    req: NextRequest,
+    role: string
+): NextResponse | null => {
     switch (role) {
         case UserRole.ADMIN:
             req.nextUrl.pathname = `/admins/${userId}`;
@@ -80,7 +53,39 @@ function skipHomePage(
     }
 
     return NextResponse.redirect(req.nextUrl);
-}
+};
+
+export default clerkMiddleware(
+    (auth, req) => {
+        const jwt: UserJwtSessionClaims | null = auth().sessionClaims;
+        const role: string | null = jwt?.metadata?.role?.toUpperCase() ?? null;
+
+        //the user isn't authenticated
+        if (!auth().userId && isProtectedRoute(req)) {
+            return auth().redirectToSignIn({returnBackUrl: req.url});
+        }
+
+        //the user is authenticated but hasn't complete profile yet
+        if (auth().userId && !role) {
+            return NextResponse.redirect(new URL(completeProfilePage, req.url));
+        }
+
+        //the user doesn't have right permission
+        if (!isRightPermission(role, req)) {
+            return NextResponse.redirect(new URL(errorPage, req.url));
+        }
+
+        //the user is fully authorized and in homepage
+        if (auth().userId && role && req.nextUrl.pathname === homepage) {
+            const response = skipHomePage(auth().userId!, req, role!);
+            if (response !== null) return response;
+        }
+
+        //public route or the user is authorized
+        return NextResponse.next();
+    },
+    {debug: true}
+);
 
 export const config = {
     matcher: ["/((?!.+.[w]+$|_next).*)", "/", "/(api|trpc)(.*)"],

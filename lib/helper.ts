@@ -14,7 +14,7 @@ export async function authHandler(permittedRoles: UserRole[]) {
     }
 
     const jwt: UserJwtSessionClaims | null = auth().sessionClaims;
-    const role: string | null = jwt?.metadata?.role.toUpperCase() ?? null;
+    const role: string | null = jwt?.metadata?.role?.toUpperCase() ?? null;
     if (!role || !isRoleValid(permittedRoles, role as UserRole)) {
         throw new Error("No right permission");
     }
