@@ -2,7 +2,7 @@ import {NextResponse} from "next/server";
 import {headers} from "next/headers";
 import {Webhook} from "svix";
 import {WebhookEvent} from "@clerk/nextjs/server";
-import {db} from "@/lib/db";
+// import {db} from "@/lib/db";
 
 interface Payload {
     data: {
@@ -89,25 +89,25 @@ export async function POST(req: Request) {
             );
         }
 
-        const userData = {
-            referId: data.id,
-            firstName: data.first_name,
-            lastName: data.last_name,
-            email: emails[0].email_address,
-            imageUrl: data.profile_image_url,
-        };
+        // const userData = {
+        //     referId: data.id,
+        //     firstName: data.first_name,
+        //     lastName: data.last_name,
+        //     email: emails[0].email_address,
+        //     imageUrl: data.profile_image_url,
+        // };
 
-        const userRef = await db.user.findFirst({where: {referId: data.id}});
-        if (!userRef) {
-            const user = await db.user.create({data: userData});
-            console.log("Insert new user: ", user);
-        } else {
-            const user = await db.user.update({
-                where: {id: userRef.id},
-                data: userData,
-            });
-            console.log("Update user: ", user);
-        }
+        // const userRef = await db.user.findFirst({where: {referId: data.id}});
+        // if (!userRef) {
+        //     const user = await db.user.create({data: userData});
+        //     console.log("Insert new user: ", user);
+        // } else {
+        //     const user = await db.user.update({
+        //         where: {id: userRef.id},
+        //         data: userData,
+        //     });
+        //     console.log("Update user: ", user);
+        // }
     }
 
     return new NextResponse("", {status: 200});
