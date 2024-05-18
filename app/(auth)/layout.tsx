@@ -5,7 +5,7 @@ const AuthLayout: React.FC<{children: React.ReactNode}> = ({
 }): ReactElement => {
     return (
         <>
-            <div className="flex justify-center">{children}</div>
+            <div className="flex justify-center pt-[70px]">{children}</div>
         </>
     );
 };

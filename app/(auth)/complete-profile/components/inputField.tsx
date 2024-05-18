@@ -1,10 +1,14 @@
 import React from "react";
 import * as Form from "@radix-ui/react-form";
+import CapitalizeWord from "@/utilities/helper";
 
 type InputProps = {
     label: string;
+    placeholder: string;
+    type: string;
     isRequired: boolean;
     hasPattern: boolean;
+    message: string;
 };
 
 const fieldClasses: string =
@@ -12,37 +16,52 @@ const fieldClasses: string =
 const labelClasses: string =
     "text-[18px] font-medium leading-[35px] text-white";
 const messageClasses: string = "text-[14px] text-cyan";
-const textPattern: string = "[p{L}s]+";
+const textPattern: string =
+    "[a-zA-ZáàảãạăắằẳẵặâấầẩẫậđéèẻẽẹêếềểễệíìỉĩịóòỏõọôốồổỗộơớờởỡợúùủũụưứừửữựýỳỷỹỵÁÀẢÃẠĂẮẰẲẴẶÂẤẦẨẪẬĐÉÈẺẼẸÊẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢÚÙỦŨỤƯỨỪỬỮỰÝỲỶỸỴ]+";
 
 const inputField = (props: InputProps) => {
     return (
         <>
-            <Form.Field className="grid mb-[10px]" name="firstName">
+            <Form.Field
+                className="grid mb-[10px]"
+                name={CapitalizeWord(props.label)}
+            >
                 <div className="flex items-baseline justify-between">
                     <Form.Label className={labelClasses}>
                         {props.label}
                     </Form.Label>
-                    <Form.Message
-                        className={messageClasses}
-                        match="valueMissing"
-                    >
-                        First name can not be empty
-                    </Form.Message>
-                    <Form.Message
-                        className={messageClasses}
-                        match="patternMismatch"
-                    >
-                        First name should only contain letters
-                    </Form.Message>
+
+                    {props.isRequired && (
+                        <Form.Message
+                            className={messageClasses}
+                            match="valueMissing"
+                        >
+                            {`${props.label} is required`}
+                        </Form.Message>
+                    )}
+
+                    {props.hasPattern && (
+                        <Form.Message
+                            className={messageClasses}
+                            match="patternMismatch"
+                        >
+                            {"Invalid input"}
+                        </Form.Message>
+                    )}
                 </div>
+
                 <Form.Control asChild>
                     <input
                         className={fieldClasses}
-                        pattern={textPattern}
+                        {...(props.hasPattern
+                            ? {
+                                  pattern: textPattern,
+                              }
+                            : {})}
                         autoComplete="off"
-                        type="text"
-                        placeholder="Ex: Nguyễn Văn"
-                        required
+                        type={props.type}
+                        placeholder={props.placeholder}
+                        {...(props.isRequired && {required: true})}
                     />
                 </Form.Control>
             </Form.Field>
