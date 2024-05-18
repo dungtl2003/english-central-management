@@ -10,6 +10,7 @@ export async function authHandler(): Promise<void> {
     }
 
     const jwt: UserJwtSessionClaims | null = auth().sessionClaims;
+    console.log(jwt);
     const role: string | null = jwt?.metadata?.role?.toUpperCase() ?? null;
 
     const user = await db.user.findFirst({
@@ -28,5 +29,6 @@ export async function authHandler(): Promise<void> {
 
 export function getClerkRole(): UserRole | null {
     const jwt: UserJwtSessionClaims | null = auth().sessionClaims;
+    console.log(jwt!.metadata);
     return (jwt?.metadata?.role?.toUpperCase() as UserRole) ?? null;
 }

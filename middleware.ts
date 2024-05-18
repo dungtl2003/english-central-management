@@ -1,16 +1,19 @@
 import {clerkMiddleware, createRouteMatcher} from "@clerk/nextjs/server";
 import {NextRequest, NextResponse} from "next/server";
 import {UserRole} from "@prisma/client";
-import {getClerkRole} from "./lib/helper";
+import {UserJwtSessionClaims} from "./constaints";
 
-const homepage = "/";
+const homePage = "/";
 const errorPage = "/404";
-const completeProfilePage = "";
+const completeProfilePage = "/complete-profile";
+
 const isNonRoleProtectedRoute = createRouteMatcher(["/dashboard(.*)"]);
 const isAdminProtectedRoute = createRouteMatcher(["/admins(.*)"]);
 const isTeacherProtectedRoute = createRouteMatcher(["/teachers(.*)"]);
 const isStudentProtectedRoute = createRouteMatcher(["/students(.*)"]);
 const isParentProtectedRoute = createRouteMatcher(["/parents(.*)"]);
+const isApiRoute = createRouteMatcher(["/api(.*)"]);
+
 const isProtectedRoute = (req: NextRequest): boolean => {
     return (
         isNonRoleProtectedRoute(req) ||
@@ -57,7 +60,14 @@ const skipHomePage = (
 
 export default clerkMiddleware(
     (auth, req) => {
-        const role: UserRole | null = getClerkRole();
+        const jwt: UserJwtSessionClaims | null = auth().sessionClaims;
+        const role: UserRole | null =
+            (jwt?.metadata?.role?.toUpperCase() as UserRole) ?? null;
+
+        //for authenticated api calls
+        if (isApiRoute(req)) {
+            return NextResponse.next();
+        }
 
         //the user isn't authenticated
         if (!auth().userId && isProtectedRoute(req)) {
@@ -65,7 +75,11 @@ export default clerkMiddleware(
         }
 
         //the user is authenticated but hasn't complete profile yet
-        if (auth().userId && !role) {
+        if (
+            auth().userId &&
+            !role &&
+            req.nextUrl.pathname !== completeProfilePage
+        ) {
             return NextResponse.redirect(new URL(completeProfilePage, req.url));
         }
 
@@ -75,7 +89,7 @@ export default clerkMiddleware(
         }
 
         //the user is fully authorized and in homepage
-        if (auth().userId && role && req.nextUrl.pathname === homepage) {
+        if (auth().userId && role && req.nextUrl.pathname === homePage) {
             const response = skipHomePage(auth().userId!, req, role!);
             if (response !== null) return response;
         }

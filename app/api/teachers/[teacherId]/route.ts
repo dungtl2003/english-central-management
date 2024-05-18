@@ -32,9 +32,8 @@ export async function GET(req: Request) {
         return new NextResponse("No right permission", {status: 401});
     }
 
-    let teacher;
     try {
-        teacher = await db.user.findFirst({
+        const teacher = await db.user.findFirst({
             where: {
                 referId: teacherId,
             },
@@ -42,10 +41,11 @@ export async function GET(req: Request) {
                 teacher: true,
             },
         });
+
+        console.log("Get teacher: ", teacher);
+        return new NextResponse(JSON.stringify(teacher), {status: 200});
     } catch (error) {
         console.log("Error: ", (<Error>error).message);
         return new NextResponse("Error: Failed to get teacher", {status: 500});
     }
-
-    return new NextResponse(JSON.stringify(teacher), {status: 200});
 }

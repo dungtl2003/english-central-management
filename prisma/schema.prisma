@@ -32,7 +32,7 @@ enum AttendanceStatus {
 
 model User {
     id String @id @db.Uuid @default(uuid())
-    referId String @db.Text
+    referId String @db.Text @unique
     firstName String? @db.Text
     lastName String? @db.Text
     email String @db.Text
@@ -55,7 +55,7 @@ model Teacher {
     user User @relation(fields: [userId], references: [id])
     userId String @db.Uuid @unique
     status TeacherStatus @default(PENDING)
-    baseSalary Int @db.Integer
+    baseSalary Int @db.Integer @default(0)
     acceptedAt DateTime?
 
     monthlyPayments MonthlyPayment[]
