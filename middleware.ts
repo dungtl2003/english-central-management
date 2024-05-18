@@ -1,7 +1,7 @@
 import {clerkMiddleware, createRouteMatcher} from "@clerk/nextjs/server";
 import {NextRequest, NextResponse} from "next/server";
-import {UserJwtSessionClaims} from "./constaints";
 import {UserRole} from "@prisma/client";
+import {getClerkRole} from "./lib/helper";
 
 const homepage = "/";
 const errorPage = "/404";
@@ -57,8 +57,7 @@ const skipHomePage = (
 
 export default clerkMiddleware(
     (auth, req) => {
-        const jwt: UserJwtSessionClaims | null = auth().sessionClaims;
-        const role: string | null = jwt?.metadata?.role?.toUpperCase() ?? null;
+        const role: UserRole | null = getClerkRole();
 
         //the user isn't authenticated
         if (!auth().userId && isProtectedRoute(req)) {
