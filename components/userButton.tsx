@@ -1,9 +1,11 @@
-import {UserButton} from "@clerk/nextjs";
 import React from "react";
+import {UserButton} from "@clerk/nextjs";
+import {ThemeToggle} from "@/components/modeToggle";
 
 const userButton = () => {
     return (
         <div className="ml-auto flex items-center gap-x-2">
+            <ThemeToggle />
             <UserButton
                 afterSignOutUrl="/"
                 appearance={{
