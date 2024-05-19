@@ -58,6 +58,7 @@ const skipHomePage = (
     return NextResponse.redirect(req.nextUrl);
 };
 
+//TODO: middleware logic could be better
 export default clerkMiddleware(
     (auth, req) => {
         const jwt: UserJwtSessionClaims | null = auth().sessionClaims;
@@ -65,7 +66,7 @@ export default clerkMiddleware(
             (jwt?.metadata?.role?.toUpperCase() as UserRole) ?? null;
 
         //for authenticated api calls
-        if (isApiRoute(req)) {
+        if (auth().userId && isApiRoute(req)) {
             return NextResponse.next();
         }
 
