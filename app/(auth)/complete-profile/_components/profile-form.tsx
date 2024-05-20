@@ -1,5 +1,6 @@
 "use client";
 
+//TODO: error clerk session not up to date
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useForm} from "react-hook-form";
 import {z} from "zod";
@@ -16,8 +17,13 @@ import {
 import {RoleSelector} from "@/app/(auth)/complete-profile/_components/select-role";
 
 import {Input} from "@/components/ui/input";
-import {toast} from "@/components/ui/use-toast";
 import {containsNumber} from "@/lib/utils";
+import {Loader2} from "lucide-react";
+import {useAction} from "@/hooks/use-action";
+import {handler} from "@/lib/api/create-teacher";
+import {useRouter} from "next/navigation";
+import {useToast} from "@/components/ui/use-toast";
+import {useAuth} from "@clerk/nextjs";
 
 const FormSchema = z.object({
     firstName: z
@@ -39,8 +45,27 @@ const FormSchema = z.object({
     }),
 });
 
+type FormData = z.infer<typeof FormSchema>;
+
 export function ProfileForm() {
-    const form = useForm<z.infer<typeof FormSchema>>({
+    const router = useRouter();
+    const {userId} = useAuth();
+    const {toast} = useToast();
+    const {execute, isLoading} = useAction(handler, {
+        onError: (error: string): void => {
+            console.log(error);
+            toast({
+                title: "Uh oh!",
+                variant: "destructive",
+                description: "Something went wrong, please try again later",
+            });
+        },
+        onSuccess: (): void => {
+            router.push(`/teachers/${userId}`);
+        },
+    });
+
+    const form = useForm<FormData>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
             firstName: "",
@@ -49,16 +74,12 @@ export function ProfileForm() {
         },
     });
 
-    function onSubmit(values: z.infer<typeof FormSchema>) {
-        toast({
-            title: "User profile:",
-            description: (
-                <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                    <code className="text-white">
-                        {JSON.stringify(values, null, 2)}
-                    </code>
-                </pre>
-            ),
+    function onSubmit(values: FormData) {
+        execute({
+            id: userId,
+            firstName: values.firstName,
+            lastName: values.lastName,
+            role: values.role,
         });
     }
 
@@ -124,7 +145,12 @@ export function ProfileForm() {
                         />
                     </div>
                     <div className="flex justify-center">
-                        <Button type="submit">Continue</Button>
+                        <Button type="submit" disabled={isLoading}>
+                            {isLoading && (
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            )}
+                            {isLoading ? "Please wait" : "Continue"}
+                        </Button>
                     </div>
                 </form>
             </Form>

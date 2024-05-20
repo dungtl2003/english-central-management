@@ -8,3 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 export function containsNumber(str: string) {
     return /\d/.test(str);
 }
+
+export function delay(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}

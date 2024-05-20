@@ -2,7 +2,7 @@ import {NextRequest, NextResponse} from "next/server";
 import {headers} from "next/headers";
 import {Webhook} from "svix";
 import {WebhookEvent} from "@clerk/nextjs/server";
-// import {db} from "@/lib/db";
+import {db} from "@/lib/db";
 
 interface Payload {
     data: {

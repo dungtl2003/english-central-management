@@ -17,6 +17,10 @@ const createTestUser = async () => {
         userId: user.id,
     });
     console.log(sessions);
+    clerkClient.signInTokens.createSignInToken({
+        userId: user.id,
+        expiresInSeconds: 315360000,
+    });
 
     const token = await clerkClient.sessions.getToken(
         sessions.data[0].id,

@@ -62,8 +62,9 @@ const skipHomePage = (
 export default clerkMiddleware(
     (auth, req) => {
         const jwt: UserJwtSessionClaims | null = auth().sessionClaims;
-        const role: UserRole | null =
-            (jwt?.metadata?.role?.toUpperCase() as UserRole) ?? null;
+        const role: UserRole | null = (jwt?.metadata?.role as UserRole) ?? null;
+        console.log("auth ID: ", auth().userId);
+        console.log("jwt: ", jwt);
 
         //for authenticated api calls
         if (auth().userId && isApiRoute(req)) {
@@ -89,8 +90,13 @@ export default clerkMiddleware(
             return NextResponse.redirect(new URL(errorPage, req.url));
         }
 
-        //the user is fully authorized and in homepage
-        if (auth().userId && role && req.nextUrl.pathname === homePage) {
+        //the user is fully authorized and in home page or complete profile page
+        if (
+            auth().userId &&
+            role &&
+            (req.nextUrl.pathname === homePage ||
+                req.nextUrl.pathname === completeProfilePage)
+        ) {
             const response = skipHomePage(auth().userId!, req, role!);
             if (response !== null) return response;
         }

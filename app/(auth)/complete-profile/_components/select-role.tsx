@@ -18,9 +18,9 @@ export function RoleSelector(props: ControllerRenderProps) {
             </SelectTrigger>
             <SelectContent>
                 <SelectGroup>
-                    <SelectItem value="teacher">Teacher</SelectItem>
-                    <SelectItem value="parent">Parent</SelectItem>
-                    <SelectItem value="student">Student</SelectItem>
+                    <SelectItem value="TEACHER">Teacher</SelectItem>
+                    <SelectItem value="PARENT">Parent</SelectItem>
+                    <SelectItem value="STUDENT">Student</SelectItem>
                 </SelectGroup>
             </SelectContent>
         </Select>

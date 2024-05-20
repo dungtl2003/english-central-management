@@ -1,5 +1,6 @@
 "use client";
 
+import {UserButton} from "@clerk/nextjs";
 import {usePathname} from "next/navigation";
 import {ReactNode, useEffect, useState} from "react";
 
@@ -19,6 +20,7 @@ const TeacherPage: React.FC = (): ReactNode => {
 
     return (
         <>
+            <UserButton />
             <div>This is teacher with ID {id}</div>
             <div>{JSON.stringify(data)}</div>
         </>
