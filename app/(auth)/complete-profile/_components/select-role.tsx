@@ -8,18 +8,11 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import {ControllerRenderProps} from "react-hook-form";
 
-type selectProps = {
-    valueChange: (...event: any[]) => void;
-    selectValue: string;
-};
-
-export function RoleSelector(props: selectProps) {
+export function RoleSelector(props: ControllerRenderProps) {
     return (
-        <Select
-            onValueChange={props.valueChange}
-            defaultValue={props.selectValue}
-        >
+        <Select onValueChange={props.onChange} defaultValue={props.value}>
             <SelectTrigger className="w-full">
                 <SelectValue className="" placeholder="Choose a role ..." />
             </SelectTrigger>

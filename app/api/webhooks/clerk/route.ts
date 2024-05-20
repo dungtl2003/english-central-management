@@ -1,4 +1,4 @@
-import {NextResponse} from "next/server";
+import {NextRequest, NextResponse} from "next/server";
 import {headers} from "next/headers";
 import {Webhook} from "svix";
 import {WebhookEvent} from "@clerk/nextjs/server";
@@ -23,7 +23,7 @@ enum EventTypes {
     CREATE = "user.created",
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
     console.log("Timestamp: ", new Date().toLocaleString());
     console.log("POST ", req.url);
 

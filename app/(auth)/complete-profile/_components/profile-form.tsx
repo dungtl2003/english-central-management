@@ -13,56 +13,43 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 
-import {RoleSelector} from "@/app/(auth)/complete-profile/_components/selectRole";
+import {RoleSelector} from "@/app/(auth)/complete-profile/_components/select-role";
 
 import {Input} from "@/components/ui/input";
 import {toast} from "@/components/ui/use-toast";
+import {containsNumber} from "@/lib/utils";
 
-const validateText = function (str: string): boolean {
-    for (let i = 0; i < str.length; i++) {
-        if (!isNaN(parseInt(str[i]))) {
-            return false;
-        }
-    }
-    return true;
-};
-
-const formSchema = z.object({
-    fullName: z.string().superRefine((val, context) => {
-        if (!validateText(val)) {
-            context.addIssue({
-                code: z.ZodIssueCode.custom,
-                message: "Name should only contain letters.",
-            });
-            return;
-        }
-
-        if (val.length < 3) {
-            context.addIssue({
-                code: z.ZodIssueCode.too_small,
-                minimum: 2,
-                type: "string",
-                inclusive: true,
-                message: "Name must have at least 2 letters.",
-            });
-            return;
-        }
-    }),
+const FormSchema = z.object({
+    firstName: z
+        .string()
+        .min(1, "First name must have at least 1 letter")
+        .refine(
+            (str) => !containsNumber(str),
+            "First name should only contain letters"
+        ),
+    lastName: z
+        .string()
+        .min(1, "Last name must have at least 1 letter")
+        .refine(
+            (str) => !containsNumber(str),
+            "Last name should only contain letters"
+        ),
     role: z.string().min(1, {
-        message: "You must have a role.",
+        message: "You must have a role",
     }),
 });
 
 export function ProfileForm() {
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+    const form = useForm<z.infer<typeof FormSchema>>({
+        resolver: zodResolver(FormSchema),
         defaultValues: {
-            fullName: "",
+            firstName: "",
+            lastName: "",
             role: "",
         },
     });
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    function onSubmit(values: z.infer<typeof FormSchema>) {
         toast({
             title: "User profile:",
             description: (
@@ -88,13 +75,32 @@ export function ProfileForm() {
                     <div className="w-[250px]">
                         <FormField
                             control={form.control}
-                            name="fullName"
+                            name="firstName"
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Full name</FormLabel>
+                                    <FormLabel>First name</FormLabel>
                                     <FormControl>
                                         <Input
-                                            placeholder="Ex. Nguyễn Văn Nam"
+                                            placeholder="Ex. Harry"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+
+                    <div className="w-[250px]">
+                        <FormField
+                            control={form.control}
+                            name="lastName"
+                            render={({field}) => (
+                                <FormItem>
+                                    <FormLabel>Last name</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            placeholder="Ex. Potter"
                                             {...field}
                                         />
                                     </FormControl>
@@ -111,10 +117,7 @@ export function ProfileForm() {
                             render={({field}) => (
                                 <FormItem>
                                     <FormLabel>You are ... ?</FormLabel>
-                                    <RoleSelector
-                                        valueChange={field.onChange}
-                                        selectValue={field.value}
-                                    />
+                                    <RoleSelector {...field} />
                                     <FormMessage />
                                 </FormItem>
                             )}

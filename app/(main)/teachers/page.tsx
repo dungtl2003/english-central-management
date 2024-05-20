@@ -1,7 +1,7 @@
 "use client";
 
 import {ReactElement} from "react";
-import UserButton from "@/components/userButton";
+import UserButton from "@/components/user-button";
 import Logo from "@/components/logo";
 
 const TeachersPage: React.FC = (): ReactElement => {

@@ -1,7 +1,7 @@
 import React from "react";
-import {ThemeToggle} from "./modeToggle";
+import {ThemeToggle} from "./mode-toggle";
 
-const preLogin = () => {
+const PreLogin = () => {
     return (
         <div className="ml-auto flex items-center gap-x-2">
             <ThemeToggle />
@@ -10,4 +10,4 @@ const preLogin = () => {
     );
 };
 
-export default preLogin;
+export default PreLogin;

@@ -1,12 +1,12 @@
 import React from "react";
-import {UserButton} from "@clerk/nextjs";
-import {ThemeToggle} from "@/components/modeToggle";
+import {UserButton as NextUserButton} from "@clerk/nextjs";
+import {ThemeToggle} from "@/components/mode-toggle";
 
-const userButton = () => {
+const UserButton = () => {
     return (
         <div className="ml-auto flex items-center gap-x-2">
             <ThemeToggle />
-            <UserButton
+            <NextUserButton
                 afterSignOutUrl="/"
                 appearance={{
                     elements: {avatarBox: {height: 42, width: 42}},
@@ -16,4 +16,4 @@ const userButton = () => {
     );
 };
 
-export default userButton;
+export default UserButton;
