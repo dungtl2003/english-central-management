@@ -1,6 +1,5 @@
 "use client";
 
-//TODO: error clerk session not up to date
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useForm} from "react-hook-form";
 import {z} from "zod";
@@ -17,7 +16,7 @@ import {RoleSelector} from "@/app/(auth)/complete-profile/_components/select-rol
 
 import {Loader2} from "lucide-react";
 import {useAction} from "@/hooks/use-action";
-import {handler} from "@/lib/api/create-teacher";
+import {handler} from "@/lib/api/add-user-role";
 import {useRouter} from "next/navigation";
 import {useToast} from "@/components/ui/use-toast";
 import {useUser} from "@clerk/nextjs";

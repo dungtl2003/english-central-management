@@ -1,11 +1,18 @@
-import {InputType, ReturnType, TeacherResponseType} from "./types";
+import {UserRole} from "@prisma/client";
+import {InputType, ReturnType} from "./types";
 
 export const handler = async (data: InputType): Promise<ReturnType> => {
     console.log("Timestamp: ", new Date().toLocaleString());
 
     const domain = process.env.NEXT_PUBLIC_DOMAIN;
     const protocol = process.env.NEXT_PUBLIC_PROTOCOL;
-    const url = `${protocol}://${domain}/api/teachers`;
+    const role = data.role;
+
+    if (!Object.values(UserRole).includes(role as UserRole)) {
+        return {error: "Invalid role"};
+    }
+
+    const url = `${protocol}://${domain}/api/${role.toLowerCase()}s`;
 
     console.log(`Sending POST request to ${url}`);
 
@@ -22,7 +29,7 @@ export const handler = async (data: InputType): Promise<ReturnType> => {
             return {error: body};
         }
 
-        return {data: body as TeacherResponseType};
+        return {data: JSON.stringify(body)};
     } catch (error) {
         return {error: (<Error>error).message};
     }

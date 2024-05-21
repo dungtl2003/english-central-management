@@ -4,6 +4,7 @@ import {UserRole} from "@prisma/client";
 import {UserJwtSessionClaims} from "./constaints";
 
 const homePage = "/";
+const completeProfilePage = "/complete-profile";
 const errorPage = "/404";
 
 const isNonRoleProtectedRoute = createRouteMatcher(["/dashboard(.*)"]);
@@ -35,7 +36,7 @@ const skipHomePage = (
     userId: string,
     req: NextRequest,
     role: string
-): NextResponse | null => {
+): NextResponse => {
     switch (role) {
         case UserRole.ADMIN:
             req.nextUrl.pathname = `/admins/${userId}`;
@@ -50,7 +51,7 @@ const skipHomePage = (
             req.nextUrl.pathname = `/parents/${userId}`;
             break;
         default:
-            return null;
+            throw new Error("Unsupported role");
     }
 
     return NextResponse.redirect(req.nextUrl);
@@ -73,10 +74,14 @@ export default clerkMiddleware(
             return NextResponse.redirect(new URL(errorPage, req.url));
         }
 
-        //the user is fully authorized and in home page
-        if (userId && role && req.nextUrl.pathname === homePage) {
-            const response = skipHomePage(auth().userId!, req, role!);
-            if (response !== null) return response;
+        //the user is authorized and in home page
+        if (userId && req.nextUrl.pathname === homePage) {
+            if (!role) {
+                return NextResponse.redirect(
+                    new URL(completeProfilePage, req.url)
+                );
+            }
+            return skipHomePage(auth().userId!, req, role);
         }
 
         //public route or the user is authorized
