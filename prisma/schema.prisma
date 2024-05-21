@@ -59,8 +59,7 @@ model Teacher {
     acceptedAt DateTime?
 
     monthlyPayments MonthlyPayment[]
-    classes TeachersInClasses[]
-    attendances Attendance[]
+    classes Class[]
 }
 
 model MonthlyPayment {
@@ -146,13 +145,14 @@ model Class {
     id String @id @db.Uuid @default(uuid())
     unit Unit @relation(fields: [unitId], references: [id], onDelete: Cascade)
     unitId String @db.Uuid
+    teacher Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+    teacherId String @db.Uuid
     index Int @db.Integer
     startTime DateTime
     endTime DateTime
 
     sessions Session[]
     schedules Schedule[]
-    teachers TeachersInClasses[]
     students StudentsInClasses[]
     tuitions Tuition[]
 
@@ -184,17 +184,6 @@ model Schedule {
     location String?
 }
 
-model TeachersInClasses {
-    class Class @relation(fields: [classId], references: [id], onDelete: Cascade)
-    classId String @db.Uuid
-    teacher Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
-    teacherId String @db.Uuid
-    joinedAt DateTime @default(now())
-    leftAt DateTime
-
-    @@id([classId, teacherId])
-}
-
 model StudentsInClasses {
     class Class @relation(fields: [classId], references: [id], onDelete: Cascade)
     classId String @db.Uuid
@@ -210,8 +199,6 @@ model Attendance {
     id String @id @db.Uuid @default(uuid())
     session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
     sessionId String @db.Uuid
-    teacher Teacher @relation(fields: [checkedBy], references: [id], onDelete: Cascade)
-    checkedBy String @db.Uuid
     student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
     studentId String @db.Uuid
     status AttendanceStatus
