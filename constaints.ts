@@ -5,3 +5,7 @@ export interface UserJwtSessionClaims extends CustomJwtSessionClaims {
     firstName?: string;
     lastName?: string;
 }
+
+export interface PublicMetadata extends UserPublicMetadata {
+    role?: string;
+}

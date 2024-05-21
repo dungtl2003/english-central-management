@@ -64,8 +64,6 @@ export async function POST(req: NextRequest) {
             },
             data: {
                 role: validBody.data.role,
-                firstName: validBody.data.firstName,
-                lastName: validBody.data.lastName,
                 teacher: {
                     create: {},
                 },
@@ -76,8 +74,6 @@ export async function POST(req: NextRequest) {
         });
 
         const clerkUser = await clerkClient.users.updateUser(clerkUserId, {
-            firstName: validBody.data.firstName,
-            lastName: validBody.data.lastName,
             publicMetadata: {
                 role: validBody.data.role,
             },
@@ -85,7 +81,6 @@ export async function POST(req: NextRequest) {
 
         console.log("Created teacher: ", teacher);
         console.log("Updated clerk user: ", clerkUser);
-        clerkClient.testingTokens.createTestingToken();
         return NextResponse.json(teacher, {status: 200});
     } catch (error) {
         console.log("Error: ", (<Error>error).message);

@@ -2,39 +2,17 @@ import {z} from "zod";
 
 const ROLE = ["TEACHER"] as const;
 
-const HasId = z.object({
-    id: z
-        .string({
-            required_error: "ID is required",
-            invalid_type_error: "ID must be a string",
-            description: "ID of the teacher",
-        })
-        .min(1, "ID is too short"),
-});
-
-const HasRole = z.object({
-    role: z.enum(ROLE),
-});
-
-const BaseSchema = z.object({
-    firstName: z
-        .string({
-            required_error: "First name is required",
-            invalid_type_error: "First name must be a string",
-            description: "Fist name of the teacher",
-        })
-        .min(1, "First name is too short"),
-    lastName: z
-        .string({
-            required_error: "Last name is required",
-            invalid_type_error: "Last name must be a string",
-            description: "Last name of the teacher",
-        })
-        .min(1, "Last name is too short"),
-});
-
-export const PostTeacherSchema = BaseSchema.merge(HasId)
-    .merge(HasRole)
+export const PostTeacherSchema = z
+    .object({
+        id: z
+            .string({
+                required_error: "ID is required",
+                invalid_type_error: "ID must be a string",
+                description: "ID of the teacher",
+            })
+            .min(1, "ID is too short"),
+        role: z.enum(ROLE),
+    })
     .strict();
 
 export const PatchTeacherWithAdminRoleSchema = z
@@ -54,6 +32,20 @@ export const PatchTeacherWithAdminRoleSchema = z
 
 export const PatchTeacherWithTeacherRoleSchema = z
     .object({
+        firstName: z
+            .string({
+                required_error: "First name is required",
+                invalid_type_error: "First name must be a string",
+                description: "Fist name of the teacher",
+            })
+            .min(1, "First name is too short"),
+        lastName: z
+            .string({
+                required_error: "Last name is required",
+                invalid_type_error: "Last name must be a string",
+                description: "Last name of the teacher",
+            })
+            .min(1, "Last name is too short"),
         phoneNumber: z
             .string({
                 invalid_type_error: "Phone number must be a string",
@@ -69,7 +61,6 @@ export const PatchTeacherWithTeacherRoleSchema = z
             description: "Image URL of the teacher",
         }),
     })
-    .merge(BaseSchema)
     .partial()
     .strict();
 

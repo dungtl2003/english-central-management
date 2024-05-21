@@ -5,14 +5,12 @@ import {UserJwtSessionClaims} from "./constaints";
 
 const homePage = "/";
 const errorPage = "/404";
-const completeProfilePage = "/complete-profile";
 
 const isNonRoleProtectedRoute = createRouteMatcher(["/dashboard(.*)"]);
 const isAdminProtectedRoute = createRouteMatcher(["/admins(.*)"]);
 const isTeacherProtectedRoute = createRouteMatcher(["/teachers(.*)"]);
 const isStudentProtectedRoute = createRouteMatcher(["/students(.*)"]);
 const isParentProtectedRoute = createRouteMatcher(["/parents(.*)"]);
-const isApiRoute = createRouteMatcher(["/api(.*)"]);
 
 const isProtectedRoute = (req: NextRequest): boolean => {
     return (
@@ -58,31 +56,16 @@ const skipHomePage = (
     return NextResponse.redirect(req.nextUrl);
 };
 
-//TODO: middleware logic could be better
 export default clerkMiddleware(
     (auth, req) => {
+        console.log("Redirect to ", req.nextUrl.pathname);
+        const userId: string | null = auth().userId;
         const jwt: UserJwtSessionClaims | null = auth().sessionClaims;
         const role: UserRole | null = (jwt?.metadata?.role as UserRole) ?? null;
-        console.log("auth ID: ", auth().userId);
-        console.log("jwt: ", jwt);
-
-        //for authenticated api calls
-        if (auth().userId && isApiRoute(req)) {
-            return NextResponse.next();
-        }
 
         //the user isn't authenticated
-        if (!auth().userId && isProtectedRoute(req)) {
+        if (!userId && isProtectedRoute(req)) {
             return auth().redirectToSignIn({returnBackUrl: req.url});
-        }
-
-        //the user is authenticated but hasn't complete profile yet
-        if (
-            auth().userId &&
-            !role &&
-            req.nextUrl.pathname !== completeProfilePage
-        ) {
-            return NextResponse.redirect(new URL(completeProfilePage, req.url));
         }
 
         //the user doesn't have right permission
@@ -90,13 +73,8 @@ export default clerkMiddleware(
             return NextResponse.redirect(new URL(errorPage, req.url));
         }
 
-        //the user is fully authorized and in home page or complete profile page
-        if (
-            auth().userId &&
-            role &&
-            (req.nextUrl.pathname === homePage ||
-                req.nextUrl.pathname === completeProfilePage)
-        ) {
+        //the user is fully authorized and in home page
+        if (userId && role && req.nextUrl.pathname === homePage) {
             const response = skipHomePage(auth().userId!, req, role!);
             if (response !== null) return response;
         }
