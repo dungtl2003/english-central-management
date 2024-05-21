@@ -23,6 +23,7 @@ enum EventTypes {
     CREATE = "user.created",
 }
 
+//TODO: something went wrong with delete user account
 export async function POST(req: NextRequest) {
     console.log("Timestamp: ", new Date().toLocaleString());
     console.log("POST ", req.url);
@@ -75,6 +76,20 @@ export async function POST(req: NextRequest) {
     console.log(`Webhook with and ID of ${id} and type of ${eventType}`);
     console.log("Webhook body: ", payload);
 
+    switch (eventType) {
+        case EventTypes.CREATE:
+            return await createUserHandler(payload);
+        case EventTypes.DELETE:
+            return await deleteUserHandler(payload);
+        default:
+            console.log("Error: Invalid event type");
+            return new NextResponse("Error: Invalid event type", {
+                status: 400,
+            });
+    }
+}
+
+const createUserHandler = async (payload: Payload): Promise<NextResponse> => {
     const data = payload.data;
     const primaryEmailId = data.primary_email_address_id;
     const emails = (data.email_addresses || []).filter(
@@ -96,37 +111,40 @@ export async function POST(req: NextRequest) {
         imageUrl: data.profile_image_url,
     };
 
-    if (eventType === EventTypes.CREATE) {
-        try {
-            const user = await db.user.upsert({
-                where: {
-                    referId: data.id,
-                },
-                create: userData,
-                update: userData,
-            });
-            console.log("Upserted user: ", user);
-            return new NextResponse("", {status: 200});
-        } catch (error) {
-            console.log("Error: ", (<Error>error).message);
-            return new NextResponse("Error: Failed to upsert user", {
-                status: 500,
-            });
-        }
-    } else if (eventType === EventTypes.DELETE) {
-        try {
-            const user = await db.user.delete({
-                where: {
-                    referId: data.id,
-                },
-            });
-            console.log("Deleted user: ", user);
-            return new NextResponse("", {status: 200});
-        } catch (error) {
-            console.log("Error: ", (<Error>error).message);
-            return new NextResponse("Error: Failed to delete user", {
-                status: 500,
-            });
-        }
+    try {
+        const user = await db.user.upsert({
+            where: {
+                referId: data.id,
+            },
+            create: userData,
+            update: userData,
+        });
+        console.log("Upserted user: ", user);
+        return NextResponse.json("", {status: 200});
+    } catch (error) {
+        console.log("Error: ", (<Error>error).message);
+        return NextResponse.json(
+            {error: "Failed to upsert user"},
+            {status: 500}
+        );
     }
-}
+};
+
+const deleteUserHandler = async (payload: Payload): Promise<NextResponse> => {
+    const data = payload.data;
+    try {
+        const user = await db.user.delete({
+            where: {
+                referId: data.id,
+            },
+        });
+        console.log("Deleted user: ", user);
+        return new NextResponse("", {status: 200});
+    } catch (error) {
+        console.log("Error: ", (<Error>error).message);
+        return NextResponse.json(
+            {error: "Failed to delete user"},
+            {status: 500}
+        );
+    }
+};
