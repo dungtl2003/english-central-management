@@ -14,7 +14,8 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import {ArrowUpDown, ChevronDown, MoreHorizontal} from "lucide-react";
-
+import {Label} from "@/components/ui/label";
+import {RadioGroup, RadioGroupItem} from "@/components/ui/radio-group";
 import {Button} from "@/components/ui/button";
 import {Checkbox} from "@/components/ui/checkbox";
 import {
@@ -208,6 +209,13 @@ export const columns: ColumnDef<ClassesDemoData>[] = [
     },
 ];
 
+function convertClassNameToText(input: string): string {
+    return input
+        .replace(/([A-Z])/g, " $1")
+        .toLowerCase()
+        .trim();
+}
+
 export function DataTableDemo() {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] =
@@ -215,7 +223,19 @@ export function DataTableDemo() {
     const [columnVisibility, setColumnVisibility] =
         React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
+    const [filterType, setFilterType] = React.useState("id");
+    const [selectedRadio, setSelectedRadio] = React.useState("id");
 
+    const handleRadioClick = (value: string) => {
+        document
+            .getElementById("searchBar")
+            ?.setAttribute(
+                "placeholder",
+                `Filter by ${convertClassNameToText(value)} ...`
+            );
+        setFilterType(value);
+        setSelectedRadio(value);
+    };
     const table = useReactTable({
         data,
         columns,
@@ -241,15 +261,18 @@ export function DataTableDemo() {
                 {/* Search bar */}
                 <div className="flex flex-row gap-x-4">
                     <Input
-                        placeholder="Filter code..."
+                        placeholder={`Filter by ${convertClassNameToText(
+                            filterType
+                        )} ...`}
+                        id="searchBar"
                         value={
                             (table
-                                .getColumn("className")
+                                .getColumn(filterType)
                                 ?.getFilterValue() as string) ?? ""
                         }
                         onChange={(event) =>
                             table
-                                .getColumn("className")
+                                .getColumn(filterType)
                                 ?.setFilterValue(event.target.value)
                         }
                         className="w-[346px]"
@@ -261,23 +284,45 @@ export function DataTableDemo() {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
-                            {table
-                                .getAllColumns()
-                                .filter((column) => column.getCanHide())
-                                .map((column) => {
-                                    return (
-                                        <DropdownMenuCheckboxItem
-                                            key={column.id}
-                                            className="capitalize"
-                                            checked={column.getIsVisible()}
-                                            onCheckedChange={(value) =>
-                                                column.toggleVisibility(!!value)
-                                            }
-                                        >
-                                            {column.id}
-                                        </DropdownMenuCheckboxItem>
-                                    );
-                                })}
+                            <RadioGroup defaultValue="">
+                                <div className="flex items-center space-x-2">
+                                    <RadioGroupItem
+                                        value="id"
+                                        id="classCode"
+                                        checked={selectedRadio === "id"}
+                                        onClick={() => handleRadioClick("id")}
+                                    />
+                                    <Label htmlFor="classCode">Class Id</Label>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <RadioGroupItem
+                                        value="className"
+                                        id="className"
+                                        checked={selectedRadio === "className"}
+                                        onClick={() =>
+                                            handleRadioClick("className")
+                                        }
+                                    />
+                                    <Label htmlFor="className">
+                                        class Name
+                                    </Label>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <RadioGroupItem
+                                        value="classProgress"
+                                        id="classProgress"
+                                        checked={
+                                            selectedRadio === "classProgress"
+                                        }
+                                        onClick={() =>
+                                            handleRadioClick("classProgress")
+                                        }
+                                    />
+                                    <Label htmlFor="classProgress">
+                                        Class Progress
+                                    </Label>
+                                </div>
+                            </RadioGroup>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
