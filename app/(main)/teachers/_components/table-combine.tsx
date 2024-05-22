@@ -12,6 +12,7 @@ import {
     ColumnDef,
     ColumnFiltersState,
     SortingState,
+    PaginationState,
     VisibilityState,
     flexRender,
     getCoreRowModel,
@@ -70,6 +71,10 @@ export function TeacherTable() {
     const [rowSelection, _setRowSelection] = React.useState({});
     const [filterType, _setFilterType] = React.useState("className");
     const [selectedRadio, _setSelectedRadio] = React.useState("className");
+    const [pagination, setPagination] = React.useState<PaginationState>({
+        pageIndex: 0,
+        pageSize: 7,
+    });
 
     const table = useReactTable({
         data,
@@ -82,11 +87,13 @@ export function TeacherTable() {
         getFilteredRowModel: getFilteredRowModel(),
         onColumnVisibilityChange: _setColumnVisibility,
         onRowSelectionChange: _setRowSelection,
+        onPaginationChange: setPagination,
         state: {
             sorting,
             columnFilters,
             columnVisibility,
             rowSelection,
+            pagination,
         },
     });
 
@@ -211,7 +218,10 @@ export function TeacherTable() {
                                         }
                                     >
                                         {row.getVisibleCells().map((cell) => (
-                                            <TableCell key={cell.id}>
+                                            <TableCell
+                                                key={cell.id}
+                                                className="w-[235px]"
+                                            >
                                                 {flexRender(
                                                     cell.column.columnDef.cell,
                                                     cell.getContext()
@@ -234,16 +244,38 @@ export function TeacherTable() {
                     </Table>
                 </div>
                 <div className="flex items-center justify-end space-x-2 py-4">
-                    <div className="flex-1 text-sm text-muted-foreground">
-                        {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                        {table.getFilteredRowModel().rows.length} row(s)
-                        selected.
+                    <div className="inline-flex flex-1">
+                        <span className="flex items-center gap-1">
+                            <div>Page</div>
+                            <strong>
+                                {table.getState().pagination.pageIndex + 1} of{" "}
+                                {table.getPageCount().toLocaleString()}
+                            </strong>
+                        </span>
+                        <span className="flex pl-1.5 items-center gap-1">
+                            | Go to page:
+                            <input
+                                type="number"
+                                defaultValue={
+                                    table.getState().pagination.pageIndex + 1
+                                }
+                                onChange={(e) => {
+                                    const page = e.target.value
+                                        ? Number(e.target.value) - 1
+                                        : 0;
+                                    table.setPageIndex(page);
+                                }}
+                                className="border p-1 rounded w-16"
+                            />
+                        </span>
                     </div>
                     <div className="space-x-2">
                         <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => table.previousPage()}
+                            onClick={() => {
+                                table.previousPage();
+                            }}
                             disabled={!table.getCanPreviousPage()}
                         >
                             Previous
