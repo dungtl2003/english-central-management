@@ -1,18 +1,13 @@
 import {NextRequest, NextResponse} from "next/server";
-import {
-    BaseQueryParams,
-    QueryParamsWithAdminRoleSchema,
-    QueryParamsWithTeacherRoleSchema,
-    QueryParamsWithStudentRoleSchema,
-} from "./schema";
+import {BaseQueryParams} from "./schema";
 import {db} from "@/lib/db";
-import {Json} from "@/constaints";
+import {Json, UserRole} from "@/constaints";
 import {
     authHandler,
     convertQueryParamsToJsonObject,
     getClerkRole,
 } from "@/lib/helper";
-import {UserRole} from "@prisma/client";
+import {getSchemaByRole} from "./helper";
 
 export async function GET(req: NextRequest) {
     console.log("Timestamp: ", new Date().toLocaleString());
@@ -50,21 +45,10 @@ export async function GET(req: NextRequest) {
         const classes = await db.class.findMany({
             where: {
                 teacherId: queryParams.teacherId,
-                unit: {
-                    grade: queryParams.grade,
-                    year: queryParams.year,
-                    price_per_session: queryParams.price_per_session,
-                },
                 students: {
                     some: {
                         studentId: queryParams.studentId,
                     },
-                },
-                startTime: queryParams.startTime || {
-                    gte: queryParams.startPeriod,
-                },
-                endTime: queryParams.endTime || {
-                    lte: queryParams.endPeriod,
                 },
             },
             include: {
@@ -79,18 +63,5 @@ export async function GET(req: NextRequest) {
             {error: "Failed to get classes"},
             {status: 500}
         );
-    }
-}
-
-function getSchemaByRole(role: string) {
-    switch (role) {
-        case UserRole.ADMIN:
-            return QueryParamsWithAdminRoleSchema;
-        case UserRole.TEACHER:
-            return QueryParamsWithTeacherRoleSchema;
-        case UserRole.STUDENT:
-            return QueryParamsWithStudentRoleSchema;
-        default:
-            throw Error("Unsupported role");
     }
 }

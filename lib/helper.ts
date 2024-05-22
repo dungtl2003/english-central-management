@@ -1,6 +1,5 @@
-import {Json, UserJwtSessionClaims} from "@/constaints";
+import {Json, UserJwtSessionClaims, UserRole} from "@/constaints";
 import {auth} from "@clerk/nextjs/server";
-import {UserRole} from "@prisma/client";
 import {db} from "./db";
 
 export async function authHandler(): Promise<void> {
@@ -15,7 +14,9 @@ export async function authHandler(): Promise<void> {
     const user = await db.user.findFirst({
         where: {
             referId: clerkUserId,
-            role: role as UserRole,
+            role: {
+                name: role as UserRole,
+            },
         },
     });
 

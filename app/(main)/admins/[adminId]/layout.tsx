@@ -1,6 +1,5 @@
-import {UserJwtSessionClaims} from "@/constaints";
+import {UserJwtSessionClaims, UserRole} from "@/constaints";
 import {auth} from "@clerk/nextjs/server";
-import {UserRole} from "@prisma/client";
 import {redirect} from "next/navigation";
 import {ReactElement} from "react";
 
