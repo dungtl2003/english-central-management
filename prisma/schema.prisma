@@ -13,21 +13,42 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum UserRole {
-    ADMIN
-    TEACHER
-    STUDENT
-    PARENT
-}
-
 enum TeacherStatus {
     PENDING
+    AVAILABLE
+    TEACHING
+    DELETED
 }
 
 enum AttendanceStatus {
     PRESENT
     ABSENT
     LATE
+}
+
+model Permission {
+    id String @id @db.Uuid @default(uuid())
+    name String @db.Text @unique 
+
+    roles PermissionsForRoles[]
+}
+
+model Role {
+    id String @id @db.Uuid @default(uuid())
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String @db.Uuid @unique
+    name String @db.Text 
+
+    permissions PermissionsForRoles[]
+}
+
+model PermissionsForRoles {
+    permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+    permissionId String @db.Uuid
+    role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+    roleId String @db.Uuid
+
+    @@id([roleId, permissionId])
 }
 
 model User {
@@ -39,7 +60,7 @@ model User {
     phoneNumber String? @db.Text
     identifyCard String? @db.Text
     imageUrl String? @db.Text
-    role UserRole?
+    role Role?
 
     admin Admin?
     teacher Teacher?
@@ -48,6 +69,7 @@ model User {
 
     createdAt DateTime @default(now())
     updatedAt DateTime?
+    deletedAt DateTime?
 }
 
 model Teacher {
@@ -130,7 +152,6 @@ model Unit {
     grade Int @db.Integer
     max_sessions Int @db.Integer
     max_students Int @db.Integer
-    max_teachers Int @db.Integer
     price_per_session Int @db.Integer
 
     classes Class[]
@@ -179,8 +200,8 @@ model Schedule {
     class Class @relation(fields: [classId], references: [id], onDelete: Cascade)
     classId String @db.Uuid
     dayOfWeek Int @db.Integer
-    startTime DateTime
-    endTime DateTime
+    startTime DateTime @db.Time
+    endTime DateTime @db.Time
     location String?
 }
 

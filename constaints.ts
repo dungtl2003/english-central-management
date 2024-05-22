@@ -13,3 +13,10 @@ export interface PublicMetadata extends UserPublicMetadata {
 export type Json = {
     [key: string]: string | string[];
 };
+
+export enum UserRole {
+    ADMIN = "ADMIN",
+    TEACHER = "TEACHER",
+    STUDENT = "STUDENT",
+    PARENT = "PARENT",
+}

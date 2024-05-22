@@ -1,4 +1,4 @@
-import {UserRole} from "@prisma/client";
+import {UserRole} from "@/constaints";
 import {InputType, ReturnType} from "./types";
 
 export const handler = async (data: InputType): Promise<ReturnType> => {

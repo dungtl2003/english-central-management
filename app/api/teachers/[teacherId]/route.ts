@@ -1,9 +1,9 @@
 import {db} from "@/lib/db";
 import {NextRequest, NextResponse} from "next/server";
-import {UserRole} from "@prisma/client";
 import {auth} from "@clerk/nextjs/server";
 import {authHandler, getClerkRole} from "@/lib/helper";
 import {getPatchSchema} from "./handler";
+import {UserRole} from "@/constaints";
 
 /**
  * Get teacher's detail information.
@@ -78,14 +78,9 @@ export async function PATCH(req: NextRequest) {
     }
 
     const body = await req.json();
-    let validBody;
-    try {
-        validBody = getPatchSchema(role).safeParse(body);
-        if (validBody.error) {
-            throw new Error(JSON.stringify(validBody.error.flatten()));
-        }
-    } catch (error) {
-        console.log("Error: ", (<Error>error).message);
+    const validBody = getPatchSchema(role).safeParse(body);
+    if (validBody.error) {
+        console.log("Error: ", validBody.error.flatten());
         return NextResponse.json({error: "Wrong body format"}, {status: 400});
     }
 

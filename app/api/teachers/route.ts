@@ -1,9 +1,9 @@
 import {NextRequest, NextResponse} from "next/server";
 import {db} from "@/lib/db";
 import {authHandler, getClerkRole} from "@/lib/helper";
-import {UserRole} from "@prisma/client";
 import {auth, clerkClient} from "@clerk/nextjs/server";
 import {PostTeacher, PostTeacherSchema} from "./schema";
+import {UserRole} from "@/constaints";
 
 export async function GET(req: NextRequest) {
     console.log("Timestamp: ", new Date().toLocaleString());
@@ -63,7 +63,9 @@ export async function POST(req: NextRequest) {
                 referId: clerkUserId,
             },
             data: {
-                role: validBody.data.role,
+                role: {
+                    create: {name: validBody.data.role},
+                },
                 teacher: {
                     create: {},
                 },
