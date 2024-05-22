@@ -1,23 +1,16 @@
-import {UserJwtSessionClaims} from "@/constaints";
+import {Json, UserJwtSessionClaims} from "@/constaints";
 import {auth} from "@clerk/nextjs/server";
 import {UserRole} from "@prisma/client";
 import {db} from "./db";
 
-const isRoleValid = (permittedRoles: UserRole[], role: UserRole): boolean => {
-    return Object.values(permittedRoles).includes(role);
-};
-
-export async function authHandler(permittedRoles: UserRole[]) {
+export async function authHandler(): Promise<void> {
     const clerkUserId = auth().userId;
     if (!clerkUserId) {
         throw new Error("No signed in user");
     }
 
     const jwt: UserJwtSessionClaims | null = auth().sessionClaims;
-    const role: string | null = jwt?.metadata?.role?.toUpperCase() ?? null;
-    if (!role || !isRoleValid(permittedRoles, role as UserRole)) {
-        throw new Error("No right permission");
-    }
+    const role: string | null = jwt?.metadata?.role ?? null;
 
     const user = await db.user.findFirst({
         where: {
@@ -31,4 +24,30 @@ export async function authHandler(permittedRoles: UserRole[]) {
             `Cannot find account with id ${clerkUserId} in database`
         );
     }
+}
+
+export function getClerkRole(): UserRole | null {
+    const jwt: UserJwtSessionClaims | null = auth().sessionClaims;
+    return (jwt?.metadata?.role as UserRole) ?? null;
+}
+
+export function convertQueryParamsToJsonObject(
+    queryParams: URLSearchParams
+): Json {
+    const json: Json = {};
+
+    queryParams.forEach((value, key) => {
+        if (!(key in json)) {
+            json[key] = value;
+        } else {
+            if (Array.isArray(json[key])) {
+                const values: string[] = json[key] as string[];
+                json[key] = [...values, value];
+            } else {
+                json[key] = [json[key] as string, value];
+            }
+        }
+    });
+
+    return json;
 }

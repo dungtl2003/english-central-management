@@ -8,7 +8,7 @@ const AdminLayout: React.FC<{children: React.ReactNode}> = ({
     children,
 }): ReactElement => {
     const jwt: UserJwtSessionClaims | null = auth().sessionClaims;
-    const role: string | null = jwt?.metadata?.role?.toUpperCase() ?? null;
+    const role: string | null = jwt?.metadata?.role ?? null;
 
     if (!role || role !== UserRole.ADMIN) {
         redirect("/404");

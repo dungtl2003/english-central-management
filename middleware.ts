@@ -1,16 +1,18 @@
 import {clerkMiddleware, createRouteMatcher} from "@clerk/nextjs/server";
 import {NextRequest, NextResponse} from "next/server";
-import {UserJwtSessionClaims} from "./constaints";
 import {UserRole} from "@prisma/client";
+import {UserJwtSessionClaims} from "./constaints";
 
-const homepage = "/";
+const homePage = "/";
+const completeProfilePage = "/complete-profile";
 const errorPage = "/404";
-const completeProfilePage = "";
+
 const isNonRoleProtectedRoute = createRouteMatcher(["/dashboard(.*)"]);
 const isAdminProtectedRoute = createRouteMatcher(["/admins(.*)"]);
 const isTeacherProtectedRoute = createRouteMatcher(["/teachers(.*)"]);
 const isStudentProtectedRoute = createRouteMatcher(["/students(.*)"]);
 const isParentProtectedRoute = createRouteMatcher(["/parents(.*)"]);
+
 const isProtectedRoute = (req: NextRequest): boolean => {
     return (
         isNonRoleProtectedRoute(req) ||
@@ -34,7 +36,7 @@ const skipHomePage = (
     userId: string,
     req: NextRequest,
     role: string
-): NextResponse | null => {
+): NextResponse => {
     switch (role) {
         case UserRole.ADMIN:
             req.nextUrl.pathname = `/admins/${userId}`;
@@ -49,7 +51,7 @@ const skipHomePage = (
             req.nextUrl.pathname = `/parents/${userId}`;
             break;
         default:
-            return null;
+            throw new Error("Unsupported role");
     }
 
     return NextResponse.redirect(req.nextUrl);
@@ -57,17 +59,14 @@ const skipHomePage = (
 
 export default clerkMiddleware(
     (auth, req) => {
+        console.log("Redirect to ", req.nextUrl.pathname);
+        const userId: string | null = auth().userId;
         const jwt: UserJwtSessionClaims | null = auth().sessionClaims;
-        const role: string | null = jwt?.metadata?.role?.toUpperCase() ?? null;
+        const role: UserRole | null = (jwt?.metadata?.role as UserRole) ?? null;
 
         //the user isn't authenticated
-        if (!auth().userId && isProtectedRoute(req)) {
+        if (!userId && isProtectedRoute(req)) {
             return auth().redirectToSignIn({returnBackUrl: req.url});
-        }
-
-        //the user is authenticated but hasn't complete profile yet
-        if (auth().userId && !role) {
-            return NextResponse.redirect(new URL(completeProfilePage, req.url));
         }
 
         //the user doesn't have right permission
@@ -75,10 +74,14 @@ export default clerkMiddleware(
             return NextResponse.redirect(new URL(errorPage, req.url));
         }
 
-        //the user is fully authorized and in homepage
-        if (auth().userId && role && req.nextUrl.pathname === homepage) {
-            const response = skipHomePage(auth().userId!, req, role!);
-            if (response !== null) return response;
+        //the user is authorized and in home page
+        if (userId && req.nextUrl.pathname === homePage) {
+            if (!role) {
+                return NextResponse.redirect(
+                    new URL(completeProfilePage, req.url)
+                );
+            }
+            return skipHomePage(auth().userId!, req, role);
         }
 
         //public route or the user is authorized

@@ -4,10 +4,9 @@ const AuthLayout: React.FC<{children: React.ReactNode}> = ({
     children,
 }): ReactElement => {
     return (
-        <div className="flex items-center justify-center h-full">
-            {children}
-        </div>
+        <>
+            <div className="flex justify-center pt-[70px]">{children}</div>
+        </>
     );
 };
-
 export default AuthLayout;
