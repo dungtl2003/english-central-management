@@ -1,8 +1,6 @@
 "use client";
 
 import {ReactElement} from "react";
-
-import {SheetDemo} from "./_components/preview-sheet";
 import {TeacherTable} from "./_components/table-combine";
 
 const TeachersPage: React.FC = (): ReactElement => {
@@ -11,7 +9,6 @@ const TeachersPage: React.FC = (): ReactElement => {
             <div className="flex justify-center">
                 <TeacherTable />
             </div>
-            <SheetDemo />
         </>
     );
 };

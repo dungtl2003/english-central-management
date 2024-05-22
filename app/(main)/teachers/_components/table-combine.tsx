@@ -7,7 +7,18 @@ import {Button} from "@/components/ui/button";
 import {ArrowUpDown, ChevronDown} from "lucide-react";
 import {Input} from "@/components/ui/input";
 import {RadioGroup} from "@/components/ui/radio-group";
+import {Label} from "@/components/ui/label";
 
+import {
+    Sheet,
+    SheetClose,
+    SheetContent,
+    SheetDescription,
+    SheetFooter,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from "@/components/ui/sheet";
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -60,8 +71,109 @@ for (const key in ClassInfoDictionary) {
     columns.push(createColumns(key, ClassInfoDictionary[key]));
 }
 
+columns.push({
+    id: "actions",
+    enableHiding: false,
+    cell: () => {
+        return (
+            <div className="flex flex-row gap-x-4">
+                <Sheet>
+                    <SheetTrigger asChild>
+                        <Button variant="outline">Preview</Button>
+                    </SheetTrigger>
+                    <SheetContent>
+                        <SheetHeader>
+                            <SheetTitle>Class preview</SheetTitle>
+                            <SheetDescription>
+                                View more class properties. Click close when you
+                                are done.
+                            </SheetDescription>
+                        </SheetHeader>
+                        <div className="grid gap-4 py-4">
+                            <div className="grid grid-cols-4 items-center gap-4">
+                                <Label
+                                    htmlFor="className"
+                                    className="text-left"
+                                >
+                                    Class name
+                                </Label>
+                                <Input
+                                    id="className"
+                                    value=""
+                                    className="col-span-3"
+                                    disabled
+                                />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="year" className="text-left">
+                                    Year
+                                </Label>
+                                <Input
+                                    id="year"
+                                    value=""
+                                    className="col-span-3"
+                                    disabled
+                                />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="start" className="text-left">
+                                    Start
+                                </Label>
+                                <Input
+                                    id="start"
+                                    value=""
+                                    className="col-span-3"
+                                    disabled
+                                />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="end" className="text-left">
+                                    End
+                                </Label>
+                                <Input
+                                    id="end"
+                                    value=""
+                                    className="col-span-3"
+                                    disabled
+                                />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="price" className="text-left">
+                                    Price
+                                </Label>
+                                <Input
+                                    id="price"
+                                    value=""
+                                    className="col-span-3"
+                                    disabled
+                                />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="teacher" className="text-left">
+                                    Teacher
+                                </Label>
+                                <Input
+                                    id="teacher"
+                                    value=""
+                                    className="col-span-3"
+                                    disabled
+                                />
+                            </div>
+                        </div>
+                        <SheetFooter>
+                            <SheetClose asChild>
+                                <Button type="submit">Close preview</Button>
+                            </SheetClose>
+                        </SheetFooter>
+                    </SheetContent>
+                </Sheet>
+                <Button variant="outline">Detail</Button>
+            </div>
+        );
+    },
+});
+
 export function TeacherTable() {
-    // const [data, _setData] = React.useState(() => [...dummyData]);
     const data: ClassInfo[] = dummyData;
     const [sorting, _setSorting] = React.useState<SortingState>([]);
     const [columnFilters, _setColumnFilters] =
@@ -98,6 +210,7 @@ export function TeacherTable() {
     });
 
     const searchBar = React.useRef<HTMLInputElement>(null);
+    const pageIndexInput = React.useRef<HTMLInputElement>(null);
     const handleRadioClick = (
         key: string,
         title: string,
@@ -220,7 +333,7 @@ export function TeacherTable() {
                                         {row.getVisibleCells().map((cell) => (
                                             <TableCell
                                                 key={cell.id}
-                                                className="w-[235px]"
+                                                className="w-2/12"
                                             >
                                                 {flexRender(
                                                     cell.column.columnDef.cell,
@@ -255,6 +368,7 @@ export function TeacherTable() {
                         <span className="flex pl-1.5 items-center gap-1">
                             | Go to page:
                             <input
+                                ref={pageIndexInput}
                                 type="number"
                                 defaultValue={
                                     table.getState().pagination.pageIndex + 1
@@ -273,9 +387,7 @@ export function TeacherTable() {
                         <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => {
-                                table.previousPage();
-                            }}
+                            onClick={() => table.previousPage()}
                             disabled={!table.getCanPreviousPage()}
                         >
                             Previous
