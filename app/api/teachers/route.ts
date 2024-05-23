@@ -3,8 +3,13 @@ import {db} from "@/lib/db";
 import {authHandler, getClerkRole} from "@/lib/helper";
 import {UserRole} from "@prisma/client";
 import {auth, clerkClient} from "@clerk/nextjs/server";
-import {PostTeacher, PostTeacherSchema} from "./schema";
+import {Post, PostSchema} from "./schema";
 
+/**
+ * Get teachers.
+ * Admin can get all teachers.
+ * Teacher, student, parent cannot use this api.
+ */
 export async function GET(req: NextRequest) {
     console.log("Timestamp: ", new Date().toLocaleString());
     console.log("GET ", req.nextUrl.pathname);
@@ -34,6 +39,10 @@ export async function GET(req: NextRequest) {
     }
 }
 
+/**
+ * Add teacher.
+ * Only user who chose teacher role can use this api.
+ */
 export async function POST(req: NextRequest) {
     console.log("Timestamp: ", new Date().toLocaleString());
     console.log("POST ", req.nextUrl.pathname);
@@ -43,8 +52,8 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({error: "No signed in user"}, {status: 401});
     }
 
-    const body: PostTeacher = await req.json();
-    const validBody = PostTeacherSchema.safeParse(body);
+    const body: Post = await req.json();
+    const validBody = PostSchema.safeParse(body);
     if (validBody.error) {
         console.log("Error: ", validBody.error.flatten());
         return NextResponse.json({error: "Wrong body format"}, {status: 400});
@@ -63,7 +72,6 @@ export async function POST(req: NextRequest) {
                 referId: clerkUserId,
             },
             data: {
-                role: validBody.data.role,
                 teacher: {
                     create: {},
                 },

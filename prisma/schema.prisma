@@ -22,6 +22,9 @@ enum UserRole {
 
 enum TeacherStatus {
     PENDING
+    AVAILABLE
+    TEACHING
+    DELETED
 }
 
 enum AttendanceStatus {
@@ -130,7 +133,6 @@ model Unit {
     grade Int @db.Integer
     max_sessions Int @db.Integer
     max_students Int @db.Integer
-    max_teachers Int @db.Integer
     price_per_session Int @db.Integer
 
     classes Class[]
@@ -179,8 +181,8 @@ model Schedule {
     class Class @relation(fields: [classId], references: [id], onDelete: Cascade)
     classId String @db.Uuid
     dayOfWeek Int @db.Integer
-    startTime DateTime
-    endTime DateTime
+    startTime DateTime @db.Time
+    endTime DateTime @db.Time
     location String?
 }
 
@@ -190,7 +192,7 @@ model StudentsInClasses {
     student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
     studentId String @db.Uuid
     joinedAt DateTime @default(now())
-    leftAt DateTime
+    leftAt DateTime?
 
     @@id([classId, studentId])
 }
