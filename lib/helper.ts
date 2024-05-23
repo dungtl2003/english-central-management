@@ -14,9 +14,7 @@ export async function authHandler(): Promise<void> {
     const user = await db.user.findFirst({
         where: {
             referId: clerkUserId,
-            role: {
-                name: role as UserRole,
-            },
+            role: role as UserRole,
         },
     });
 

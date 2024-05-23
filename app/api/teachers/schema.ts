@@ -1,8 +1,9 @@
+import {UserRole} from "@prisma/client";
 import {z} from "zod";
 
 const ROLE = ["TEACHER"] as const;
 
-export const PostTeacherSchema = z
+export const PostSchema = z
     .object({
         id: z
             .string({
@@ -15,7 +16,7 @@ export const PostTeacherSchema = z
     })
     .strict();
 
-export const PatchTeacherWithAdminRoleSchema = z
+const BasePatchSchema = z
     .object({
         baseSalary: z
             .number({
@@ -26,12 +27,6 @@ export const PatchTeacherWithAdminRoleSchema = z
             .finite("Base salary cannot be infinity")
             .int("Base salary must be an integer")
             .multipleOf(1000, "Base salary must be divisible by 1000"),
-    })
-    .partial()
-    .strict();
-
-export const PatchTeacherWithTeacherRoleSchema = z
-    .object({
         firstName: z
             .string({
                 required_error: "First name is required",
@@ -64,10 +59,26 @@ export const PatchTeacherWithTeacherRoleSchema = z
     .partial()
     .strict();
 
-export type PostTeacher = z.infer<typeof PostTeacherSchema>;
-export type PatchTeacherWithTeacherRole = z.infer<
-    typeof PatchTeacherWithTeacherRoleSchema
->;
-export type PatchTeacherWithAdminRole = z.infer<
-    typeof PatchTeacherWithAdminRoleSchema
->;
+export const PatchWithAdminRoleSchema = BasePatchSchema.pick({
+    baseSalary: true,
+});
+
+export const PatchWithTeacherRoleSchema = BasePatchSchema.omit({
+    baseSalary: true,
+});
+
+export type Post = z.infer<typeof PostSchema>;
+export type BasePatch = z.infer<typeof BasePatchSchema>;
+export type PatchWithTeacherRole = z.infer<typeof PatchWithTeacherRoleSchema>;
+export type PatchWithAdminRole = z.infer<typeof PatchWithAdminRoleSchema>;
+
+export const getPatchSchemaByRole = (role: UserRole) => {
+    switch (role) {
+        case UserRole.ADMIN:
+            return PatchWithAdminRoleSchema;
+        case UserRole.TEACHER:
+            return PatchWithTeacherRoleSchema;
+        default:
+            throw new Error("Unsupported role");
+    }
+};

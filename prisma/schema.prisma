@@ -211,7 +211,7 @@ model StudentsInClasses {
     student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
     studentId String @db.Uuid
     joinedAt DateTime @default(now())
-    leftAt DateTime
+    leftAt DateTime?
 
     @@id([classId, studentId])
 }
