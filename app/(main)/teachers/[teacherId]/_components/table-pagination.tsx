@@ -42,7 +42,7 @@ const TablePagination = (props: TablePaginationProps): ReactElement => {
                     | Go to page:
                     <Input
                         ref={pageIndexInput}
-                        type="number"
+                        type="text"
                         defaultValue={
                             props.table.getState().pagination.pageIndex + 1
                         }
