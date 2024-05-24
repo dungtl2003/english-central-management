@@ -72,6 +72,7 @@ export async function POST(req: NextRequest) {
                 referId: clerkUserId,
             },
             data: {
+                role: validBody.data.role,
                 teacher: {
                     create: {},
                 },
