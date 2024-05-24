@@ -9,7 +9,7 @@ export const handler = async (data: InputType): Promise<ReturnType> => {
 
     const url = `${protocol}://${domain}/api/teachers/${teacherId}`;
 
-    console.log(`Sending POST request to ${url}`);
+    console.log(`Sending PATCH request to ${url}`);
 
     try {
         const response = await fetch(url, {
@@ -19,13 +19,13 @@ export const handler = async (data: InputType): Promise<ReturnType> => {
 
         const body = await response.json();
 
-        console.log("Updated: ", body);
+        console.log("Updated teacher: ", body);
 
         if (response.status !== 200) {
             return {error: body};
         }
 
-        return {data: JSON.stringify(body)};
+        return {data: body};
     } catch (error) {
         return {error: (<Error>error).message};
     }

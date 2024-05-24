@@ -13,6 +13,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+    ADMIN
+    TEACHER
+    STUDENT
+    PARENT
+}
+
 enum TeacherStatus {
     PENDING
     AVAILABLE
@@ -26,31 +33,6 @@ enum AttendanceStatus {
     LATE
 }
 
-model Permission {
-    id String @id @db.Uuid @default(uuid())
-    name String @db.Text @unique 
-
-    roles PermissionsForRoles[]
-}
-
-model Role {
-    id String @id @db.Uuid @default(uuid())
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId String @db.Uuid @unique
-    name String @db.Text 
-
-    permissions PermissionsForRoles[]
-}
-
-model PermissionsForRoles {
-    permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
-    permissionId String @db.Uuid
-    role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
-    roleId String @db.Uuid
-
-    @@id([roleId, permissionId])
-}
-
 model User {
     id String @id @db.Uuid @default(uuid())
     referId String @db.Text @unique
@@ -60,7 +42,7 @@ model User {
     phoneNumber String? @db.Text
     identifyCard String? @db.Text
     imageUrl String? @db.Text
-    role Role?
+    role UserRole?
 
     admin Admin?
     teacher Teacher?
@@ -69,7 +51,6 @@ model User {
 
     createdAt DateTime @default(now())
     updatedAt DateTime?
-    deletedAt DateTime?
 }
 
 model Teacher {

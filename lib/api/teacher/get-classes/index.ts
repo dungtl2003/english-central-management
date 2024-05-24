@@ -5,7 +5,7 @@ export const handler = async (data: InputType): Promise<ReturnType> => {
 
     const domain = process.env.NEXT_PUBLIC_DOMAIN;
     const protocol = process.env.NEXT_PUBLIC_PROTOCOL;
-    const teacherId = data.id;
+    const teacherId = data.teacherId;
 
     const url = `${protocol}://${domain}/api/classes?teacherId=${teacherId}`;
 
@@ -24,7 +24,7 @@ export const handler = async (data: InputType): Promise<ReturnType> => {
             return {error: body};
         }
 
-        return {data: JSON.stringify(body)};
+        return {data: body};
     } catch (error) {
         return {error: (<Error>error).message};
     }

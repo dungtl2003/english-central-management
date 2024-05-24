@@ -1,10 +1,10 @@
 import {z} from "zod";
 import {RequestSchema} from "./schema";
+import {Student, User} from "@prisma/client";
 import {ActionState} from "@/lib/create-safe-action";
-import {Teacher, User} from "@prisma/client";
 
 export type InputType = z.infer<typeof RequestSchema>;
-type OutputTypeOfTeacher = Teacher & {
+type OutputTypeOfStudents = (Student & {
     user: User;
-};
-export type ReturnType = ActionState<InputType, OutputTypeOfTeacher>;
+})[];
+export type ReturnType = ActionState<InputType, OutputTypeOfStudents>;

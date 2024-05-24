@@ -17,13 +17,13 @@ export const handler = async (data: InputType): Promise<ReturnType> => {
         });
 
         const body = await response.json();
-        console.log("Received: ", body);
+        console.log("Received teachers: ", body);
 
         if (response.status !== 200) {
             return {error: body};
         }
 
-        return {data: JSON.stringify(response)};
+        return {data: body};
     } catch (error) {
         return {error: (<Error>error).message};
     }

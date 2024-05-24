@@ -5,18 +5,19 @@ export const handler = async (data: InputType): Promise<ReturnType> => {
 
     const domain = process.env.NEXT_PUBLIC_DOMAIN;
     const protocol = process.env.NEXT_PUBLIC_PROTOCOL;
-    const teacherId = data.teacherId;
 
-    const url = `${protocol}://${domain}/api/teachers/${teacherId}`;
+    const url = `${protocol}://${domain}/api/classes`;
+
+    console.log(`Sending POST request to ${url}`);
 
     try {
         const res = await fetch(url, {
-            method: "PATCH",
+            method: "POST",
             body: JSON.stringify(data),
         });
 
         const body = await res.json();
-        console.log("Updated: ", body);
+        console.log("Added classes: ", body);
 
         if (res.status !== 200) {
             return {error: body};
