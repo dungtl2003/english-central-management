@@ -21,11 +21,11 @@ export const ClassInfoArray: ClassInfoDef[] = [
     {key: "teacher", title: "Teacher"},
 ];
 
-type Dictionary = {
+export type TableDictionary = {
     [key: string]: string;
 };
 
-export const ClassInfoDictionary: Dictionary = {
+export const ClassInfoDictionary: TableDictionary = {
     className: "Class name",
     year: "Year",
     start: "Start",

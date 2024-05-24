@@ -1,6 +1,6 @@
-import {ClassInfo} from "./classInfoModel";
+import {ClassInfo} from "./class-info";
 
-export const dummyData: ClassInfo[] = [
+export const DummyData: ClassInfo[] = [
     {
         className: "3.1", // grade.index
         teacher: "Trần Lưu Dũng", // teacher

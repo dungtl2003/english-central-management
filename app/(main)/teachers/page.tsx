@@ -1,7 +1,7 @@
 "use client";
 
 import {ReactElement} from "react";
-import {TeacherTable} from "./_components/table-combine";
+import {TeacherTable} from "./_components/teacher-table";
 
 const TeachersPage: React.FC = (): ReactElement => {
     return (
