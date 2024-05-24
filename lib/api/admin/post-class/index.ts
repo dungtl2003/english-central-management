@@ -1,4 +1,3 @@
-import {UserRole} from "@/constaints";
 import {InputType, ReturnType} from "./types";
 
 export const handler = async (data: InputType): Promise<ReturnType> => {
@@ -6,30 +5,25 @@ export const handler = async (data: InputType): Promise<ReturnType> => {
 
     const domain = process.env.NEXT_PUBLIC_DOMAIN;
     const protocol = process.env.NEXT_PUBLIC_PROTOCOL;
-    const role = data.role;
 
-    if (!Object.values(UserRole).includes(role as UserRole)) {
-        return {error: "Invalid role"};
-    }
-
-    const url = `${protocol}://${domain}/api/${role.toLowerCase()}s`;
+    const url = `${protocol}://${domain}/api/classes`;
 
     console.log(`Sending POST request to ${url}`);
 
     try {
-        const response = await fetch(url, {
+        const res = await fetch(url, {
             method: "POST",
             body: JSON.stringify(data),
         });
 
-        const body = await response.json();
-        console.log("Received: ", body);
+        const body = await res.json();
+        console.log("Added classes: ", body);
 
-        if (response.status !== 200) {
+        if (res.status !== 200) {
             return {error: body};
         }
 
-        return {data: JSON.stringify(body)};
+        return {data: body};
     } catch (error) {
         return {error: (<Error>error).message};
     }

@@ -1,7 +1,6 @@
 import {clerkMiddleware, createRouteMatcher} from "@clerk/nextjs/server";
 import {NextRequest, NextResponse} from "next/server";
-import {UserRole} from "@prisma/client";
-import {UserJwtSessionClaims} from "./constaints";
+import {UserJwtSessionClaims, UserRole} from "./constaints";
 
 const homePage = "/";
 const completeProfilePage = "/complete-profile";

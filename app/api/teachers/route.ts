@@ -1,9 +1,9 @@
 import {NextRequest, NextResponse} from "next/server";
 import {db} from "@/lib/db";
 import {authHandler, getClerkRole} from "@/lib/helper";
-import {UserRole} from "@prisma/client";
 import {auth, clerkClient} from "@clerk/nextjs/server";
 import {Post, PostSchema} from "./schema";
+import {UserRole} from "@prisma/client";
 
 /**
  * Get teachers.

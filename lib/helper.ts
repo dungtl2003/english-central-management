@@ -1,6 +1,5 @@
-import {Json, UserJwtSessionClaims} from "@/constaints";
+import {Json, UserJwtSessionClaims, UserRole} from "@/constaints";
 import {auth} from "@clerk/nextjs/server";
-import {UserRole} from "@prisma/client";
 import {db} from "./db";
 
 export async function authHandler(): Promise<void> {
@@ -10,7 +9,6 @@ export async function authHandler(): Promise<void> {
     }
 
     const jwt: UserJwtSessionClaims | null = auth().sessionClaims;
-    console.log(jwt);
     const role: string | null = jwt?.metadata?.role ?? null;
 
     const user = await db.user.findFirst({
@@ -22,14 +20,13 @@ export async function authHandler(): Promise<void> {
 
     if (!user) {
         throw new Error(
-            `Cannot find account with id ${clerkUserId} and role ${role} in database`
+            `Cannot find account with id ${clerkUserId} in database`
         );
     }
 }
 
 export function getClerkRole(): UserRole | null {
     const jwt: UserJwtSessionClaims | null = auth().sessionClaims;
-    console.log(jwt!.metadata);
     return (jwt?.metadata?.role as UserRole) ?? null;
 }
 
