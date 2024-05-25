@@ -1,16 +1,16 @@
-export type ClassInfo = {
+export interface ClassInfo {
     className: string; // 3.1, 3.2
     teacher: string; // Nguyễn Minh Đức
     year: string; // Khối 3
     start: string; // 01/05/2024
     end: string; // 31/12/2024
     price: string; // 150,000 / buổi
-};
+}
 
-export type ClassInfoDef = {
+export interface ClassInfoDef {
     key: string;
     title: string;
-};
+}
 
 export const ClassInfoArray: ClassInfoDef[] = [
     {key: "className", title: "Class name"},
@@ -21,9 +21,9 @@ export const ClassInfoArray: ClassInfoDef[] = [
     {key: "teacher", title: "Teacher"},
 ];
 
-export type TableDictionary = {
+export interface TableDictionary {
     [key: string]: string;
-};
+}
 
 export const ClassInfoDictionary: TableDictionary = {
     className: "Class name",
