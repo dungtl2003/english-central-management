@@ -1,4 +1,5 @@
-import {InputType, ReturnType} from "./types";
+import {formatDate} from "@/lib/utils";
+import {InputType, OutputType, ReturnType, ResponseType} from "./types";
 
 export const handler = async (data: InputType): Promise<ReturnType> => {
     console.log("Timestamp: ", new Date().toLocaleString());
@@ -14,7 +15,6 @@ export const handler = async (data: InputType): Promise<ReturnType> => {
     try {
         const response = await fetch(url, {
             method: "GET",
-            body: JSON.stringify(data),
         });
 
         const body = await response.json();
@@ -24,8 +24,33 @@ export const handler = async (data: InputType): Promise<ReturnType> => {
             return {error: body};
         }
 
-        return {data: body};
+        return {data: formatData(body as ResponseType)};
     } catch (error) {
         return {error: (<Error>error).message};
     }
+};
+
+const formatData = (fetchedData: ResponseType): OutputType[] | undefined => {
+    if (!fetchedData) return undefined;
+
+    const formattedData: OutputType[] = [];
+    fetchedData.forEach((data) =>
+        formattedData.push({
+            className: `${data.unit.grade}.${data.index}`,
+            teacher: `${data.teacher.user.lastName} ${data.teacher.user.firstName}`,
+            year: String(data.unit.year),
+            start: formatDate(new Date(data.startTime)),
+            end: formatDate(new Date(data.endTime)),
+            price:
+                String(
+                    Math.round(
+                        Number(data.unit.price_per_session) *
+                            data.unit.max_sessions *
+                            100
+                    ) / 100
+                ) + "$",
+        })
+    );
+
+    return formattedData;
 };

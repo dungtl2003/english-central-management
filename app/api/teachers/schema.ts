@@ -1,20 +1,15 @@
 import {UserRole} from "@prisma/client";
 import {z} from "zod";
 
-const ROLE = ["TEACHER"] as const;
-
-export const PostSchema = z
-    .object({
-        id: z
-            .string({
-                required_error: "ID is required",
-                invalid_type_error: "ID must be a string",
-                description: "ID of the teacher",
-            })
-            .min(1, "ID is too short"),
-        role: z.enum(ROLE),
-    })
-    .strict();
+const HasId = z.object({
+    id: z
+        .string({
+            required_error: "ID is required",
+            invalid_type_error: "ID must be a string",
+            description: "ID of the teacher",
+        })
+        .min(1, "ID is too short"),
+});
 
 const BasePatchSchema = z
     .object({
@@ -24,9 +19,7 @@ const BasePatchSchema = z
                 description: "Base salary of the teacher",
             })
             .nonnegative("Base salary cannot be negative")
-            .finite("Base salary cannot be infinity")
-            .int("Base salary must be an integer")
-            .multipleOf(1000, "Base salary must be divisible by 1000"),
+            .finite("Base salary cannot be infinity"),
         firstName: z
             .string({
                 required_error: "First name is required",
@@ -59,15 +52,17 @@ const BasePatchSchema = z
     .partial()
     .strict();
 
+export const PostSchema = HasId.strict();
+export const DeleteSchema = HasId.strict();
 export const PatchWithAdminRoleSchema = BasePatchSchema.pick({
     baseSalary: true,
 });
-
 export const PatchWithTeacherRoleSchema = BasePatchSchema.omit({
     baseSalary: true,
 });
 
 export type Post = z.infer<typeof PostSchema>;
+export type Delete = z.infer<typeof DeleteSchema>;
 export type BasePatch = z.infer<typeof BasePatchSchema>;
 export type PatchWithTeacherRole = z.infer<typeof PatchWithTeacherRoleSchema>;
 export type PatchWithAdminRole = z.infer<typeof PatchWithAdminRoleSchema>;

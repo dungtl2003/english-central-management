@@ -51,6 +51,7 @@ model User {
 
     createdAt DateTime @default(now())
     updatedAt DateTime?
+    deletedAt DateTime?
 }
 
 model Teacher {
@@ -58,7 +59,7 @@ model Teacher {
     user User @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId String @db.Uuid @unique
     status TeacherStatus @default(PENDING)
-    baseSalary Int @db.Integer @default(0)
+    baseSalary Decimal @db.Decimal(20, 2) @default(0)
     acceptedAt DateTime?
 
     monthlyPayments MonthlyPayment[]
@@ -69,7 +70,7 @@ model MonthlyPayment {
     id String @id @db.Uuid @default(uuid())
     teacher Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
     teacherId String @db.Uuid
-    salary Int @db.Integer
+    salary Decimal @db.Decimal(20, 2)
     year Int @db.Integer
     month Int @db.Integer
     paidAt DateTime @default(now())
@@ -122,7 +123,7 @@ model Tuition {
     classId String @db.Uuid
     year Int @db.Integer
     month Int @db.Integer
-    amount Int @db.Integer
+    amount Decimal @db.Decimal(20, 2)
     discount Int @db.Integer
     paidAt DateTime @default(now())
 }
@@ -133,7 +134,7 @@ model Unit {
     grade Int @db.Integer
     max_sessions Int @db.Integer
     max_students Int @db.Integer
-    price_per_session Int @db.Integer
+    price_per_session Decimal @db.Decimal(20, 2) 
 
     classes Class[]
 
