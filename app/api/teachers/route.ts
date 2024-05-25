@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
                 referId: clerkUserId,
             },
             data: {
-                role: validBody.data.role,
+                role: "TEACHER",
                 teacher: {
                     create: {},
                 },
@@ -84,7 +84,7 @@ export async function POST(req: NextRequest) {
 
         const clerkUser = await clerkClient.users.updateUser(clerkUserId, {
             publicMetadata: {
-                role: validBody.data.role,
+                role: "TEACHER",
             },
         });
 

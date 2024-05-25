@@ -49,9 +49,22 @@ export async function GET(req: NextRequest) {
     }
 
     try {
+        const user = await db.user.findFirst({
+            where: {
+                referId: queryParams.teacherId,
+            },
+
+            select: {
+                teacher: {
+                    select: {
+                        id: true,
+                    },
+                },
+            },
+        });
         const classes = await db.class.findMany({
             where: {
-                teacherId: queryParams.teacherId,
+                teacherId: user!.teacher!.id,
             },
             include: {
                 unit: true,
