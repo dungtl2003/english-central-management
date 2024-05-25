@@ -1,5 +1,5 @@
-import {UserRole} from "@/constaints";
-import {InputType, ReturnType} from "./types";
+import {UserRole} from "@prisma/client";
+import {Body, InputType, ReturnType} from "./types";
 
 export const handler = async (data: InputType): Promise<ReturnType> => {
     console.log("Timestamp: ", new Date().toLocaleString());
@@ -13,13 +13,16 @@ export const handler = async (data: InputType): Promise<ReturnType> => {
     }
 
     const url = `${protocol}://${domain}/api/${role.toLowerCase()}s`;
+    const bodyData: Body = {
+        id: data.id,
+    };
 
     console.log(`Sending POST request to ${url}`);
 
     try {
         const response = await fetch(url, {
             method: "POST",
-            body: JSON.stringify(data),
+            body: JSON.stringify(bodyData),
         });
 
         const body = await response.json();
