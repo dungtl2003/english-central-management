@@ -17,8 +17,8 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import {useAction} from "@/hooks/use-action";
-import {handler} from "@/lib/api/teacher/get-classes";
-import {OutputType} from "@/lib/api/teacher/get-classes/types";
+import {handler} from "@/lib/action/teacher/get-classes";
+import {OutputType} from "@/lib/action/teacher/get-classes/types";
 import {toast} from "@/components/ui/use-toast";
 import {useAuth} from "@clerk/nextjs";
 import {formatDate} from "@/lib/utils";

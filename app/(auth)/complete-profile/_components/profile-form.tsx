@@ -16,7 +16,7 @@ import {RoleSelector} from "@/app/(auth)/complete-profile/_components/select-rol
 
 import {Loader2} from "lucide-react";
 import {useAction} from "@/hooks/use-action";
-import {handler} from "@/lib/api/add-user-role";
+import {handler} from "@/lib/action/add-user-role";
 import {useRouter} from "next/navigation";
 import {useToast} from "@/components/ui/use-toast";
 import {useUser} from "@clerk/nextjs";
