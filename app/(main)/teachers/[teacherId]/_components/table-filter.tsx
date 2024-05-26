@@ -24,6 +24,7 @@ const TableFilter = (props: TableFilterProps): ReactElement => {
         setFilterType(key);
         setSelectedRadio(key);
         props.table.setSorting([]);
+        props.table.setColumnFilters([]);
         props.table.setRowSelection({});
     };
 

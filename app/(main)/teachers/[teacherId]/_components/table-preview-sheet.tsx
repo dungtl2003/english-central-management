@@ -13,6 +13,7 @@ import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {ReactElement} from "react";
+import Link from "next/link";
 
 type TablePreviewSheetProps = {
     data: ClassInfo;
@@ -67,7 +68,16 @@ const TablePreviewSheet: React.FC<TablePreviewSheetProps> = ({
                         </SheetFooter>
                     </SheetContent>
                 </Sheet>
-                <Button variant="outline">Detail</Button>
+                <Button variant="outline">
+                    <Link
+                        className="mr-auto flex gap-x-2"
+                        href="/teachers/1/classes/1"
+                        legacyBehavior
+                        passHref
+                    >
+                        Detail
+                    </Link>
+                </Button>
             </div>
         </>
     );
