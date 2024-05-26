@@ -1,6 +1,6 @@
 "Use client";
 
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {ClassInfo} from "./class-info";
 import TeacherTableColumns from "./teacher-table-columns";
 import TablePagination from "./table-pagination";
@@ -21,6 +21,7 @@ import {handler} from "@/lib/api/teacher/get-classes";
 import {OutputType} from "@/lib/api/teacher/get-classes/types";
 import {toast} from "@/components/ui/use-toast";
 import {useAuth} from "@clerk/nextjs";
+import {formatDate} from "@/lib/utils";
 
 //TODO: for temp testing, will remove later
 // const addTempClasses = async (teacherId: string): Promise<void> => {
@@ -40,15 +41,39 @@ import {useAuth} from "@clerk/nextjs";
 //
 //     console.log(response);
 // };
+const formatData = (fetchedData: OutputType): ClassInfo[] | undefined => {
+    if (!fetchedData) return undefined;
+
+    const displayData: ClassInfo[] = [];
+    fetchedData.forEach((data) =>
+        displayData.push({
+            className: `${data.unit.grade}.${data.index}`,
+            teacher: `${data.teacher.user.lastName} ${data.teacher.user.firstName}`,
+            year: String(data.unit.year),
+            start: formatDate(new Date(data.startTime)),
+            end: formatDate(new Date(data.endTime)),
+            price:
+                String(
+                    Math.round(
+                        Number(data.unit.price_per_session) *
+                            data.unit.max_sessions *
+                            100
+                    ) / 100
+                ) + "$",
+        })
+    );
+
+    return displayData;
+};
 
 // Get columns model
 const columns: ColumnDef<ClassInfo>[] = TeacherTableColumns;
 
-const fallbackData: OutputType[] = [];
+const fallbackDisplayData: ClassInfo[] = [];
 
 export function TeacherTable() {
     const {isLoaded, userId} = useAuth();
-    const {data, execute} = useAction(handler, {
+    const {execute} = useAction(handler, {
         onError: (error: string) => {
             console.log("Error: ", error);
             toast({
@@ -57,15 +82,21 @@ export function TeacherTable() {
                 description: "Cannot get classes",
             });
         },
+        onSuccess: (data: OutputType) => {
+            setDisplayData(formatData(data));
+        },
     });
+    const [displayData, setDisplayData] = useState<ClassInfo[] | undefined>(
+        undefined
+    );
     const [sorting, setSorting] = React.useState<SortingState>([]);
     // Define how many rows can be display
     const [pagination, setPagination] = React.useState<PaginationState>({
         pageIndex: 0,
         pageSize: 5,
     });
-    const table = useReactTable<OutputType>({
-        data: data ?? fallbackData,
+    const table = useReactTable<ClassInfo>({
+        data: displayData ?? fallbackDisplayData,
         columns,
         onSortingChange: setSorting,
         getCoreRowModel: getCoreRowModel(),
