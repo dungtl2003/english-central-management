@@ -154,7 +154,7 @@ model Class {
     startTime DateTime
     endTime DateTime
 
-    sessions Session[]
+    attendances Attendance[]
     schedules Schedule[]
     students StudentsInClasses[]
     tuitions Tuition[]
@@ -162,19 +162,6 @@ model Class {
     createdAt DateTime @default(now())
     updatedAt DateTime?
     closedAt DateTime?
-}
-
-model Session {
-    id String @id @db.Uuid @default(uuid())
-    class Class @relation(fields: [classId], references: [id], onDelete: Cascade)
-    classId String @db.Uuid
-    startTime DateTime @default(now())
-    endTime DateTime
-    location String?
-
-    attendances Attendance[]
-
-    createdAt DateTime @default(now())
 }
 
 model Schedule {
@@ -200,8 +187,8 @@ model StudentsInClasses {
 
 model Attendance {
     id String @id @db.Uuid @default(uuid())
-    session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-    sessionId String @db.Uuid
+    class Class @relation(fields: [classId], references: [id], onDelete: Cascade)
+    classId String @db.Uuid
     student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
     studentId String @db.Uuid
     status AttendanceStatus
