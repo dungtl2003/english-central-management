@@ -9,8 +9,8 @@ type TableFilterProps = {
 };
 
 const TableFilter = (props: TableFilterProps): ReactElement => {
-    const [filterType, _setFilterType] = React.useState("className");
-    const [selectedRadio, _setSelectedRadio] = React.useState("className");
+    const [filterType, setFilterType] = React.useState("className");
+    const [selectedRadio, setSelectedRadio] = React.useState("className");
     const searchBar = React.useRef<HTMLInputElement>(null);
     const handleRadioClick = (
         key: string,
@@ -21,8 +21,8 @@ const TableFilter = (props: TableFilterProps): ReactElement => {
             "placeholder",
             `Filter by ${title.toLocaleLowerCase()}`
         );
-        _setFilterType(key);
-        _setSelectedRadio(key);
+        setFilterType(key);
+        setSelectedRadio(key);
         props.table.setSorting([]);
         props.table.setColumnFilters([]);
         props.table.setRowSelection({});

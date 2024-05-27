@@ -1,12 +1,22 @@
-export enum UserRole {
-    ADMIN = "admin",
-    TEACHER = "teacher",
-    STUDENT = "student",
-    PARENT = "parent",
-}
-
 export interface UserJwtSessionClaims extends CustomJwtSessionClaims {
     metadata?: {
-        role: UserRole;
+        role?: string;
     };
+    firstName?: string;
+    lastName?: string;
+}
+
+export interface PublicMetadata extends UserPublicMetadata {
+    role?: string;
+}
+
+export type Json = {
+    [key: string]: string | string[];
+};
+
+export enum UserRole {
+    ADMIN = "ADMIN",
+    TEACHER = "TEACHER",
+    STUDENT = "STUDENT",
+    PARENT = "PARENT",
 }

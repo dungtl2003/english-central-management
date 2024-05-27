@@ -1,4 +1,4 @@
-"use client";
+"use-client";
 
 import {ReactElement} from "react";
 import {ProfileForm} from "@/app/(auth)/complete-profile/_components/profile-form";

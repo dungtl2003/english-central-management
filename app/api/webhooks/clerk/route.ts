@@ -2,7 +2,7 @@ import {NextRequest, NextResponse} from "next/server";
 import {headers} from "next/headers";
 import {Webhook} from "svix";
 import {WebhookEvent} from "@clerk/nextjs/server";
-// import {db} from "@/lib/db";
+import {db} from "@/lib/db";
 
 interface Payload {
     data: {
@@ -19,10 +19,11 @@ interface Payload {
 }
 
 enum EventTypes {
-    UPDATE = "user.updated",
+    DELETE = "user.deleted",
     CREATE = "user.created",
 }
 
+//TODO: something went wrong with delete user account
 export async function POST(req: NextRequest) {
     console.log("Timestamp: ", new Date().toLocaleString());
     console.log("POST ", req.url);
@@ -75,40 +76,75 @@ export async function POST(req: NextRequest) {
     console.log(`Webhook with and ID of ${id} and type of ${eventType}`);
     console.log("Webhook body: ", payload);
 
-    if (eventType === EventTypes.CREATE || eventType === EventTypes.UPDATE) {
-        const data = payload.data;
-        const primaryEmailId = data.primary_email_address_id;
-        const emails = (data.email_addresses || []).filter(
-            (item) => item.id === primaryEmailId
+    switch (eventType) {
+        case EventTypes.CREATE:
+            return await createUserHandler(payload);
+        case EventTypes.DELETE:
+            return await deleteUserHandler(payload);
+        default:
+            console.log("Error: Invalid event type");
+            return new NextResponse("Error: Invalid event type", {
+                status: 400,
+            });
+    }
+}
+
+const createUserHandler = async (payload: Payload): Promise<NextResponse> => {
+    const data = payload.data;
+    const primaryEmailId = data.primary_email_address_id;
+    const emails = (data.email_addresses || []).filter(
+        (item) => item.id === primaryEmailId
+    );
+
+    if (emails.length <= 0) {
+        return NextResponse.json(
+            {message: "Invalid format message"},
+            {status: 400}
         );
-
-        if (emails.length <= 0) {
-            return NextResponse.json(
-                {message: "Invalid format message"},
-                {status: 400}
-            );
-        }
-
-        // const userData = {
-        //     referId: data.id,
-        //     firstName: data.first_name,
-        //     lastName: data.last_name,
-        //     email: emails[0].email_address,
-        //     imageUrl: data.profile_image_url,
-        // };
-
-        // const userRef = await db.user.findFirst({where: {referId: data.id}});
-        // if (!userRef) {
-        //     const user = await db.user.create({data: userData});
-        //     console.log("Insert new user: ", user);
-        // } else {
-        //     const user = await db.user.update({
-        //         where: {id: userRef.id},
-        //         data: userData,
-        //     });
-        //     console.log("Update user: ", user);
-        // }
     }
 
-    return new NextResponse("", {status: 200});
-}
+    const userData = {
+        referId: data.id,
+        firstName: data.first_name,
+        lastName: data.last_name,
+        email: emails[0].email_address,
+        imageUrl: data.profile_image_url,
+    };
+
+    try {
+        const user = await db.user.upsert({
+            where: {
+                referId: data.id,
+            },
+            create: userData,
+            update: userData,
+        });
+        console.log("Upserted user: ", user);
+        return NextResponse.json("", {status: 200});
+    } catch (error) {
+        console.log("Error: ", (<Error>error).message);
+        return NextResponse.json(
+            {error: "Failed to upsert user"},
+            {status: 500}
+        );
+    }
+};
+
+const deleteUserHandler = async (payload: Payload): Promise<NextResponse> => {
+    const data = payload.data;
+    try {
+        const user = await db.user.delete({
+            where: {
+                referId: data.id,
+            },
+        });
+        console.log("Deleted user: ", user);
+        return new NextResponse("", {status: 200});
+    } catch (error) {
+        console.log("Error: ", (<Error>error).message);
+        return NextResponse.json(
+            {error: "Failed to delete user"},
+            {status: 500}
+        );
+    }
+};

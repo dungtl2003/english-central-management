@@ -2,80 +2,40 @@ import {clerkMiddleware, createRouteMatcher} from "@clerk/nextjs/server";
 import {NextRequest, NextResponse} from "next/server";
 import {UserJwtSessionClaims, UserRole} from "./constaints";
 
-const homepage = "/";
+const homePage = "/";
+const completeProfilePage = "/complete-profile";
+const errorPage = "/404";
+
 const isNonRoleProtectedRoute = createRouteMatcher(["/dashboard(.*)"]);
-const isTestProtectedRoute = createRouteMatcher(["/normal-users(.*)"]);
 const isAdminProtectedRoute = createRouteMatcher(["/admins(.*)"]);
 const isTeacherProtectedRoute = createRouteMatcher(["/teachers(.*)"]);
 const isStudentProtectedRoute = createRouteMatcher(["/students(.*)"]);
 const isParentProtectedRoute = createRouteMatcher(["/parents(.*)"]);
+
 const isProtectedRoute = (req: NextRequest): boolean => {
     return (
         isNonRoleProtectedRoute(req) ||
         isAdminProtectedRoute(req) ||
         isTeacherProtectedRoute(req) ||
         isStudentProtectedRoute(req) ||
-        isParentProtectedRoute(req) ||
-        isTestProtectedRoute(req)
+        isParentProtectedRoute(req)
     );
 };
 
-export default clerkMiddleware(
-    (auth, req) => {
-        const jwt: UserJwtSessionClaims | null = auth().sessionClaims;
-        const role: string | null =
-            jwt && jwt!.metadata && jwt!.metadata!.role
-                ? jwt!.metadata!.role
-                : null;
+const isRightPermission = (role: string | null, req: NextRequest): boolean => {
+    return !(
+        (role !== UserRole.ADMIN && isAdminProtectedRoute(req)) ||
+        (role !== UserRole.TEACHER && isTeacherProtectedRoute(req)) ||
+        (role !== UserRole.STUDENT && isStudentProtectedRoute(req)) ||
+        (role !== UserRole.PARENT && isParentProtectedRoute(req))
+    );
+};
 
-        //if the user isn't authenticated
-        if (!auth().userId && isProtectedRoute(req)) {
-            return auth().redirectToSignIn({returnBackUrl: req.url});
-        }
-
-        //user doesn't have right permission
-        //the user must have signed in in order to try to access protected routes,
-        //no need to check userId
-        if (role !== UserRole.ADMIN && isAdminProtectedRoute(req)) {
-            return NextResponse.redirect(new URL("/404", req.url));
-        }
-        if (role !== UserRole.TEACHER && isTeacherProtectedRoute(req)) {
-            return NextResponse.redirect(new URL("/404", req.url));
-        }
-        if (role !== UserRole.STUDENT && isStudentProtectedRoute(req)) {
-            return NextResponse.redirect(new URL("/404", req.url));
-        }
-        if (role !== UserRole.PARENT && isParentProtectedRoute(req)) {
-            return NextResponse.redirect(new URL("/404", req.url));
-        }
-
-        //TODO: for testing purpose
-        if (
-            auth().userId &&
-            role === null &&
-            req.nextUrl.pathname === homepage
-        ) {
-            req.nextUrl.pathname = `/normal-users/${auth().userId}`;
-            return NextResponse.redirect(req.nextUrl);
-        }
-
-        //user is authorized and in homepage
-        if (auth().userId && role && req.nextUrl.pathname === homepage) {
-            const response = skipHomePage(auth().userId!, role!, req);
-            if (response !== null) return response;
-        }
-
-        //public route or the user is authorized
-        return NextResponse.next();
-    },
-    {debug: true}
-);
-
-function skipHomePage(
+const skipHomePage = (
     userId: string,
-    role: string,
-    req: NextRequest
-): NextResponse<unknown> | null {
+    req: NextRequest,
+    role: string
+): NextResponse => {
     switch (role) {
         case UserRole.ADMIN:
             req.nextUrl.pathname = `/admins/${userId}`;
@@ -90,11 +50,44 @@ function skipHomePage(
             req.nextUrl.pathname = `/parents/${userId}`;
             break;
         default:
-            return null;
+            throw new Error("Unsupported role");
     }
 
     return NextResponse.redirect(req.nextUrl);
-}
+};
+
+export default clerkMiddleware(
+    (auth, req) => {
+        console.log("Redirect to ", req.nextUrl.pathname);
+        const userId: string | null = auth().userId;
+        const jwt: UserJwtSessionClaims | null = auth().sessionClaims;
+        const role: UserRole | null = (jwt?.metadata?.role as UserRole) ?? null;
+
+        //the user isn't authenticated
+        if (!userId && isProtectedRoute(req)) {
+            return auth().redirectToSignIn({returnBackUrl: req.url});
+        }
+
+        //the user doesn't have right permission
+        if (!isRightPermission(role, req)) {
+            return NextResponse.redirect(new URL(errorPage, req.url));
+        }
+
+        //the user is authorized and in home page
+        if (userId && req.nextUrl.pathname === homePage) {
+            if (!role) {
+                return NextResponse.redirect(
+                    new URL(completeProfilePage, req.url)
+                );
+            }
+            return skipHomePage(auth().userId!, req, role);
+        }
+
+        //public route or the user is authorized
+        return NextResponse.next();
+    },
+    {debug: true}
+);
 
 export const config = {
     matcher: ["/((?!.+.[w]+$|_next).*)", "/", "/(api|trpc)(.*)"],

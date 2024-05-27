@@ -15,11 +15,11 @@ const TablePagination = (props: TablePaginationProps): ReactElement => {
     const inputChangeHandler = (e: ChangeEvent<HTMLInputElement>): void => {
         if (!e.target.value) return;
 
-        try {
-            const page = Number(e.target.value) - 1;
-            if (page < 0 || page >= props.table.getPageCount()) return;
-            props.table.setPageIndex(page);
-        } catch (error) {}
+        if (isNaN(Number(e.target.value))) return;
+
+        const page = Number(e.target.value) - 1;
+        if (page < 0 || page >= props.table.getPageCount()) return;
+        props.table.setPageIndex(page);
     };
 
     useEffect(() => {
@@ -43,9 +43,7 @@ const TablePagination = (props: TablePaginationProps): ReactElement => {
                     <Input
                         ref={pageIndexInput}
                         type="text"
-                        defaultValue={
-                            props.table.getState().pagination.pageIndex + 1
-                        }
+                        defaultValue={pageIndex + 1}
                         onChange={inputChangeHandler}
                         className="border p-1 h-[35px] rounded w-16"
                     />
