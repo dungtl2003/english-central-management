@@ -33,6 +33,11 @@ enum AttendanceStatus {
     LATE
 }
 
+enum Gender {
+    MALE
+    FEMALE
+}
+
 model User {
     id String @id @db.Uuid @default(uuid())
     referId String @db.Text @unique
@@ -42,6 +47,8 @@ model User {
     phoneNumber String? @db.Text
     identifyCard String? @db.Text
     imageUrl String? @db.Text
+    birthday DateTime? @db.Date
+    gender Gender?
     role UserRole?
 
     admin Admin?
