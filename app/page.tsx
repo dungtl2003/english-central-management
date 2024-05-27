@@ -1,16 +1,20 @@
-import {ReactElement} from "react";
+"use client";
 
-const HomeLayout: React.FC = (): ReactElement => {
+import {ReactElement} from "react";
+import PreLogin from "@/components/pre-login";
+import Logo from "@/components/logo";
+import {UserButton, useUser} from "@clerk/nextjs";
+
+const HomePage: React.FC = (): ReactElement => {
+    const {isSignedIn} = useUser();
     return (
         <div className="relative z-0 h-full flex flex-col">
-            <nav className="fixed w-full h-18 p-4 border-b shadow-sm flex items-center">
-                <div className="ml-auto flex items-center gap-x-2">
-                    <a href="/sign-in">Sign in</a> /{" "}
-                    <a href="/sign-up">Sign up</a>
-                </div>
+            <nav className="w-full h-16 p-4 border-b shadow-sm flex items-center">
+                <Logo />
+                {isSignedIn ? <UserButton /> : <PreLogin />}
             </nav>
         </div>
     );
 };
 
-export default HomeLayout;
+export default HomePage;

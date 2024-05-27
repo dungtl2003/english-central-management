@@ -46,6 +46,50 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
+## Run test
+
+Run the end-to-end tests
+
+```bash
+npx playwright test
+```
+
+Start the interactive UI mode
+
+```bash
+npx playwright test --ui
+```
+
+Run the test only on Desktop Chrome
+
+```bash
+npx playwright test --project=chromium
+```
+
+Run the tests in a specific file
+
+```bash
+npx playwright test example
+```
+
+Run the tests in debug mode
+
+```bash
+npx playwright test --debug
+```
+
+Auto generate tests with Codegen
+
+```bash
+npx playwright codegen
+```
+
+We suggest that you begin by typing:
+
+```bash
+npx playwright test
+```
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

@@ -1,23 +1,32 @@
-import {UserButton} from "@clerk/nextjs";
-import {ReactElement} from "react";
+"use client";
+
+import {PublicMetadata} from "@/constaints";
+import {useUser} from "@clerk/nextjs";
+import {useRouter} from "next/navigation";
+import {ReactElement, useEffect} from "react";
 
 const MainLayout: React.FC<{children: React.ReactNode}> = ({
     children,
 }): ReactElement => {
+    const router = useRouter();
+    const {isSignedIn, user, isLoaded} = useUser();
+
+    useEffect(() => {
+        if (!isLoaded) return;
+
+        if (!isSignedIn) {
+            router.push("/404");
+        }
+
+        if (!(user!.publicMetadata as PublicMetadata).role) {
+            router.push("/complete-profile");
+        }
+    }, [isLoaded]);
+
     return (
-        <div className="relative z-0 h-full flex flex-col">
-            <nav className="fixed w-full h-18 p-4 border-b shadow-sm flex items-center">
-                <div className="ml-auto flex items-center gap-x-2">
-                    <UserButton
-                        afterSignOutUrl="/"
-                        appearance={{
-                            elements: {avatarBox: {height: 55, width: 55}},
-                        }}
-                    />
-                </div>
-            </nav>
-            {children}
-        </div>
+        <>
+            <div>{children}</div>
+        </>
     );
 };
 
