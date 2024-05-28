@@ -1,25 +1,57 @@
 import React, {ReactElement} from "react";
 import OverviewCardContent from "./overview-card-content";
+import {OutputType} from "@/lib/action/teacher/get-class-detail/types";
 
-const OverviewCard = (): ReactElement => {
+interface DisplayData {
+    numberOfStudents: string;
+    classProgress: string;
+    classGoal: string;
+    totalFee: string;
+}
+
+const formatData = (data: OutputType | undefined): DisplayData => {
+    return {
+        numberOfStudents: data ? String(data.students.length) : "",
+        classProgress: data ? String(data.attendances.length) : "",
+        classGoal: data ? String(data.unit.max_sessions) : "",
+        totalFee: data
+            ? String(
+                  Math.round(
+                      Number(data.unit.price_per_session) *
+                          data.unit.max_sessions *
+                          100
+                  ) / 100
+              ) + "$"
+            : "",
+    };
+};
+
+const OverviewCard: React.FC<{data: OutputType | undefined}> = ({
+    data,
+}): ReactElement => {
+    const formattedData: DisplayData = formatData(data);
+
     return (
         <div className="pt-3 flex flex-row">
             <div className="min-w-full grid grid-cols-4 gap-x-5">
                 <OverviewCardContent
                     cardTitle="Number of students"
-                    cardValue="45"
+                    cardValue={formattedData.numberOfStudents}
                 />
 
                 <OverviewCardContent
                     cardTitle="Class progress"
-                    cardValue="27"
+                    cardValue={formattedData.classProgress}
                 />
 
-                <OverviewCardContent cardTitle="Class goal" cardValue="50" />
+                <OverviewCardContent
+                    cardTitle="Class goal"
+                    cardValue={formattedData.classGoal}
+                />
 
                 <OverviewCardContent
-                    cardTitle="Tuition fee"
-                    cardValue={"15" + "$"}
+                    cardTitle="Total fee"
+                    cardValue={formattedData.totalFee}
                 />
             </div>
         </div>

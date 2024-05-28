@@ -9,7 +9,10 @@ import {UserRole} from "@prisma/client";
  * Get teacher's detail information.
  * Only teacher can use this api (with him/her's ID).
  */
-export async function GET(req: NextRequest) {
+export async function GET(
+    req: NextRequest,
+    {params}: {params: {teacherId: string}}
+) {
     console.log("Timestamp: ", new Date().toLocaleString());
     console.log("GET ", req.nextUrl.pathname);
 
@@ -21,7 +24,7 @@ export async function GET(req: NextRequest) {
     }
 
     const clerkUserId = auth().userId;
-    const teacherId = req.url.substring(req.url.lastIndexOf("/") + 1);
+    const teacherId = params.teacherId;
     const role: UserRole | null = getClerkRole();
 
     if (
