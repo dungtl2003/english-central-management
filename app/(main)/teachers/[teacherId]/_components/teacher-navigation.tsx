@@ -51,7 +51,7 @@ const TeacherNavigation = (): ReactElement => {
 
                             <Link
                                 className="mr-auto flex gap-x-2"
-                                href="/teachers/1"
+                                href="/"
                                 legacyBehavior
                                 passHref
                             >

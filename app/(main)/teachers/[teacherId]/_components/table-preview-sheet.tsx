@@ -14,6 +14,7 @@ import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {ReactElement} from "react";
 import Link from "next/link";
+import {usePathname} from "next/navigation";
 
 type TablePreviewSheetProps = {
     data: ClassInfo;
@@ -22,6 +23,7 @@ type TablePreviewSheetProps = {
 const TablePreviewSheet: React.FC<TablePreviewSheetProps> = ({
     data,
 }): ReactElement => {
+    const currentUrl = usePathname();
     return (
         <>
             <div className="flex flex-row gap-x-4">
@@ -63,7 +65,20 @@ const TablePreviewSheet: React.FC<TablePreviewSheetProps> = ({
                         </div>
                         <SheetFooter>
                             <SheetClose asChild>
-                                <Button>View detail</Button>
+                                <Button variant="outline">
+                                    <Link
+                                        className="mr-auto flex gap-x-2"
+                                        href={
+                                            currentUrl +
+                                            "/classes/" +
+                                            data.classId
+                                        }
+                                        legacyBehavior
+                                        passHref
+                                    >
+                                        View detail
+                                    </Link>
+                                </Button>
                             </SheetClose>
                         </SheetFooter>
                     </SheetContent>
@@ -71,7 +86,7 @@ const TablePreviewSheet: React.FC<TablePreviewSheetProps> = ({
                 <Button variant="outline">
                     <Link
                         className="mr-auto flex gap-x-2"
-                        href="/teachers/1/classes/1"
+                        href={currentUrl + "/classes/" + data.classId}
                         legacyBehavior
                         passHref
                     >

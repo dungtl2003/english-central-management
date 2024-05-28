@@ -2,7 +2,6 @@
 
 import React from "react";
 import {ClassInfo} from "../../../../_components/class-info";
-import {DummyData} from "../../../../_components/dummy-data";
 import TeacherTableColumns from "../../../../_components/teacher-table-columns";
 import TablePagination from "../../../../_components/table-pagination";
 import TableFilter from "../../../../_components/table-filter";
@@ -20,8 +19,9 @@ import {
 
 const columns: ColumnDef<ClassInfo>[] = TeacherTableColumns;
 
+const data: ClassInfo[] = [];
+
 const ClassListTable = () => {
-    const data: ClassInfo[] = DummyData;
     const [sorting, _setSorting] = React.useState<SortingState>([]);
     // Define how many rows can be display
     const [pagination, setPagination] = React.useState<PaginationState>({
