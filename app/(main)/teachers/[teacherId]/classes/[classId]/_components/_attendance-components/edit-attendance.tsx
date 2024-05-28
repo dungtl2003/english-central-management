@@ -20,7 +20,7 @@ import {
 import {Button} from "@/components/ui/button";
 import React, {ReactElement} from "react";
 import {FaPlusCircle} from "react-icons/fa";
-import AttendanceTable from "./attendance-table";
+import AttendanceTable from "./attendance-detail-table";
 
 export function CreateAttendance(): ReactElement {
     const [open, setOpen] = React.useState(false);

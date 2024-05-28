@@ -1,10 +1,10 @@
 export type ClassInfo = {
-    className: string; // 3.1, 3.2
-    teacher: string; // Nguyễn Minh Đức
-    year: string; // Khối 3
-    start: string; // 01/05/2024
-    end: string; // 31/12/2024
-    price: string; // 150,000 / buổi
+    className: string;
+    teacher: string;
+    year: string;
+    start: string;
+    end: string;
+    price: string;
 };
 
 export type ClassInfoDef = {
@@ -32,4 +32,30 @@ export const ClassInfoDictionary: TableDictionary = {
     end: "End",
     price: "Price",
     teacher: "Teacher",
+};
+
+export type StudentInfo = {
+    fullName: string;
+    studentCode: string;
+    birthday: string;
+    tuitionPaid: string;
+};
+
+export type StudentInfoDef = {
+    key: string;
+    title: string;
+};
+
+export const StudentInfoArray: StudentInfoDef[] = [
+    {key: "fullName", title: "Full name"},
+    {key: "studentCode", title: "Student code"},
+    {key: "birthday", title: "Birthday"},
+    {key: "tuitionPaid", title: "Tuition fee"},
+];
+
+export const StudentInfoDictionary: TableDictionary = {
+    fullName: "Full name",
+    studentCode: "Student code",
+    birthday: "Birthday",
+    tuitionPaid: "Tuition fee",
 };

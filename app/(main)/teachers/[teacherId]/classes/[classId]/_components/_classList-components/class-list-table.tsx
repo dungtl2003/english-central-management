@@ -1,12 +1,11 @@
 ("Use client");
 
 import React from "react";
-import {ClassInfo} from "../../../../_components/class-info";
-import {DummyData} from "../../../../_components/dummy-data";
-import TeacherTableColumns from "../../../../_components/teacher-table-columns";
-import TablePagination from "../../../../_components/table-pagination";
-import TableFilter from "../../../../_components/table-filter";
-import TableContent from "../../../../_components/table-content";
+import {StudentInfo} from "../../../../_components/class-info";
+import {StudentData} from "../../../../_components/dummy-data";
+import ClassListTableColumns from "./class-list-table-columns";
+import ClassListPagination from "./class-list-pagination";
+import ClassListTableContent from "./class-list-table-content";
 import {
     ColumnDef,
     SortingState,
@@ -18,15 +17,14 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 
-const columns: ColumnDef<ClassInfo>[] = TeacherTableColumns;
+const columns: ColumnDef<StudentInfo>[] = ClassListTableColumns;
 
 const ClassListTable = () => {
-    const data: ClassInfo[] = DummyData;
+    const data: StudentInfo[] = StudentData;
     const [sorting, _setSorting] = React.useState<SortingState>([]);
-    // Define how many rows can be display
     const [pagination, setPagination] = React.useState<PaginationState>({
         pageIndex: 0,
-        pageSize: 5,
+        pageSize: 4,
     });
 
     const table = useReactTable({
@@ -45,10 +43,9 @@ const ClassListTable = () => {
     });
     return (
         <>
-            <div className="w-11/12 pt-[120px]">
-                <TableFilter table={table} />
-                <TableContent table={table} columns={columns} />
-                <TablePagination table={table} />
+            <div className="w-full mt-5">
+                <ClassListTableContent table={table} columns={columns} />
+                <ClassListPagination table={table} />
             </div>
         </>
     );
