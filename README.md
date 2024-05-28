@@ -12,9 +12,23 @@ in clerk's session token, add:
 
 ```json
 {
-	"metadata": "{{user.public_metadata}}"
+	"metadata": "{{user.public_metadata}}",
+	"last_name": "{{user.last_name}}",
+	"first_name": "{{user.first_name}}"
 }
 ```
+
+you also need to have `.env` file in root project, in the file you need `key=value` each line<br>
+required environment variables:<br>
+Variable | Purpose
+--- | ---
+NEXT_PUBLIC_NODE_ENV | set runtime environment, can be "development" or "production"
+NEXT_PUBLIC_DOMAIN | set app domain name
+NEXT_PUBLIC_PROTOCOL | set protocol, can be "http" or "https"
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY | clerk public key
+CLERK_SECRET_KEY | clerk secret key
+WEBHOOK_SECRET | clerk webhook key for webhook connection
+DATABASE_URL | for prisma connection with database
 
 ## About project
 
