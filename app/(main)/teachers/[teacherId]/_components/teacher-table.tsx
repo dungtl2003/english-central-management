@@ -50,6 +50,7 @@ const formatData = (fetchedData: OutputType): ClassInfo[] | undefined => {
     const displayData: ClassInfo[] = [];
     fetchedData.forEach((data) =>
         displayData.push({
+            classId: data.id,
             className: `${data.unit.grade}.${data.index}`,
             teacher: `${data.teacher.user.lastName} ${data.teacher.user.firstName}`,
             year: String(data.unit.year),

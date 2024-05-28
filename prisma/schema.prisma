@@ -200,7 +200,8 @@ model Attendance {
     studentId String @db.Uuid
     status AttendanceStatus
     description String?
-    attendanceDate DateTime @default(now())
+    isAttended Boolean @default(false)
+    attendanceDate DateTime
 
     updatedAt DateTime?
 }

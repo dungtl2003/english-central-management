@@ -1,4 +1,5 @@
 export interface ClassInfo {
+    classId: string; //uuid
     className: string; // 3.1, 3.2
     teacher: string; // Nguyễn Minh Đức
     year: string; // Khối 3
