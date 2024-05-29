@@ -139,9 +139,9 @@ model Unit {
     id String @id @db.Uuid @default(uuid())
     year Int @db.Integer
     grade Int @db.Integer
-    max_sessions Int @db.Integer
-    max_students Int @db.Integer
-    price_per_session Decimal @db.Decimal(20, 2) 
+    maxSessions Int @db.Integer
+    maxStudents Int @db.Integer
+    pricePerSession Decimal @db.Decimal(20, 2) 
 
     classes Class[]
 
@@ -161,7 +161,7 @@ model Class {
     startTime DateTime
     endTime DateTime
 
-    attendances Attendance[]
+    sessions Session[]
     schedules Schedule[]
     students StudentsInClasses[]
     tuitions Tuition[]
@@ -192,16 +192,27 @@ model StudentsInClasses {
     @@id([classId, studentId])
 }
 
-model Attendance {
+model Session {
     id String @id @db.Uuid @default(uuid())
     class Class @relation(fields: [classId], references: [id], onDelete: Cascade)
     classId String @db.Uuid
+    estimatedStartTime DateTime
+    estimatedEndTime DateTime
+    actualStartTime DateTime
+    actualEndTime DateTime
+    attendedTime DateTime?
+
+    attendances Attendance[]
+}
+
+model Attendance {
+    id String @id @db.Uuid @default(uuid())
+    session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+    sessionId String @db.Uuid
     student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
     studentId String @db.Uuid
     status AttendanceStatus
     description String?
-    isAttended Boolean @default(false)
-    attendanceDate DateTime
 
     updatedAt DateTime?
 }
