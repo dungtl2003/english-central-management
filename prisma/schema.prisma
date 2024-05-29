@@ -93,7 +93,6 @@ model Parent {
     id String @id @db.Uuid @default(uuid())
     user User @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId String @db.Uuid @unique
-    discount Int @db.Integer
 
     children ChildrenParents[]
     tuitions Tuition[]
@@ -103,6 +102,7 @@ model Student {
     id String @id @db.Uuid @default(uuid())
     user User @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId String @db.Uuid @unique
+    discount Int @db.Integer @default(0)
 
     parents ChildrenParents[]
     tuitions Tuition[]
