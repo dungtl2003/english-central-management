@@ -21,10 +21,6 @@ export const ClassInfoArray: ClassInfoDef[] = [
     {key: "teacher", title: "Teacher"},
 ];
 
-export interface TableDictionary {
-    [key: string]: string;
-}
-
 export const ClassInfoDictionary: TableDictionary = {
     className: "Class name",
     year: "Year",
@@ -32,4 +28,8 @@ export const ClassInfoDictionary: TableDictionary = {
     end: "End",
     price: "Price",
     teacher: "Teacher",
+};
+
+export type TableDictionary = {
+    [key: string]: string;
 };

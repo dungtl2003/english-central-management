@@ -2,8 +2,6 @@ import {
     Dialog,
     DialogContent,
     DialogFooter,
-    DialogHeader,
-    DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
 import {
@@ -11,7 +9,6 @@ import {
     AlertDialogAction,
     AlertDialogCancel,
     AlertDialogContent,
-    AlertDialogDescription,
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
@@ -19,47 +16,55 @@ import {
 } from "@/components/ui/alert-dialog";
 import {Button} from "@/components/ui/button";
 import React, {ReactElement} from "react";
-import {FaPlusCircle} from "react-icons/fa";
+import {FaEdit} from "react-icons/fa";
 import AttendanceTable from "./attendance-table";
+import {SessionTableModel} from "./session-table-model";
+import SessionEditHeader from "./session-edit-header";
 
-export function CreateAttendance(): ReactElement {
+interface SessionEditProps {
+    data: SessionTableModel;
+}
+
+export function SessionEdit({data}: SessionEditProps): ReactElement {
     const [open, setOpen] = React.useState(false);
     const handleClose = () => setOpen(false);
+
+    // Dùng biến này check xem ngày hiện tại có lớn hơn ngày theo lịch
+    // Nếu lớn hơn thì để false => lúc này cái nút sẽ bấm được
+    // Nếu nhỏ hơn thì để true => lúc này cái nút sẽ bị làm mờ
+    const isEditable: boolean = false;
+
+    // Dùng biến này để kiểm tra xem bản ghi điểm danh đã được lưu lần đầu chưa
+    // Mặc định ban đầu sẽ là false
+    // Khi bấm nút "Save attendance" => setFlag(true) => đổi biến cờ
+    // const [flag, setFlag] = useState(false);
+
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
+            <DialogTrigger disabled={isEditable} asChild>
                 <Button variant="outline">
                     <span className="pr-1">
-                        <FaPlusCircle />
+                        <FaEdit />
                     </span>
-                    Attendance
+                    Edit
                 </Button>
             </DialogTrigger>
             <DialogContent
                 className="max-w-[80%] min-h-[80%]"
                 onInteractOutside={(e) => e.preventDefault()}
             >
-                <DialogHeader>
-                    <DialogTitle className="text-2xl">
-                        Class 3.1: 26/05/2024
-                    </DialogTitle>
-                </DialogHeader>
+                <SessionEditHeader data={data} />
                 <AttendanceTable />
                 <DialogFooter>
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
-                            <Button type="submit">Save record</Button>
+                            <Button type="submit">Save attendance</Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                             <AlertDialogHeader>
                                 <AlertDialogTitle>
                                     Are you absolutely sure?
                                 </AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    This action cannot be undone. This will
-                                    permanently delete your account and remove
-                                    your data from our servers.
-                                </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
