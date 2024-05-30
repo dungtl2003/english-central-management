@@ -2,8 +2,8 @@ import {z} from "zod";
 import {RequestSchema} from "./schema";
 import {ActionState} from "@/lib/create-safe-action";
 import {
-    Attendance,
     Class,
+    Session,
     Student,
     StudentsInClasses,
     Unit,
@@ -15,7 +15,7 @@ export type InputType = z.infer<typeof RequestSchema>;
 export type OutputType =
     | (Class & {
           unit: Unit;
-          attendances: Attendance[];
+          sessions: Session[];
           students: (StudentsInClasses & {
               student: Student & {
                   user: User;

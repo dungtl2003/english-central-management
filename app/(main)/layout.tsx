@@ -3,13 +3,17 @@
 import {PublicMetadata} from "@/constaints";
 import {useUser} from "@clerk/nextjs";
 import {useRouter} from "next/navigation";
-import {ReactElement, useEffect} from "react";
+import {ReactElement, useEffect, useMemo} from "react";
 
 const MainLayout: React.FC<{children: React.ReactNode}> = ({
     children,
 }): ReactElement => {
     const router = useRouter();
     const {isSignedIn, user, isLoaded} = useUser();
+    const metadata = useMemo(
+        () => user?.publicMetadata as PublicMetadata,
+        [user]
+    );
 
     useEffect(() => {
         if (!isLoaded) return;
@@ -18,10 +22,10 @@ const MainLayout: React.FC<{children: React.ReactNode}> = ({
             router.push("/404");
         }
 
-        if (!(user!.publicMetadata as PublicMetadata).role) {
+        if (!metadata.role) {
             router.push("/complete-profile");
         }
-    }, [isLoaded]);
+    }, [isLoaded, isSignedIn, metadata, router]);
 
     return (
         <>

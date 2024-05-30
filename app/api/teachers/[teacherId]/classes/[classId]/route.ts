@@ -55,7 +55,7 @@ export async function GET(
             },
             include: {
                 unit: true,
-                attendances: true,
+                sessions: true,
                 students: {
                     include: {
                         student: {

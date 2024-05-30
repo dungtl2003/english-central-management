@@ -23,7 +23,6 @@ enum EventTypes {
     CREATE = "user.created",
 }
 
-//TODO: something went wrong with delete user account
 export async function POST(req: NextRequest) {
     console.log("Timestamp: ", new Date().toLocaleString());
     console.log("POST ", req.url);
@@ -65,7 +64,7 @@ export async function POST(req: NextRequest) {
             "svix-signature": svix_signature,
         }) as WebhookEvent;
     } catch (err) {
-        console.error("Error verifying webhook:", err);
+        console.error("Error verifying webhook:", (<Error>err).message);
         return new NextResponse("Error occured", {
             status: 400,
         });

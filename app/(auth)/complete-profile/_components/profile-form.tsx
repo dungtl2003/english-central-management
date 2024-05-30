@@ -20,7 +20,7 @@ import {handler} from "@/lib/action/add-user-role";
 import {useRouter} from "next/navigation";
 import {useToast} from "@/components/ui/use-toast";
 import {useUser} from "@clerk/nextjs";
-import {useEffect} from "react";
+import {useEffect, useMemo} from "react";
 import {PublicMetadata} from "@/constaints";
 
 const FormSchema = z.object({
@@ -33,6 +33,10 @@ type FormData = z.infer<typeof FormSchema>;
 
 export function ProfileForm() {
     const {user, isSignedIn, isLoaded} = useUser();
+    const metadata = useMemo(
+        () => user?.publicMetadata as PublicMetadata,
+        [user]
+    );
     const router = useRouter();
     const {toast} = useToast();
     const {execute, isLoading, data} = useAction(handler, {
@@ -67,15 +71,15 @@ export function ProfileForm() {
         }
 
         redirect();
-    }, [data]);
+    }, [data, router, user]);
 
     useEffect(() => {
         if (!isLoaded) return;
 
-        if (!isSignedIn || (user.publicMetadata as PublicMetadata).role) {
+        if (!isSignedIn || metadata.role) {
             router.push("/");
         }
-    }, [isLoaded]);
+    }, [isLoaded, isSignedIn, router, metadata]);
 
     function onSubmit(values: FormData) {
         execute({

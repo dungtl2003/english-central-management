@@ -57,13 +57,14 @@ const formatData = (fetchedData: OutputType): ClassInfo[] | undefined => {
             start: formatDate(new Date(data.startTime)),
             end: formatDate(new Date(data.endTime)),
             price:
+                "$" +
                 String(
                     Math.round(
-                        Number(data.unit.price_per_session) *
-                            data.unit.max_sessions *
+                        Number(data.unit.pricePerSession) *
+                            data.unit.maxSessions *
                             100
                     ) / 100
-                ) + "$",
+                ),
         })
     );
 

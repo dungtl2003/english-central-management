@@ -73,8 +73,6 @@ const TablePreviewSheet: React.FC<TablePreviewSheetProps> = ({
                                             "/classes/" +
                                             data.classId
                                         }
-                                        legacyBehavior
-                                        passHref
                                     >
                                         View detail
                                     </Link>
@@ -87,8 +85,6 @@ const TablePreviewSheet: React.FC<TablePreviewSheetProps> = ({
                     <Link
                         className="mr-auto flex gap-x-2"
                         href={currentUrl + "/classes/" + data.classId}
-                        legacyBehavior
-                        passHref
                     >
                         Detail
                     </Link>

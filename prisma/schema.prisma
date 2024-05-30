@@ -141,6 +141,7 @@ model Unit {
     grade Int @db.Integer
     maxSessions Int @db.Integer
     maxStudents Int @db.Integer
+    studyTime DateTime @db.Time(0)
     pricePerSession Decimal @db.Decimal(20, 2) 
 
     classes Class[]
@@ -197,9 +198,7 @@ model Session {
     class Class @relation(fields: [classId], references: [id], onDelete: Cascade)
     classId String @db.Uuid
     estimatedStartTime DateTime
-    estimatedEndTime DateTime
     actualStartTime DateTime
-    actualEndTime DateTime
     attendedTime DateTime?
 
     attendances Attendance[]
