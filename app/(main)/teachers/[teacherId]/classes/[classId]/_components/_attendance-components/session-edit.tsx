@@ -11,7 +11,6 @@ import {
     AlertDialogAction,
     AlertDialogCancel,
     AlertDialogContent,
-    AlertDialogDescription,
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
@@ -19,20 +18,32 @@ import {
 } from "@/components/ui/alert-dialog";
 import {Button} from "@/components/ui/button";
 import React, {ReactElement} from "react";
-import {FaPlusCircle} from "react-icons/fa";
-import AttendanceTable from "./attendance-detail-table";
+import {FaEdit} from "react-icons/fa";
+import AttendanceTable from "./attendance-table";
+import {SessionTableModel} from "./session-table-model";
 
-export function CreateAttendance(): ReactElement {
+interface SessionEditProps {
+    data: SessionTableModel;
+}
+
+export function SessionEdit({data}: SessionEditProps): ReactElement {
     const [open, setOpen] = React.useState(false);
     const handleClose = () => setOpen(false);
+
+    const isDisabled: boolean =
+        new Date().getDate() - new Date(data.attendanceDate).getDate() > 0;
+
+    // const isEditable: boolean = data.status.toLowerCase() === "true";
+    console.log(new Date("22/01/2024"));
+
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
+            <DialogTrigger disabled={isDisabled} asChild>
                 <Button variant="outline">
                     <span className="pr-1">
-                        <FaPlusCircle />
+                        <FaEdit />
                     </span>
-                    Attendance
+                    Edit
                 </Button>
             </DialogTrigger>
             <DialogContent
@@ -41,25 +52,20 @@ export function CreateAttendance(): ReactElement {
             >
                 <DialogHeader>
                     <DialogTitle className="text-2xl">
-                        Class 3.1: 26/05/2024
+                        {`Class ${data.className}: ${data.attendanceDate}`}
                     </DialogTitle>
                 </DialogHeader>
                 <AttendanceTable />
                 <DialogFooter>
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
-                            <Button type="submit">Save record</Button>
+                            <Button type="submit">Save attendance</Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                             <AlertDialogHeader>
                                 <AlertDialogTitle>
                                     Are you absolutely sure?
                                 </AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    This action cannot be undone. This will
-                                    permanently delete your account and remove
-                                    your data from our servers.
-                                </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>

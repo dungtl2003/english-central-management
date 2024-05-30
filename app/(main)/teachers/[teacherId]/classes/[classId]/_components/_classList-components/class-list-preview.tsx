@@ -21,7 +21,6 @@ import {
     AlertDialogAction,
     AlertDialogCancel,
     AlertDialogContent,
-    AlertDialogDescription,
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
@@ -35,7 +34,6 @@ import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import React, {ReactElement} from "react";
-import Link from "next/link";
 
 type TablePreviewSheetProps = {
     data: StudentInfo;
@@ -111,14 +109,7 @@ const ClassListPreview: React.FC<TablePreviewSheetProps> = ({
                                     />
                                 </svg>
                             </span>
-                            <Link
-                                className="mr-auto flex gap-x-2"
-                                href="#"
-                                legacyBehavior
-                                passHref
-                            >
-                                Pay
-                            </Link>
+                            Pay
                         </Button>
                     </DialogTrigger>
                     <DialogContent
@@ -141,12 +132,6 @@ const ClassListPreview: React.FC<TablePreviewSheetProps> = ({
                                         <AlertDialogTitle>
                                             Are you absolutely sure?
                                         </AlertDialogTitle>
-                                        <AlertDialogDescription>
-                                            This action cannot be undone. This
-                                            will permanently delete your account
-                                            and remove your data from our
-                                            servers.
-                                        </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
                                         <AlertDialogCancel>
