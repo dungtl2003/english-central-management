@@ -21,10 +21,6 @@ export const ClassInfoArray: ClassInfoDef[] = [
     {key: "teacher", title: "Teacher"},
 ];
 
-export type TableDictionary = {
-    [key: string]: string;
-};
-
 export const ClassInfoDictionary: TableDictionary = {
     className: "Class name",
     year: "Year",
@@ -34,28 +30,6 @@ export const ClassInfoDictionary: TableDictionary = {
     teacher: "Teacher",
 };
 
-export type StudentInfo = {
-    fullName: string;
-    studentCode: string;
-    birthday: string;
-    tuitionPaid: string;
-};
-
-export type StudentInfoDef = {
-    key: string;
-    title: string;
-};
-
-export const StudentInfoArray: StudentInfoDef[] = [
-    {key: "fullName", title: "Full name"},
-    {key: "studentCode", title: "Student code"},
-    {key: "birthday", title: "Birthday"},
-    {key: "tuitionPaid", title: "Tuition fee"},
-];
-
-export const StudentInfoDictionary: TableDictionary = {
-    fullName: "Full name",
-    studentCode: "Student code",
-    birthday: "Birthday",
-    tuitionPaid: "Tuition fee",
+export type TableDictionary = {
+    [key: string]: string;
 };

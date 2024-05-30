@@ -1,5 +1,5 @@
 import React, {ReactElement, useEffect} from "react";
-import {StudentInfo} from "../../../../_components/class-info";
+import {StudentInfo} from "../_attendance-components/student-info";
 import {Table} from "@tanstack/react-table";
 import {Button} from "@/components/ui/button";
 import ClassListTableFilter from "./class-list-table-filter";

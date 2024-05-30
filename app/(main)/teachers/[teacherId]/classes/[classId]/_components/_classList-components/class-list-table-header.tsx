@@ -1,7 +1,7 @@
 import React, {ReactElement} from "react";
 import {TableHeader as THead, TableHead, TableRow} from "@/components/ui/table";
 import {Table, flexRender} from "@tanstack/react-table";
-import {StudentInfo} from "../../../../_components/class-info";
+import {StudentInfo} from "../_attendance-components/student-info";
 
 interface TableHeaderProps {
     table: Table<StudentInfo>;

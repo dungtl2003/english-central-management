@@ -1,7 +1,7 @@
 import React, {ReactElement} from "react";
 import {TableBody as TBody, TableCell, TableRow} from "@/components/ui/table";
 import {ColumnDef, Table, flexRender} from "@tanstack/react-table";
-import {StudentInfo} from "../../../../_components/class-info";
+import {StudentInfo} from "../_attendance-components/student-info";
 
 type TableBodyProps = {
     table: Table<StudentInfo>;

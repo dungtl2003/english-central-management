@@ -15,7 +15,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import React, {ReactElement} from "react";
-import {StudentData} from "../../../../_components/dummy-data";
+import {StudentDummyData} from "./student-dummy-data";
 
 const AttendanceTable = (): ReactElement => {
     let order: number = 1;
@@ -32,7 +32,7 @@ const AttendanceTable = (): ReactElement => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {StudentData.map((student) => {
+                    {StudentDummyData.map((student) => {
                         return (
                             <TableRow key={order++}>
                                 <TableCell>{order}</TableCell>

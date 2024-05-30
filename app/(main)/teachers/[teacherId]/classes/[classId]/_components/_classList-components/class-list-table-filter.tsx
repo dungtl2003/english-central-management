@@ -1,6 +1,6 @@
 import React, {ReactElement} from "react";
 import {Table} from "@tanstack/react-table";
-import {StudentInfo} from "../../../../_components/class-info";
+import {StudentInfo} from "../_attendance-components/student-info";
 import {Input} from "@/components/ui/input";
 
 type TableFilterProps = {

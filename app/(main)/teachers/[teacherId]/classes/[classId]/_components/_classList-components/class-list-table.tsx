@@ -1,8 +1,8 @@
 ("Use client");
 
 import React from "react";
-import {StudentInfo} from "../../../../_components/class-info";
-import {StudentData} from "../../../../_components/dummy-data";
+import {StudentInfo} from "../_attendance-components/student-info";
+import {StudentDummyData} from "../_attendance-components/student-dummy-data";
 import ClassListTableColumns from "./class-list-table-columns";
 import ClassListPagination from "./class-list-pagination";
 import ClassListTableContent from "./class-list-table-content";
@@ -20,7 +20,7 @@ import {
 const columns: ColumnDef<StudentInfo>[] = ClassListTableColumns;
 
 const ClassListTable = () => {
-    const data: StudentInfo[] = StudentData;
+    const data: StudentInfo[] = StudentDummyData;
     const [sorting, _setSorting] = React.useState<SortingState>([]);
     const [pagination, setPagination] = React.useState<PaginationState>({
         pageIndex: 0,

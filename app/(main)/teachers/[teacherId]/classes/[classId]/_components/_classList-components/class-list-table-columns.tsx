@@ -4,7 +4,7 @@ import React from "react";
 import {
     StudentInfo,
     StudentInfoDictionary,
-} from "../../../../_components/class-info";
+} from "../_attendance-components/student-info";
 import {ColumnDef} from "@tanstack/react-table";
 import {Button} from "@/components/ui/button";
 import ClassListPreview from "./class-list-preview";

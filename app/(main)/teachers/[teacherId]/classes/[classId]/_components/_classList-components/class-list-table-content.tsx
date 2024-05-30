@@ -3,7 +3,7 @@ import ClassListTableHeader from "./class-list-table-header";
 import ClassListTableBody from "./class-list-table-body";
 import {Table as T} from "@/components/ui/table";
 import {ColumnDef, Table} from "@tanstack/react-table";
-import {StudentInfo} from "../../../../_components/class-info";
+import {StudentInfo} from "../_attendance-components/student-info";
 
 type TableContentProps = {
     table: Table<StudentInfo>;
