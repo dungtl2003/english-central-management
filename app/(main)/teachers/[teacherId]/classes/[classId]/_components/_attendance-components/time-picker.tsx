@@ -9,8 +9,8 @@ import {
 } from "@/components/ui/select";
 
 interface TimePickerProps {
-    hour: number[];
-    minute: number[];
+    hour: string[];
+    minute: string[];
     title: string;
     defaultHour: string;
     defaultMinute: string;
@@ -35,7 +35,7 @@ const TimePicker = ({
                         <SelectGroup>
                             {hour.map((h) => {
                                 return (
-                                    <SelectItem key={h} value={h.toString()}>
+                                    <SelectItem key={h} value={h}>
                                         {h}
                                     </SelectItem>
                                 );
@@ -51,7 +51,7 @@ const TimePicker = ({
                         <SelectGroup>
                             {minute.map((m) => {
                                 return (
-                                    <SelectItem key={m} value={m.toString()}>
+                                    <SelectItem key={m} value={m}>
                                         {m}
                                     </SelectItem>
                                 );

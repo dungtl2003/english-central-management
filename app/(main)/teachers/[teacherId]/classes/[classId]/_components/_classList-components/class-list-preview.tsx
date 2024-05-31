@@ -17,16 +17,6 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import {
     StudentInfo,
     StudentInfoArray,
 } from "../_attendance-components/student-info";
@@ -34,6 +24,7 @@ import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import React, {ReactElement} from "react";
+import ConfirmDialog from "@/components/comfirm-dialog";
 
 type TablePreviewSheetProps = {
     data: StudentInfo;
@@ -43,7 +34,7 @@ const ClassListPreview: React.FC<TablePreviewSheetProps> = ({
     data,
 }): ReactElement => {
     const [open, setOpen] = React.useState(false);
-    const handleClose = () => setOpen(false);
+    // const handleClose = () => setOpen(false);
     return (
         <>
             <div className="flex flex-row gap-x-4">
@@ -122,29 +113,7 @@ const ClassListPreview: React.FC<TablePreviewSheetProps> = ({
                             </DialogTitle>
                         </DialogHeader>
                         <DialogFooter>
-                            <AlertDialog>
-                                <AlertDialogTrigger asChild>
-                                    <Button type="submit">Save record</Button>
-                                </AlertDialogTrigger>
-                                {/* Content goes here */}
-                                <AlertDialogContent>
-                                    <AlertDialogHeader>
-                                        <AlertDialogTitle>
-                                            Are you absolutely sure?
-                                        </AlertDialogTitle>
-                                    </AlertDialogHeader>
-                                    <AlertDialogFooter>
-                                        <AlertDialogCancel>
-                                            Cancel
-                                        </AlertDialogCancel>
-                                        <AlertDialogAction
-                                            onClick={handleClose}
-                                        >
-                                            Continue
-                                        </AlertDialogAction>
-                                    </AlertDialogFooter>
-                                </AlertDialogContent>
-                            </AlertDialog>
+                            <ConfirmDialog title="Save record" />
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>

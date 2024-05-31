@@ -9,6 +9,7 @@ import {Calendar} from "@/components/ui/calendar";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {hour, minute} from "@/components/time-list";
 import TimePicker from "./time-picker";
+import ConfirmDialog from "@/components/comfirm-dialog";
 
 interface SessionEditHeaderProps {
     data: SessionTableModel;
@@ -63,19 +64,27 @@ const SessionEditHeader = ({data}: SessionEditHeaderProps): ReactElement => {
                             hour={hour}
                             minute={minute}
                             title="Start time"
-                            defaultHour={estimateStartHour}
-                            defaultMinute={estimateStartMinute}
+                            defaultHour={
+                                estimateStartHour ? estimateStartHour : "0"
+                            }
+                            defaultMinute={
+                                estimateStartMinute ? estimateStartMinute : "00"
+                            }
                         />
 
                         <TimePicker
                             hour={hour}
                             minute={minute}
                             title="End time"
-                            defaultHour={estimateEndHour}
-                            defaultMinute={estimateEndMinute}
+                            defaultHour={
+                                estimateEndHour ? estimateEndHour : "0"
+                            }
+                            defaultMinute={
+                                estimateEndMinute ? estimateEndMinute : "00"
+                            }
                         />
                         <div className="flex items-center justify-center">
-                            <Button>Save calendar</Button>
+                            <ConfirmDialog title="Save calendar" />
                         </div>
                     </div>
                 </DialogTitle>

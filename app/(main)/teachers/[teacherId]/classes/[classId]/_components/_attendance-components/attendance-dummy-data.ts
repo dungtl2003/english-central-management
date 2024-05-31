@@ -11,7 +11,15 @@ export const SessionDummyData: SessionTableModel[] = [
     },
     {
         className: "3.1",
-        attendanceDate: "08/01/2024",
+        attendanceDate: "01/08/2024",
+        startTime: "17h",
+        endTime: "19h",
+        presences: "0/40",
+        status: "true",
+    },
+    {
+        className: "3.1",
+        attendanceDate: "01/15/2024",
         startTime: "19h30",
         endTime: "21h30",
         presences: "0/40",
@@ -19,7 +27,7 @@ export const SessionDummyData: SessionTableModel[] = [
     },
     {
         className: "3.1",
-        attendanceDate: "15/01/2024",
+        attendanceDate: "01/22/2024",
         startTime: "19h30",
         endTime: "21h30",
         presences: "0/40",
@@ -27,7 +35,7 @@ export const SessionDummyData: SessionTableModel[] = [
     },
     {
         className: "3.1",
-        attendanceDate: "22/01/2024",
+        attendanceDate: "01/29/2024",
         startTime: "19h30",
         endTime: "21h30",
         presences: "0/40",
@@ -35,7 +43,7 @@ export const SessionDummyData: SessionTableModel[] = [
     },
     {
         className: "3.1",
-        attendanceDate: "29/01/2024",
+        attendanceDate: "02/05/2024",
         startTime: "19h30",
         endTime: "21h30",
         presences: "0/40",
@@ -43,7 +51,7 @@ export const SessionDummyData: SessionTableModel[] = [
     },
     {
         className: "3.1",
-        attendanceDate: "05/02/2024",
+        attendanceDate: "02/12/2024",
         startTime: "19h30",
         endTime: "21h30",
         presences: "0/40",
@@ -51,7 +59,15 @@ export const SessionDummyData: SessionTableModel[] = [
     },
     {
         className: "3.1",
-        attendanceDate: "12/02/2024",
+        attendanceDate: "02/19/2024",
+        startTime: "19h30",
+        endTime: "21h30",
+        presences: "0/40",
+        status: "false",
+    },
+    {
+        className: "3.1",
+        attendanceDate: "02/26/2024",
         startTime: "19h30",
         endTime: "21h30",
         presences: "0/40",
@@ -59,7 +75,7 @@ export const SessionDummyData: SessionTableModel[] = [
     },
     {
         className: "3.1",
-        attendanceDate: "19/02/2024",
+        attendanceDate: "03/04/2024",
         startTime: "19h30",
         endTime: "21h30",
         presences: "0/40",
@@ -67,15 +83,7 @@ export const SessionDummyData: SessionTableModel[] = [
     },
     {
         className: "3.1",
-        attendanceDate: "26/02/2024",
-        startTime: "19h30",
-        endTime: "21h30",
-        presences: "0/40",
-        status: "true",
-    },
-    {
-        className: "3.1",
-        attendanceDate: "04/03/2024",
+        attendanceDate: "03/11/2024",
         startTime: "19h30",
         endTime: "21h30",
         presences: "0/40",
@@ -83,7 +91,7 @@ export const SessionDummyData: SessionTableModel[] = [
     },
     {
         className: "3.1",
-        attendanceDate: "11/03/2024",
+        attendanceDate: "03/18/2024",
         startTime: "19h30",
         endTime: "21h30",
         presences: "0/40",
@@ -91,7 +99,7 @@ export const SessionDummyData: SessionTableModel[] = [
     },
     {
         className: "3.1",
-        attendanceDate: "18/03/2024",
+        attendanceDate: "03/25/2024",
         startTime: "19h30",
         endTime: "21h30",
         presences: "0/40",
@@ -99,7 +107,7 @@ export const SessionDummyData: SessionTableModel[] = [
     },
     {
         className: "3.1",
-        attendanceDate: "25/03/2024",
+        attendanceDate: "04/01/2024",
         startTime: "19h30",
         endTime: "21h30",
         presences: "0/40",
@@ -107,7 +115,7 @@ export const SessionDummyData: SessionTableModel[] = [
     },
     {
         className: "3.1",
-        attendanceDate: "01/04/2024",
+        attendanceDate: "04/08/2024",
         startTime: "19h30",
         endTime: "21h30",
         presences: "0/40",
@@ -115,7 +123,7 @@ export const SessionDummyData: SessionTableModel[] = [
     },
     {
         className: "3.1",
-        attendanceDate: "08/04/2024",
+        attendanceDate: "04/15/2024",
         startTime: "19h30",
         endTime: "21h30",
         presences: "0/40",
@@ -123,7 +131,7 @@ export const SessionDummyData: SessionTableModel[] = [
     },
     {
         className: "3.1",
-        attendanceDate: "15/04/2024",
+        attendanceDate: "04/22/2024",
         startTime: "19h30",
         endTime: "21h30",
         presences: "0/40",
@@ -131,7 +139,7 @@ export const SessionDummyData: SessionTableModel[] = [
     },
     {
         className: "3.1",
-        attendanceDate: "22/04/2024",
+        attendanceDate: "04/29/2024",
         startTime: "19h30",
         endTime: "21h30",
         presences: "0/40",
@@ -139,7 +147,7 @@ export const SessionDummyData: SessionTableModel[] = [
     },
     {
         className: "3.1",
-        attendanceDate: "29/04/2024",
+        attendanceDate: "05/06/2024",
         startTime: "19h30",
         endTime: "21h30",
         presences: "0/40",
@@ -147,7 +155,7 @@ export const SessionDummyData: SessionTableModel[] = [
     },
     {
         className: "3.1",
-        attendanceDate: "06/05/2024",
+        attendanceDate: "05/13/2024",
         startTime: "19h30",
         endTime: "21h30",
         presences: "0/40",
@@ -155,7 +163,7 @@ export const SessionDummyData: SessionTableModel[] = [
     },
     {
         className: "3.1",
-        attendanceDate: "13/05/2024",
+        attendanceDate: "05/20/2024",
         startTime: "19h30",
         endTime: "21h30",
         presences: "0/40",
@@ -163,7 +171,7 @@ export const SessionDummyData: SessionTableModel[] = [
     },
     {
         className: "3.1",
-        attendanceDate: "20/05/2024",
+        attendanceDate: "05/27/2024",
         startTime: "19h30",
         endTime: "21h30",
         presences: "0/40",
@@ -171,7 +179,7 @@ export const SessionDummyData: SessionTableModel[] = [
     },
     {
         className: "3.1",
-        attendanceDate: "27/05/2024",
+        attendanceDate: "06/03/2024",
         startTime: "19h30",
         endTime: "21h30",
         presences: "0/40",
@@ -179,7 +187,7 @@ export const SessionDummyData: SessionTableModel[] = [
     },
     {
         className: "3.1",
-        attendanceDate: "03/06/2024",
+        attendanceDate: "06/10/2024",
         startTime: "19h30",
         endTime: "21h30",
         presences: "0/40",
@@ -187,7 +195,7 @@ export const SessionDummyData: SessionTableModel[] = [
     },
     {
         className: "3.1",
-        attendanceDate: "10/06/2024",
+        attendanceDate: "06/17/2024",
         startTime: "19h30",
         endTime: "21h30",
         presences: "0/40",
@@ -195,7 +203,7 @@ export const SessionDummyData: SessionTableModel[] = [
     },
     {
         className: "3.1",
-        attendanceDate: "17/06/2024",
+        attendanceDate: "06/24/2024",
         startTime: "19h30",
         endTime: "21h30",
         presences: "0/40",
@@ -203,7 +211,7 @@ export const SessionDummyData: SessionTableModel[] = [
     },
     {
         className: "3.1",
-        attendanceDate: "24/06/2024",
+        attendanceDate: "07/01/2024",
         startTime: "19h30",
         endTime: "21h30",
         presences: "0/40",
@@ -211,7 +219,7 @@ export const SessionDummyData: SessionTableModel[] = [
     },
     {
         className: "3.1",
-        attendanceDate: "01/07/2024",
+        attendanceDate: "07/08/2024",
         startTime: "19h30",
         endTime: "21h30",
         presences: "0/40",
@@ -219,15 +227,7 @@ export const SessionDummyData: SessionTableModel[] = [
     },
     {
         className: "3.1",
-        attendanceDate: "08/07/2024",
-        startTime: "19h30",
-        endTime: "21h30",
-        presences: "0/40",
-        status: "false",
-    },
-    {
-        className: "3.1",
-        attendanceDate: "15/07/2024",
+        attendanceDate: "07/15/2024",
         startTime: "19h30",
         endTime: "21h30",
         presences: "0/40",
