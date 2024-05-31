@@ -4,22 +4,13 @@ import {
     DialogFooter,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import {Button} from "@/components/ui/button";
 import React, {ReactElement} from "react";
 import {FaEdit} from "react-icons/fa";
 import AttendanceTable from "./attendance-table";
 import {SessionTableModel} from "./session-table-model";
 import SessionEditHeader from "./session-edit-header";
+import ConfirmDialog from "@/components/comfirm-dialog";
 
 interface SessionEditProps {
     data: SessionTableModel;
@@ -27,7 +18,7 @@ interface SessionEditProps {
 
 export function SessionEdit({data}: SessionEditProps): ReactElement {
     const [open, setOpen] = React.useState(false);
-    const handleClose = () => setOpen(false);
+    // const handleClose = () => setOpen(false);
 
     // Dùng biến này check xem ngày hiện tại có lớn hơn ngày theo lịch
     // Nếu lớn hơn thì để false => lúc này cái nút sẽ bấm được
@@ -56,24 +47,7 @@ export function SessionEdit({data}: SessionEditProps): ReactElement {
                 <SessionEditHeader data={data} />
                 <AttendanceTable />
                 <DialogFooter>
-                    <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                            <Button type="submit">Save attendance</Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                                <AlertDialogTitle>
-                                    Are you absolutely sure?
-                                </AlertDialogTitle>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction onClick={handleClose}>
-                                    Continue
-                                </AlertDialogAction>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
+                    <ConfirmDialog title="Save attendance" />
                 </DialogFooter>
             </DialogContent>
         </Dialog>
