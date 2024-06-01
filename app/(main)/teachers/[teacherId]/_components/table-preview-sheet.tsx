@@ -55,7 +55,7 @@ const TablePreviewSheet: React.FC<TablePreviewSheetProps> = ({
                                             id={obj.key}
                                             value={data[key] || ""}
                                             className="col-span-3"
-                                            disabled
+                                            readOnly
                                         />
                                     </div>
                                 );
