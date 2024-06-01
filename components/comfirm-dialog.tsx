@@ -13,13 +13,22 @@ import {Button} from "./ui/button";
 
 interface ConfirmDialogProps {
     title: string;
+    customClass?: string;
 }
 
-const ConfirmDialog = ({title}: ConfirmDialogProps): ReactElement => {
+const ConfirmDialog = ({
+    title,
+    customClass,
+}: ConfirmDialogProps): ReactElement => {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button type="submit">{title}</Button>
+                <Button
+                    className={customClass ? customClass : ""}
+                    type="submit"
+                >
+                    {title}
+                </Button>
             </AlertDialogTrigger>
             <AlertDialogContent className="h-[180px]">
                 <AlertDialogHeader className="flex items-center justify-center">
