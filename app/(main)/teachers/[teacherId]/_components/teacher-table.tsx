@@ -22,6 +22,7 @@ import {OutputType} from "@/lib/action/teacher/get-classes/types";
 import {toast} from "@/components/ui/use-toast";
 import {useAuth} from "@clerk/nextjs";
 import {formatDate} from "@/lib/utils";
+import {SkeletonTable} from "./skeleton";
 
 //TODO: for temp testing, will remove later
 // const addTempClasses = async (teacherId: string): Promise<void> => {
@@ -55,8 +56,8 @@ const formatData = (fetchedData: OutputType): ClassInfo[] | undefined => {
             price:
                 String(
                     Math.round(
-                        Number(data.unit.price_per_session) *
-                            data.unit.max_sessions *
+                        Number(data.unit.pricePerSession) *
+                            Number(data.unit.pricePerSession) *
                             100
                     ) / 100
                 ) + "$",
@@ -73,6 +74,7 @@ const fallbackDisplayData: ClassInfo[] = [];
 
 export function TeacherTable() {
     const {isLoaded, userId} = useAuth();
+    const [isLoading, setIsLoading] = useState(true);
     const {execute} = useAction(handler, {
         onError: (error: string) => {
             console.log("Error: ", error);
@@ -81,9 +83,11 @@ export function TeacherTable() {
                 variant: "destructive",
                 description: "Cannot get classes",
             });
+            setIsLoading(false);
         },
         onSuccess: (data: OutputType) => {
             setDisplayData(formatData(data));
+            setIsLoading(false);
         },
     });
     const [displayData, setDisplayData] = useState<ClassInfo[] | undefined>(
@@ -114,11 +118,13 @@ export function TeacherTable() {
         if (!isLoaded) return;
         execute({teacherId: userId!});
     }, [isLoaded]);
+
     return (
         <>
             <div className="w-11/12 pt-[120px]">
                 <TableFilter table={table} />
-                <TableContent table={table} columns={columns} />
+                {isLoading && <SkeletonTable />}
+                {!isLoading && <TableContent table={table} columns={columns} />}
                 <TablePagination table={table} />
             </div>
         </>
