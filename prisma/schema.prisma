@@ -47,7 +47,7 @@ model User {
     phoneNumber String? @db.Text
     identifyCard String? @db.Text
     imageUrl String? @db.Text
-    birthday DateTime? @db.Date
+    birthday DateTime?
     gender Gender?
     role UserRole?
 
@@ -141,7 +141,9 @@ model Unit {
     grade Int @db.Integer
     maxSessions Int @db.Integer
     maxStudents Int @db.Integer
-    studyTime DateTime @db.Time(0)
+    studyHour Int @db.Integer
+    studyMinute Int @db.Integer
+    studySecond Int @db.Integer
     pricePerSession Decimal @db.Decimal(20, 2) 
 
     classes Class[]
@@ -161,6 +163,7 @@ model Class {
     index Int @db.Integer
     startTime DateTime
     endTime DateTime
+    timeZone String
 
     sessions Session[]
     schedules Schedule[]
@@ -177,9 +180,12 @@ model Schedule {
     class Class @relation(fields: [classId], references: [id], onDelete: Cascade)
     classId String @db.Uuid
     dayOfWeek Int @db.Integer
-    startTime DateTime @db.Time(0)
-    endTime DateTime @db.Time(0)
+    startHour Int @db.Integer
+    startMinute Int @db.Integer
+    startSecond Int @db.Integer
     location String?
+
+    createdAt DateTime @default(now())
 }
 
 model StudentsInClasses {
@@ -202,6 +208,9 @@ model Session {
     attendedTime DateTime?
 
     attendances Attendance[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime?
 }
 
 model Attendance {
@@ -213,5 +222,6 @@ model Attendance {
     status AttendanceStatus
     description String?
 
+    createdAt DateTime @default(now())
     updatedAt DateTime?
 }

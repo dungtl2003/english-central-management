@@ -65,18 +65,16 @@ const TablePreviewSheet: React.FC<TablePreviewSheetProps> = ({
                         </div>
                         <SheetFooter>
                             <SheetClose asChild>
-                                <Button variant="outline">
-                                    <Link
-                                        className="mr-auto flex gap-x-2"
-                                        href={
-                                            currentUrl +
-                                            "/classes/" +
-                                            data.classId
-                                        }
-                                    >
+                                <Link
+                                    className="mr-auto flex gap-x-2"
+                                    href={
+                                        currentUrl + "/classes/" + data.classId
+                                    }
+                                >
+                                    <Button variant="outline">
                                         View detail
-                                    </Link>
-                                </Button>
+                                    </Button>
+                                </Link>
                             </SheetClose>
                         </SheetFooter>
                     </SheetContent>

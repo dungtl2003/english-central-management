@@ -1,13 +1,12 @@
+import {NextRequest, NextResponse} from "next/server";
+import {Post, PostSchema} from "./schema";
 import {db} from "@/lib/db";
 import {authHandler, getClerkRole} from "@/lib/helper";
 import {auth} from "@clerk/nextjs/server";
-import {Prisma, UserRole} from "@prisma/client";
-import {NextRequest, NextResponse} from "next/server";
-import {Post, PostSchema} from "./schema";
-import {compareDate} from "@/lib/utils";
+import {UserRole} from "@prisma/client";
 
 /**
- * Add sessions.
+ * Add unit.
  * Only admin can access this api.
  */
 export async function POST(req: NextRequest) {
@@ -54,59 +53,25 @@ export async function POST(req: NextRequest) {
     }
 
     try {
-        const _class = await db.class.findFirst({
-            where: {
-                id: validBody.data.classId,
+        const unit = await db.unit.create({
+            data: {
+                year: validBody.data!.year,
+                grade: validBody.data!.grade,
+                maxSessions: validBody.data!.maxSessions,
+                maxStudents: validBody.data!.maxStudents,
+                studyHour: validBody.data!.studyHour,
+                studyMinute: validBody.data!.studyMinute,
+                studySecond: validBody.data!.studySecond,
+                pricePerSession: validBody.data!.pricePerSession,
             },
-            include: {
-                schedules: true,
-                unit: true,
-            },
         });
 
-        const now = new Date();
-        const begin: Date =
-            compareDate(now, _class!.startTime, true) < 0
-                ? _class!.startTime
-                : now;
-
-        const dateList: Date[] = [];
-        const totalSessions = _class!.unit.maxSessions;
-        const dowScedules: number[] | undefined = _class?.schedules.map(
-            (schedule) => schedule.startTime.getDay()
-        );
-
-        let current = 0;
-        while (current < totalSessions) {
-            if (dowScedules!.includes(begin.getDay())) {
-                dateList.push(new Date(begin));
-                current++;
-            }
-
-            begin.setDate(begin.getDate() + 1);
-        }
-
-        const sessionsObj: Prisma.SessionCreateManyInput[] = dateList.map(
-            (date) => {
-                return {
-                    classId: validBody.data.classId,
-                    estimatedStartTime: date,
-                    actualStartTime: date,
-                };
-            }
-        );
-
-        const sessions = await db.session.createMany({
-            data: sessionsObj!,
-        });
-
-        return NextResponse.json(`Added sessions: ${sessions}`, {
-            status: 200,
-        });
+        console.log("Added unit: ", unit);
+        return NextResponse.json(unit, {status: 200});
     } catch (error) {
         console.log("Error: ", (<Error>error).message);
         return NextResponse.json(
-            {error: "Failed to create sessions"},
+            {error: "Failed to create unit"},
             {status: 500}
         );
     }
