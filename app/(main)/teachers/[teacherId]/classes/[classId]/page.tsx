@@ -17,6 +17,8 @@ import {Button} from "@/components/ui/button";
 const ClassDetailPage: React.FC<{
     params: {teacherId: string; classId: string};
 }> = ({params}): ReactElement => {
+    const memoTeacherId = useMemo(() => params.teacherId, [params.teacherId]);
+    const memoClassId = useMemo(() => params.classId, [params.classId]);
     const getDetailHandler = useCallback(handler, []);
     const event: UseActionOptions<OutputType> = useMemo(() => {
         return {
@@ -30,15 +32,11 @@ const ClassDetailPage: React.FC<{
             },
         };
     }, []);
-    const {data, execute, isLoading} = useAction(getDetailHandler, event);
+    const {data, execute} = useAction(getDetailHandler, event);
 
     useEffect(() => {
-        function fetchData() {
-            execute({teacherId: params.teacherId, classId: params.classId});
-        }
-
-        fetchData();
-    }, [isLoading, execute, params.teacherId, params.classId]);
+        execute({teacherId: memoTeacherId, classId: memoClassId});
+    }, [execute, memoTeacherId, memoClassId]);
 
     return (
         <div className="flex justify-center">

@@ -5,6 +5,7 @@ import {ClerkProvider} from "@clerk/nextjs";
 import {cn} from "@/lib/utils";
 import {ThemeProvider} from "@/components/theme-provider";
 import {Toaster} from "@/components/ui/toaster";
+import NextTopLoader from "nextjs-toploader";
 
 const fontSans = FontSans({
     subsets: ["latin"],
@@ -34,6 +35,7 @@ export default function RootLayout({
                     disableTransitionOnChange
                 >
                     <ClerkProvider>
+                        <NextTopLoader color="#2ecc71" showSpinner={false} />
                         <main>{children}</main>
                         <Toaster />
                     </ClerkProvider>

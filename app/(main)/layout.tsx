@@ -4,7 +4,6 @@ import {PublicMetadata} from "@/constaints";
 import {useUser} from "@clerk/nextjs";
 import {useRouter} from "next/navigation";
 import {ReactElement, useEffect, useMemo} from "react";
-import NextTopLoader from "nextjs-toploader";
 
 const MainLayout: React.FC<{children: React.ReactNode}> = ({
     children,
@@ -30,7 +29,6 @@ const MainLayout: React.FC<{children: React.ReactNode}> = ({
 
     return (
         <>
-            <NextTopLoader color="#2ecc71" />
             <div>{children}</div>
         </>
     );
