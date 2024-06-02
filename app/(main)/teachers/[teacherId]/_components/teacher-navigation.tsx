@@ -65,7 +65,7 @@ const TeacherNavigation = (): ReactElement => {
                                 </NavigationMenuLink>
                             </Link>
 
-                            <Link
+                            {/* <Link
                                 className="mr-auto flex gap-x-2"
                                 href="#"
                                 legacyBehavior
@@ -79,7 +79,7 @@ const TeacherNavigation = (): ReactElement => {
                                 >
                                     Manage profile
                                 </NavigationMenuLink>
-                            </Link>
+                            </Link> */}
                         </NavigationMenuItem>
                         <NavigationMenuItem className="ml-auto flex items-center gap-x-4">
                             <Link href="#" legacyBehavior passHref>
@@ -89,7 +89,7 @@ const TeacherNavigation = (): ReactElement => {
                                         " rounded-md border border-slate-200 dark:border-slate-800"
                                     }
                                 >
-                                    {"Salary: $150 / class"}
+                                    {"Salary: $150 / month"}
                                 </NavigationMenuLink>
                             </Link>
                             <ThemeToggle />
