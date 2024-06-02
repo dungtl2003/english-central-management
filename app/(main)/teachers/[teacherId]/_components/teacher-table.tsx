@@ -26,6 +26,11 @@ import {Button} from "@/components/ui/button";
 import {Time} from "@/lib/time";
 import {Schedule} from "@/app/api/classes/schema";
 import {Unit} from "@prisma/client";
+import {
+    SkeletonTableContent,
+    SkeletonTableFilter,
+    SkeletonTablePagination,
+} from "./skeleton-teacher";
 
 interface PostUnit {
     year: number;
@@ -45,7 +50,6 @@ interface PostClass {
     timeZone: string;
     schedules: Schedule[];
 }
-import {SkeletonTable} from "./skeleton";
 
 //TODO: for temp testing, will remove later
 const bypass = async (teacherId: string): Promise<void> => {
@@ -194,10 +198,21 @@ export function TeacherTable() {
         <>
             <div className="w-11/12 pt-[120px]">
                 <Button onClick={() => bypass(userId!)}>bypass</Button>
-                <TableFilter table={table} />
-                {isLoading && <SkeletonTable />}
-                {!isLoading && <TableContent table={table} columns={columns} />}
-                <TablePagination table={table} />
+                {isLoading ? (
+                    <SkeletonTableFilter />
+                ) : (
+                    <TableFilter table={table} />
+                )}
+                {isLoading ? (
+                    <SkeletonTableContent />
+                ) : (
+                    <TableContent table={table} columns={columns} />
+                )}
+                {isLoading ? (
+                    <SkeletonTablePagination />
+                ) : (
+                    <TablePagination table={table} />
+                )}
             </div>
         </>
     );
