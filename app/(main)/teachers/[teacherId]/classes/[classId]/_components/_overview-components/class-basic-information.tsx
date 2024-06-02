@@ -20,7 +20,7 @@ const ClassBasicInfomation = (): ReactElement => {
                                 id="className"
                                 value="3.1"
                                 className="col-span-3"
-                                disabled
+                                readOnly
                             />
                         </div>
                         <div className="pb-3 grid grid-cols-4 items-center gap-x-3">
@@ -31,7 +31,7 @@ const ClassBasicInfomation = (): ReactElement => {
                                 id="grade"
                                 value="3"
                                 className="col-span-3"
-                                disabled
+                                readOnly
                             />
                         </div>
                         <div className="pb-3 grid grid-cols-4 items-center gap-x-3">
@@ -42,7 +42,7 @@ const ClassBasicInfomation = (): ReactElement => {
                                 id="startDate"
                                 value="01/01/2024"
                                 className="col-span-3"
-                                disabled
+                                readOnly
                             />
                         </div>
                         <div className="pb-3 grid grid-cols-4 items-center gap-x-3">
@@ -53,7 +53,18 @@ const ClassBasicInfomation = (): ReactElement => {
                                 id="endDate"
                                 value="01/02/2024"
                                 className="col-span-3"
-                                disabled
+                                readOnly
+                            />
+                        </div>
+                        <div className="pb-3 grid grid-cols-4 items-center gap-x-3">
+                            <Label htmlFor="timeZone" className="text-left">
+                                Time zone
+                            </Label>
+                            <Input
+                                id="timeZone"
+                                value="Ho Chi Minh"
+                                className="col-span-3"
+                                readOnly
                             />
                         </div>
                     </CardContent>
