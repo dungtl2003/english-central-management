@@ -83,8 +83,11 @@ const SessionEditHeader = ({data}: SessionEditHeaderProps): ReactElement => {
                                 estimateEndMinute ? estimateEndMinute : "00"
                             }
                         />
-                        <div className="flex items-center justify-center">
-                            <ConfirmDialog title="Save calendar" />
+                        <div className="grid grid-rows-2">
+                            <div></div>
+                            <div className="flex items-center justify-center">
+                                <ConfirmDialog title="Save calendar" />
+                            </div>
                         </div>
                     </div>
                 </DialogTitle>

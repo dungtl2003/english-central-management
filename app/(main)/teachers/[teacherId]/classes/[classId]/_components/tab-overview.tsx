@@ -8,7 +8,6 @@ const TabOverview = (): ReactElement => {
         <TabsContent value="overview">
             <OverviewCard />
             <ClassBasicInfomation />
-            {/* <ClassChart /> */}
         </TabsContent>
     );
 };
