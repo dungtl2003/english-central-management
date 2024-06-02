@@ -1,4 +1,11 @@
-import {Table, TableBody, TableCell, TableRow} from "@/components/ui/table";
+import {
+    Table,
+    TableHead,
+    TableHeader,
+    TableBody,
+    TableCell,
+    TableRow,
+} from "@/components/ui/table";
 import {Textarea} from "@/components/ui/textarea";
 import {
     Select,
@@ -8,266 +15,59 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import React, {ReactElement} from "react";
-import AttendanceTableHeader from "./attendance-table-header";
+import {StudentDummyData} from "./student-dummy-data";
 
 const AttendanceTable = (): ReactElement => {
+    let order: number = 1;
     return (
         <div className="relative max-h-[400px] overflow-y-auto">
             <Table>
-                <AttendanceTableHeader />
+                <TableHeader>
+                    <TableRow>
+                        <TableHead className="max-w-[50px]"></TableHead>
+                        <TableHead className="w-[250px]">Full name</TableHead>
+                        <TableHead className="">Student code</TableHead>
+                        <TableHead className="w-[200px]">Attendance</TableHead>
+                        <TableHead className="">Note</TableHead>
+                    </TableRow>
+                </TableHeader>
                 <TableBody>
-                    <TableRow>
-                        <TableCell>1</TableCell>
-                        <TableCell>Nguyễn Minh Đức</TableCell>
-                        <TableCell>EN330</TableCell>
-                        <TableCell>
-                            <Select defaultValue="PRESENT">
-                                <SelectTrigger className="w-[180px]">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="PRESENT">
-                                        Present
-                                    </SelectItem>
-                                    <SelectItem value="ABSENT">
-                                        Absent
-                                    </SelectItem>
-                                    <SelectItem value="LATE">Late</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </TableCell>
-                        <TableCell>
-                            <Textarea
-                                placeholder="Note here."
-                                className="resize-none"
-                                spellCheck={false}
-                            />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell>2</TableCell>
-                        <TableCell>Trần Lưu Dũng</TableCell>
-                        <TableCell>EN331</TableCell>
-                        <TableCell>
-                            <Select defaultValue="PRESENT">
-                                <SelectTrigger className="w-[180px]">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="PRESENT">
-                                        Present
-                                    </SelectItem>
-                                    <SelectItem value="ABSENT">
-                                        Absent
-                                    </SelectItem>
-                                    <SelectItem value="LATE">Late</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </TableCell>
-                        <TableCell>
-                            <Textarea
-                                placeholder="Note here."
-                                className="resize-none"
-                                spellCheck={false}
-                            />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell>3</TableCell>
-                        <TableCell>Nguyễn Hữu Nhật Quang</TableCell>
-                        <TableCell>EN332</TableCell>
-                        <TableCell>
-                            <Select defaultValue="PRESENT">
-                                <SelectTrigger className="w-[180px]">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="PRESENT">
-                                        Present
-                                    </SelectItem>
-                                    <SelectItem value="ABSENT">
-                                        Absent
-                                    </SelectItem>
-                                    <SelectItem value="LATE">Late</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </TableCell>
-                        <TableCell>
-                            <Textarea
-                                placeholder="Note here."
-                                className="resize-none"
-                                spellCheck={false}
-                            />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell>1</TableCell>
-                        <TableCell>Nguyễn Minh Đức</TableCell>
-                        <TableCell>EN330</TableCell>
-                        <TableCell>
-                            <Select defaultValue="PRESENT">
-                                <SelectTrigger className="w-[180px]">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="PRESENT">
-                                        Present
-                                    </SelectItem>
-                                    <SelectItem value="ABSENT">
-                                        Absent
-                                    </SelectItem>
-                                    <SelectItem value="LATE">Late</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </TableCell>
-                        <TableCell>
-                            <Textarea
-                                placeholder="Note here."
-                                className="resize-none"
-                                spellCheck={false}
-                            />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell>2</TableCell>
-                        <TableCell>Trần Lưu Dũng</TableCell>
-                        <TableCell>EN331</TableCell>
-                        <TableCell>
-                            <Select defaultValue="PRESENT">
-                                <SelectTrigger className="w-[180px]">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="PRESENT">
-                                        Present
-                                    </SelectItem>
-                                    <SelectItem value="ABSENT">
-                                        Absent
-                                    </SelectItem>
-                                    <SelectItem value="LATE">Late</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </TableCell>
-                        <TableCell>
-                            <Textarea
-                                placeholder="Note here."
-                                className="resize-none"
-                                spellCheck={false}
-                            />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell>3</TableCell>
-                        <TableCell>Nguyễn Hữu Nhật Quang</TableCell>
-                        <TableCell>EN332</TableCell>
-                        <TableCell>
-                            <Select defaultValue="PRESENT">
-                                <SelectTrigger className="w-[180px]">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="PRESENT">
-                                        Present
-                                    </SelectItem>
-                                    <SelectItem value="ABSENT">
-                                        Absent
-                                    </SelectItem>
-                                    <SelectItem value="LATE">Late</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </TableCell>
-                        <TableCell>
-                            <Textarea
-                                placeholder="Note here."
-                                className="resize-none"
-                                spellCheck={false}
-                            />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell>1</TableCell>
-                        <TableCell>Nguyễn Minh Đức</TableCell>
-                        <TableCell>EN330</TableCell>
-                        <TableCell>
-                            <Select defaultValue="PRESENT">
-                                <SelectTrigger className="w-[180px]">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="PRESENT">
-                                        Present
-                                    </SelectItem>
-                                    <SelectItem value="ABSENT">
-                                        Absent
-                                    </SelectItem>
-                                    <SelectItem value="LATE">Late</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </TableCell>
-                        <TableCell>
-                            <Textarea
-                                placeholder="Note here."
-                                className="resize-none"
-                                spellCheck={false}
-                            />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell>2</TableCell>
-                        <TableCell>Trần Lưu Dũng</TableCell>
-                        <TableCell>EN331</TableCell>
-                        <TableCell>
-                            <Select defaultValue="PRESENT">
-                                <SelectTrigger className="w-[180px]">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="PRESENT">
-                                        Present
-                                    </SelectItem>
-                                    <SelectItem value="ABSENT">
-                                        Absent
-                                    </SelectItem>
-                                    <SelectItem value="LATE">Late</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </TableCell>
-                        <TableCell>
-                            <Textarea
-                                placeholder="Note here."
-                                className="resize-none"
-                                spellCheck={false}
-                            />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell>3</TableCell>
-                        <TableCell>Nguyễn Hữu Nhật Quang</TableCell>
-                        <TableCell>EN332</TableCell>
-                        <TableCell>
-                            <Select defaultValue="PRESENT">
-                                <SelectTrigger className="w-[180px]">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="PRESENT">
-                                        Present
-                                    </SelectItem>
-                                    <SelectItem value="ABSENT">
-                                        Absent
-                                    </SelectItem>
-                                    <SelectItem value="LATE">Late</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </TableCell>
-                        <TableCell>
-                            <Textarea
-                                placeholder="Note here."
-                                className="resize-none"
-                                spellCheck={false}
-                            />
-                        </TableCell>
-                    </TableRow>
+                    {StudentDummyData.map((student) => {
+                        return (
+                            <TableRow key={order++}>
+                                <TableCell>{order}</TableCell>
+                                <TableCell className="text-left">
+                                    {student.fullName}
+                                </TableCell>
+                                <TableCell>{student.studentCode}</TableCell>
+                                <TableCell>
+                                    <Select defaultValue="PRESENT">
+                                        <SelectTrigger className="w-[180px]">
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="PRESENT">
+                                                Present
+                                            </SelectItem>
+                                            <SelectItem value="ABSENT">
+                                                Absent
+                                            </SelectItem>
+                                            <SelectItem value="LATE">
+                                                Late
+                                            </SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </TableCell>
+                                <TableCell>
+                                    <Textarea
+                                        placeholder="Note here."
+                                        className="resize-none"
+                                        spellCheck={false}
+                                    />
+                                </TableCell>
+                            </TableRow>
+                        );
+                    })}
                 </TableBody>
             </Table>
         </div>

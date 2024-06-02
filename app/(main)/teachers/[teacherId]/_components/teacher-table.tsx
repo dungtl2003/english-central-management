@@ -45,6 +45,7 @@ interface PostClass {
     timeZone: string;
     schedules: Schedule[];
 }
+import {SkeletonTable} from "./skeleton";
 
 //TODO: for temp testing, will remove later
 const bypass = async (teacherId: string): Promise<void> => {
@@ -149,14 +150,17 @@ export function TeacherTable() {
                     variant: "destructive",
                     description: "Get classes failed",
                 });
+                setIsLoading(false);
             },
             onSuccess: (data: OutputType) => {
                 setDisplayData(formatData(data));
+                setIsLoading(false);
             },
         };
     }, []);
     const {isLoaded, userId} = useAuth();
     const {execute} = useAction(fetchClassesHandler, event);
+    const [isLoading, setIsLoading] = useState(true);
     const [displayData, setDisplayData] = useState<ClassInfo[] | undefined>(
         undefined
     );
@@ -191,7 +195,8 @@ export function TeacherTable() {
             <div className="w-11/12 pt-[120px]">
                 <Button onClick={() => bypass(userId!)}>bypass</Button>
                 <TableFilter table={table} />
-                <TableContent table={table} columns={columns} />
+                {isLoading && <SkeletonTable />}
+                {!isLoading && <TableContent table={table} columns={columns} />}
                 <TablePagination table={table} />
             </div>
         </>

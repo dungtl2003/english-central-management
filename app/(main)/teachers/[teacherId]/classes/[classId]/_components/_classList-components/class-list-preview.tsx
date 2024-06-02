@@ -8,40 +8,41 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
-import {ClassInfo, ClassInfoArray} from "./class-info";
+import {
+    StudentInfo,
+    StudentInfoArray,
+} from "../_attendance-components/student-info";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
-import {ReactElement} from "react";
-import Link from "next/link";
-import {usePathname} from "next/navigation";
+import React, {ReactElement} from "react";
+import PayingPopup from "./paying-popup";
 
-type TablePreviewSheetProps = {
-    data: ClassInfo;
+type ClassListPreviewProps = {
+    data: StudentInfo;
 };
 
-const TablePreviewSheet: React.FC<TablePreviewSheetProps> = ({
+const ClassListPreview: React.FC<ClassListPreviewProps> = ({
     data,
 }): ReactElement => {
-    const currentUrl = usePathname();
     return (
         <>
-            <div className="flex flex-row gap-x-4">
+            <div className="flex flex-row gap-x-6 justify-center">
                 <Sheet>
                     <SheetTrigger asChild>
-                        <Button variant="outline">Preview</Button>
+                        <Button variant="outline">Detail</Button>
                     </SheetTrigger>
                     <SheetContent>
                         <SheetHeader>
-                            <SheetTitle>Class preview</SheetTitle>
+                            <SheetTitle>Student name</SheetTitle>
                             <SheetDescription>
-                                View more class properties. Click close when you
-                                are done.
+                                View more student properties. Click close when
+                                you are done.
                             </SheetDescription>
                         </SheetHeader>
                         <div className="grid gap-4 py-4">
-                            {ClassInfoArray.map((obj) => {
-                                const key = obj.key as keyof ClassInfo;
+                            {StudentInfoArray.map((obj) => {
+                                const key = obj.key as keyof StudentInfo;
                                 return (
                                     <div
                                         key={obj.key}
@@ -65,29 +66,15 @@ const TablePreviewSheet: React.FC<TablePreviewSheetProps> = ({
                         </div>
                         <SheetFooter>
                             <SheetClose asChild>
-                                <Link
-                                    className="mr-auto flex gap-x-2"
-                                    href={
-                                        currentUrl + "/classes/" + data.classId
-                                    }
-                                >
-                                    <Button variant="outline">
-                                        View detail
-                                    </Button>
-                                </Link>
+                                <Button>Close sheet</Button>
                             </SheetClose>
                         </SheetFooter>
                     </SheetContent>
                 </Sheet>
-                <Link
-                    className="mr-auto flex gap-x-2"
-                    href="/teachers/1/classes/1"
-                >
-                    <Button variant="outline">Detail</Button>
-                </Link>
+                <PayingPopup data={data} />
             </div>
         </>
     );
 };
 
-export default TablePreviewSheet;
+export default ClassListPreview;
