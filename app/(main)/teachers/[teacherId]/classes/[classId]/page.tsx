@@ -62,7 +62,7 @@ const ClassDetailPage: React.FC<{
                         </TabsTrigger>
                     </TabsList>
                     <TabOverview data={data} />
-                    <TabClassList />
+                    <TabClassList data={data} />
                     <TabAttendanceHistory />
                 </Tabs>
             </div>

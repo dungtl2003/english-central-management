@@ -16,10 +16,13 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
+import {OutputType} from "@/lib/action/teacher/get-class-detail/types";
 
 const columns: ColumnDef<StudentInfo>[] = ClassListTableColumns;
 
-const ClassListTable = () => {
+const ClassListTable: React.FC<{
+    data: OutputType | undefined;
+}> = () => {
     const data: StudentInfo[] = StudentDummyData;
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [pagination, setPagination] = React.useState<PaginationState>({
