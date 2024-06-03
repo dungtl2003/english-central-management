@@ -3,7 +3,6 @@ import {
     VisXYContainer,
     VisGroupedBar,
     VisAxis,
-    VisCrosshair,
     VisTooltip,
 } from "@unovis/react";
 import {GroupedBar} from "@unovis/ts";
@@ -59,7 +58,11 @@ const ClassChart = (): ReactElement => {
                     numTicks={data.length}
                     type="x"
                 ></VisAxis>
-                <VisAxis tickTextFontSize="12px" type="y"></VisAxis>
+                <VisAxis
+                    gridLine={false}
+                    tickTextFontSize="12px"
+                    type="y"
+                ></VisAxis>
                 <VisGroupedBar
                     groupWidth={40}
                     color={color}
@@ -67,7 +70,6 @@ const ClassChart = (): ReactElement => {
                     x={x}
                     y={y}
                 />
-                <VisCrosshair />
                 <VisTooltip triggers={triggers} />
             </VisXYContainer>
         </div>

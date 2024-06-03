@@ -1,6 +1,6 @@
 import React, {ReactElement} from "react";
 import {TableBody as TBody, TableCell, TableRow} from "@/components/ui/table";
-import {ColumnDef, Table, flexRender} from "@tanstack/react-table";
+import {Cell, ColumnDef, Table, flexRender} from "@tanstack/react-table";
 import {StudentInfo} from "../_attendance-components/student-info";
 
 type TableBodyProps = {
@@ -9,25 +9,40 @@ type TableBodyProps = {
 };
 
 const ClassListTableBody = (props: TableBodyProps): ReactElement => {
+    const renderCellContent = (cell: Cell<StudentInfo, unknown>) => {
+        const cellValue: string = cell.getValue<string>();
+
+        switch (cell.column.id) {
+            case "tuitionPaid":
+                return cellValue.toLowerCase() === "true"
+                    ? "All paid"
+                    : "In debt";
+            default:
+                return flexRender(
+                    cell.column.columnDef.cell,
+                    cell.getContext()
+                );
+        }
+    };
+
     return (
         <TBody>
             {props.table.getRowModel().rows?.length ? (
                 props.table.getRowModel().rows.map((row) => (
                     <TableRow key={row.id}>
                         {row.getAllCells().map((cell) => {
-                            const isTuitionPaidColumn =
-                                cell.column.id === "tuitionPaid";
-                            const cellValue: string = cell.getValue<string>();
+                            const isIndexColumn = cell.column.id === "index";
+                            const isFullNameColumn =
+                                cell.column.id === "fullName";
+                            const className = isIndexColumn
+                                ? "max-w-[100px]"
+                                : isFullNameColumn
+                                  ? "text-left"
+                                  : "";
+
                             return (
-                                <TableCell key={cell.id} className="w-2/12">
-                                    {isTuitionPaidColumn
-                                        ? cellValue.toLowerCase() === "true"
-                                            ? "All paid"
-                                            : "In debt"
-                                        : flexRender(
-                                              cell.column.columnDef.cell,
-                                              cell.getContext()
-                                          )}
+                                <TableCell key={cell.id} className={className}>
+                                    {renderCellContent(cell)}
                                 </TableCell>
                             );
                         })}

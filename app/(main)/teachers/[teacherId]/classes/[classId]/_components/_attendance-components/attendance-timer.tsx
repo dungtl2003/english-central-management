@@ -9,18 +9,32 @@ import {Calendar} from "@/components/ui/calendar";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {hour, minute} from "@/components/time-list";
 import TimePicker from "./time-picker";
-import ConfirmDialog from "@/components/comfirm-dialog";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {Input} from "@/components/ui/input";
 
 interface SessionEditHeaderProps {
     data: SessionTableModel;
+    handleOnSaveTime: () => void;
+    disabled: boolean;
 }
 
-const SessionEditHeader = ({data}: SessionEditHeaderProps): ReactElement => {
+const AttendanceTimer = ({
+    data,
+    handleOnSaveTime,
+    disabled,
+}: SessionEditHeaderProps): ReactElement => {
     const estimateDate: Date = new Date(data.attendanceDate);
     const [date, setDate] = React.useState<Date | undefined>(estimateDate);
 
-    // Hiện tại, t đang tạm thời tách như thế này để lấy giờ và phút riêng
-    // Cm làm thì tự sửa nhé
     const [estimateStartHour, estimateStartMinute]: string[] =
         data.startTime.split("h");
     const [estimateEndHour, estimateEndMinute]: string[] =
@@ -38,6 +52,7 @@ const SessionEditHeader = ({data}: SessionEditHeaderProps): ReactElement => {
                             <Popover>
                                 <PopoverTrigger asChild>
                                     <Button
+                                        disabled={disabled}
                                         variant={"outline"}
                                         className={cn(
                                             "w-[280px] justify-start text-left font-normal"
@@ -64,6 +79,7 @@ const SessionEditHeader = ({data}: SessionEditHeaderProps): ReactElement => {
                             hour={hour}
                             minute={minute}
                             title="Start time"
+                            disabled={disabled}
                             defaultHour={
                                 estimateStartHour ? estimateStartHour : "0"
                             }
@@ -72,21 +88,57 @@ const SessionEditHeader = ({data}: SessionEditHeaderProps): ReactElement => {
                             }
                         />
 
-                        <TimePicker
-                            hour={hour}
-                            minute={minute}
-                            title="End time"
-                            defaultHour={
-                                estimateEndHour ? estimateEndHour : "0"
-                            }
-                            defaultMinute={
-                                estimateEndMinute ? estimateEndMinute : "00"
-                            }
-                        />
+                        <div className="col-span-2 grid grid-rows-2 items-center justify-center">
+                            <div className="text-center text-[14px]">
+                                End time
+                            </div>
+                            <div className="grid grid-cols-2 gap-x-2">
+                                <Input
+                                    disabled={disabled}
+                                    readOnly
+                                    className="w-[135px]"
+                                    defaultValue={estimateEndHour}
+                                />
+
+                                <Input
+                                    disabled={disabled}
+                                    readOnly
+                                    className="w-[135px]"
+                                    defaultValue={estimateEndMinute}
+                                />
+                            </div>
+                        </div>
                         <div className="grid grid-rows-2">
                             <div></div>
                             <div className="flex items-center justify-center">
-                                <ConfirmDialog title="Save calendar" />
+                                <AlertDialog>
+                                    <AlertDialogTrigger asChild>
+                                        <Button
+                                            disabled={disabled}
+                                            type="submit"
+                                        >
+                                            Save calendar
+                                        </Button>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent className="h-[180px]">
+                                        <AlertDialogHeader className="flex items-center justify-center">
+                                            <AlertDialogTitle className="flex items-center justify-center text-2xl">
+                                                Are you absolutely sure?
+                                            </AlertDialogTitle>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter className="grid grid-cols-2 items-center ">
+                                            <AlertDialogCancel className="min-w-[160px] text-md justify-self-center">
+                                                Cancel
+                                            </AlertDialogCancel>
+                                            <AlertDialogAction
+                                                onClick={handleOnSaveTime}
+                                                className="min-w-[160px] text-md justify-self-center"
+                                            >
+                                                Save
+                                            </AlertDialogAction>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
                             </div>
                         </div>
                     </div>
@@ -96,4 +148,4 @@ const SessionEditHeader = ({data}: SessionEditHeaderProps): ReactElement => {
     );
 };
 
-export default SessionEditHeader;
+export default AttendanceTimer;
