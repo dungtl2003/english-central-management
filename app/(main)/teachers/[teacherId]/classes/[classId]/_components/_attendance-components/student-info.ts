@@ -3,8 +3,9 @@ export type TableDictionary = {
 };
 
 export type StudentInfo = {
+    index: string;
     fullName: string;
-    studentCode: string;
+    email: string;
     birthday: string;
     tuitionPaid: string;
 };
@@ -15,15 +16,17 @@ export type StudentInfoDef = {
 };
 
 export const StudentInfoArray: StudentInfoDef[] = [
+    {key: "index", title: ""},
     {key: "fullName", title: "Full name"},
-    {key: "studentCode", title: "Student code"},
+    {key: "email", title: "Email"},
     {key: "birthday", title: "Birthday"},
     {key: "tuitionPaid", title: "Tuition fee"},
 ];
 
 export const StudentInfoDictionary: TableDictionary = {
+    index: "",
     fullName: "Full name",
-    studentCode: "Student code",
+    email: "Email",
     birthday: "Birthday",
     tuitionPaid: "Tuition fee",
 };

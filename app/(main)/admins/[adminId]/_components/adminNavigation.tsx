@@ -1,9 +1,8 @@
-import React, {ReactElement} from "react";
+import React from "react";
 import UserButton from "@/components/user-button";
 import Logo from "@/components/logo";
 import Link from "next/link";
 import {ThemeToggle} from "@/components/mode-toggle";
-
 import {
     NavigationMenu,
     NavigationMenuItem,
@@ -12,7 +11,7 @@ import {
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 
-const TeacherNavigation = (): ReactElement => {
+const AdminNavigation = () => {
     return (
         <div>
             <NavigationMenu className="fixed w-full h-16 p-4 border-b shadow-sm flex items-center">
@@ -51,7 +50,7 @@ const TeacherNavigation = (): ReactElement => {
 
                             <Link
                                 className="mr-auto flex gap-x-2"
-                                href="/"
+                                href="/teachers/1"
                                 legacyBehavior
                                 passHref
                             >
@@ -94,9 +93,9 @@ const TeacherNavigation = (): ReactElement => {
                             </Link>
                             <ThemeToggle />
                             {/* <div>
-                                    <a href="/sign-in">Sign in</a> /{" "}
-                                    <a href="/sign-up">Sign up</a>
-                                </div> */}
+                                <a href="/sign-in">Sign in</a> /{" "}
+                                <a href="/sign-up">Sign up</a>
+                            </div> */}
                             <UserButton />
                         </NavigationMenuItem>
                     </NavigationMenuList>
@@ -106,4 +105,4 @@ const TeacherNavigation = (): ReactElement => {
     );
 };
 
-export default TeacherNavigation;
+export default AdminNavigation;

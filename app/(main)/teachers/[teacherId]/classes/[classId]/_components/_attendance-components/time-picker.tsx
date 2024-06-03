@@ -14,12 +14,14 @@ interface TimePickerProps {
     title: string;
     defaultHour: string;
     defaultMinute: string;
+    disabled: boolean;
 }
 
 const TimePicker = ({
     hour,
     minute,
     title,
+    disabled,
     defaultHour,
     defaultMinute,
 }: TimePickerProps): ReactElement => {
@@ -27,7 +29,7 @@ const TimePicker = ({
         <div className="col-span-2 grid grid-rows-2 items-center justify-center">
             <div className="text-center text-[14px]">{title}</div>
             <div className="grid grid-cols-2 gap-x-2">
-                <Select defaultValue={defaultHour}>
+                <Select disabled={disabled} defaultValue={defaultHour}>
                     <SelectTrigger className="w-[135px]">
                         <SelectValue />
                     </SelectTrigger>
@@ -43,7 +45,7 @@ const TimePicker = ({
                         </SelectGroup>
                     </SelectContent>
                 </Select>
-                <Select defaultValue={defaultMinute}>
+                <Select disabled={disabled} defaultValue={defaultMinute}>
                     <SelectTrigger className="w-[135px]">
                         <SelectValue />
                     </SelectTrigger>
