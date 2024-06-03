@@ -1,9 +1,10 @@
 import {NextRequest, NextResponse} from "next/server";
 import {db} from "@/lib/db";
 import {authHandler, getClerkRole} from "@/lib/helper";
-import {auth, clerkClient} from "@clerk/nextjs/server";
+import {auth} from "@clerk/nextjs/server";
 import {Post, PostSchema} from "./schema";
 import {UserRole} from "@prisma/client";
+import {addTeacher} from "./helper";
 
 /**
  * Get teachers.
@@ -67,27 +68,7 @@ export async function POST(req: NextRequest) {
     }
 
     try {
-        const teacher = await db.user.update({
-            where: {
-                referId: clerkUserId,
-            },
-            data: {
-                role: "TEACHER",
-                teacher: {
-                    create: {},
-                },
-            },
-            include: {
-                teacher: true,
-            },
-        });
-
-        const clerkUser = await clerkClient.users.updateUser(clerkUserId, {
-            publicMetadata: {
-                role: "TEACHER",
-            },
-        });
-
+        const [teacher, clerkUser] = await addTeacher(clerkUserId);
         console.log("Created teacher: ", teacher);
         console.log("Updated clerk user: ", clerkUser);
         return NextResponse.json(teacher, {status: 200});
