@@ -1,5 +1,10 @@
 import {NextRequest, NextResponse} from "next/server";
-import {BaseQueryParams, Post, PostSchema, getSchemaByRole} from "./schema";
+import {
+    BaseQueryParams,
+    PostClass,
+    PostClassSchema,
+    getSchemaByRole,
+} from "./schema";
 import {db} from "@/lib/db";
 import {Json} from "@/constaints";
 import {
@@ -48,6 +53,7 @@ export async function GET(req: NextRequest) {
         !role ||
         (role === UserRole.TEACHER && queryParams.teacherId !== clerkUserId)
     ) {
+        console.log("Error: No right permission");
         return NextResponse.json({error: "No right permission"}, {status: 401});
     }
 
@@ -109,8 +115,8 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({error: "No right permission"}, {status: 401});
     }
 
-    const body: Post = await req.json();
-    const validBody = PostSchema.safeParse(body);
+    const body: PostClass = await req.json();
+    const validBody = PostClassSchema.safeParse(body);
     if (validBody.error) {
         console.log("Error: ", validBody.error.flatten());
         return NextResponse.json({error: "Wrong body format"}, {status: 400});

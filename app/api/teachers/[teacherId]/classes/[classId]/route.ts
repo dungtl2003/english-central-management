@@ -57,10 +57,30 @@ export async function GET(
                 unit: true,
                 sessions: true,
                 students: {
+                    where: {
+                        approvedAt: {
+                            not: null,
+                        },
+                    },
                     include: {
                         student: {
                             include: {
                                 user: true,
+                                tuitions: {
+                                    where: {
+                                        classId: classId,
+                                    },
+                                },
+                                attendances: {
+                                    where: {
+                                        session: {
+                                            classId: classId,
+                                            attendedTime: {
+                                                not: null,
+                                            },
+                                        },
+                                    },
+                                },
                             },
                         },
                     },
