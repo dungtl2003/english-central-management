@@ -24,7 +24,8 @@ const config = {
             },
             colors: {
                 cyan: "#5EFDD9",
-                lighCyan: "#00E7B4",
+                lightCyan: "#00E7B4",
+                darkCyan: "#00AF88",
                 border: "hsl(var(--border))",
                 input: "hsl(var(--input))",
                 ring: "hsl(var(--ring))",
@@ -77,6 +78,16 @@ const config = {
             animation: {
                 "accordion-down": "accordion-down 0.2s ease-out",
                 "accordion-up": "accordion-up 0.2s ease-out",
+            },
+            gridTemplateColumns: {
+                "13": "repeat(13, minmax(0, 1fr))",
+                "14": "repeat(14, minmax(0, 1fr))",
+                "15": "repeat(15, minmax(0, 1fr))",
+                "16": "repeat(16, minmax(0, 1fr))",
+                "17": "repeat(17, minmax(0, 1fr))",
+                "18": "repeat(18, minmax(0, 1fr))",
+                "19": "repeat(19, minmax(0, 1fr))",
+                "20": "repeat(20, minmax(0, 1fr))",
             },
         },
     },
