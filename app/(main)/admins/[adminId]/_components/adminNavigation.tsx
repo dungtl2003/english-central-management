@@ -10,11 +10,19 @@ import {
     NavigationMenuList,
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 const AdminNavigation = () => {
     return (
         <div>
-            <NavigationMenu className="fixed w-full h-16 p-4 border-b shadow-sm flex items-center">
+            <NavigationMenu className="bg-white dark:bg-black fixed w-full h-16 p-4 border-b shadow-sm flex items-center">
                 <div className="w-full">
                     <NavigationMenuList>
                         <NavigationMenuItem className="mr-auto flex items-center gap-x-4">
@@ -28,7 +36,7 @@ const AdminNavigation = () => {
                                 <NavigationMenuLink
                                     className={
                                         navigationMenuTriggerStyle() +
-                                        " rounded-md border border-slate-200 dark:border-slate-800"
+                                        "rounded-md border border-slate-200 dark:border-slate-800"
                                     }
                                 >
                                     <svg
@@ -49,48 +57,63 @@ const AdminNavigation = () => {
                             </Link>
 
                             <Link
-                                className="mr-auto flex gap-x-2"
-                                href="/teachers/1"
+                                className="mr-auto flex gap-x-2 "
+                                href="#"
                                 legacyBehavior
                                 passHref
                             >
                                 <NavigationMenuLink
                                     className={
                                         navigationMenuTriggerStyle() +
-                                        " rounded-md border border-slate-200 dark:border-slate-800"
+                                        "rounded-md border border-slate-200 dark:border-slate-800"
                                     }
                                 >
-                                    Manage classes
+                                    Dashboard
                                 </NavigationMenuLink>
                             </Link>
 
                             <Link
                                 className="mr-auto flex gap-x-2"
-                                href="/profile"
+                                href="/admins/1/calendar"
                                 legacyBehavior
                                 passHref
                             >
                                 <NavigationMenuLink
                                     className={
                                         navigationMenuTriggerStyle() +
-                                        " rounded-md border border-slate-200 dark:border-slate-800"
+                                        "rounded-md border border-slate-200 dark:border-slate-800"
                                     }
                                 >
-                                    Manage profile
+                                    Calendar
                                 </NavigationMenuLink>
                             </Link>
+                            <Select>
+                                <SelectTrigger className="w-[160px]">
+                                    <SelectValue placeholder="Manage data" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        <SelectItem value="Manage teacher">
+                                            <Link href="#">
+                                                Manage teachers
+                                            </Link>
+                                        </SelectItem>
+                                        <SelectItem value="Manage classes">
+                                            <Link href="#">Manage classes</Link>
+                                        </SelectItem>
+                                        <SelectItem value="Manage parents">
+                                            <Link href="#">Manage parents</Link>
+                                        </SelectItem>
+                                        <SelectItem value="Manage students">
+                                            <Link href="#">
+                                                Manage students
+                                            </Link>
+                                        </SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
                         </NavigationMenuItem>
                         <NavigationMenuItem className="ml-auto flex items-center gap-x-4">
-                            <Link href="#" legacyBehavior passHref>
-                                <NavigationMenuLink
-                                    className={
-                                        navigationMenuTriggerStyle() +
-                                        " rounded-md border border-slate-200 dark:border-slate-800"
-                                    }
-                                >
-                                    {"Salary: $150 / month"}
-                                </NavigationMenuLink>
-                            </Link>
                             <ThemeToggle />
                             {/* <div>
                                 <a href="/sign-in">Sign in</a> /{" "}

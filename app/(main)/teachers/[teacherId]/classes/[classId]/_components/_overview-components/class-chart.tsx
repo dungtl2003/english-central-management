@@ -27,9 +27,6 @@ const data: DataRecord[] = [
     {date: "01/29/2024", x: 5, y: 44},
     {date: "02/05/2024", x: 6, y: 45},
     {date: "02/17/2024", x: 7, y: 41},
-    {date: "02/24/2024", x: 8, y: 43},
-    {date: "03/02/2024", x: 9, y: 40},
-    {date: "03/09/2024", x: 10, y: 45},
 ];
 
 const dateMap = data.reduce(
@@ -64,7 +61,7 @@ const ClassChart = (): ReactElement => {
                     type="y"
                 ></VisAxis>
                 <VisGroupedBar
-                    groupWidth={40}
+                    groupWidth={50}
                     color={color}
                     barMinHeight={1}
                     x={x}
