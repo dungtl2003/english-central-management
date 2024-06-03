@@ -10,6 +10,7 @@ import ConfirmDialog from "@/components/comfirm-dialog";
 import {Button} from "@/components/ui/button";
 import PayingPopupContent from "./paying-popup-content";
 import {StudentInfo} from "../_attendance-components/student-info";
+import {DialogDescription} from "@radix-ui/react-dialog";
 
 type PayingPopupProps = {
     data: StudentInfo;
@@ -47,8 +48,11 @@ const PayingPopup = ({data}: PayingPopupProps): ReactElement => {
             >
                 <DialogHeader className="justify-center items-center">
                     <DialogTitle className="text-2xl">
-                        {data.fullName + " - " + data.studentCode}
+                        {data.fullName}
                     </DialogTitle>
+                    <DialogDescription>
+                        Đoạn này để mã học sinh
+                    </DialogDescription>
                 </DialogHeader>
                 <PayingPopupContent />
                 <div className="flex items-center justify-center">

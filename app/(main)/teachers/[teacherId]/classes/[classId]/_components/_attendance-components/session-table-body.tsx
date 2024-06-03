@@ -23,10 +23,7 @@ const SessionTableBody = (props: TableBodyProps): ReactElement => {
                                     {isTuitionPaidColumn ? (
                                         cellValue.toLowerCase() === "true" ? (
                                             <div className="flex items-center justify-center">
-                                                <FaCheckCircle
-                                                    className=""
-                                                    size={25}
-                                                />
+                                                <FaCheckCircle size={25} />
                                             </div>
                                         ) : (
                                             ""

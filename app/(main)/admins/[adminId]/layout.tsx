@@ -1,7 +1,9 @@
+"use client";
 import {UserJwtSessionClaims, UserRole} from "@/constaints";
 import {auth} from "@clerk/nextjs/server";
 import {redirect} from "next/navigation";
 import {ReactElement} from "react";
+import AdminNavigation from "./_components/adminNavigation";
 
 const AdminLayout: React.FC<{children: React.ReactNode}> = ({
     children,
@@ -13,7 +15,12 @@ const AdminLayout: React.FC<{children: React.ReactNode}> = ({
         redirect("/404");
     }
 
-    return <>{children}</>;
+    return (
+        <>
+            <AdminNavigation />
+            {children}
+        </>
+    );
 };
 
 export default AdminLayout;

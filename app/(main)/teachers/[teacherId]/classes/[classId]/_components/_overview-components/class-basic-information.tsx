@@ -4,6 +4,7 @@ import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {OutputType} from "@/lib/action/teacher/get-class-detail/types";
 import {formatDate} from "@/lib/utils";
+import ClassChart from "./class-chart";
 
 interface DisplayData {
     className: string;
@@ -29,7 +30,7 @@ const ClassBasicInfomation: React.FC<{data: OutputType | undefined}> = ({
     return (
         <div className="pt-5 grid grid-cols-5 gap-x-5">
             <div className="col-span-2">
-                <Card className="">
+                <Card className="min-h-[340px] max-h-[340px]">
                     <CardHeader className="text-2xl font-semibold">
                         Class information
                     </CardHeader>
@@ -42,7 +43,7 @@ const ClassBasicInfomation: React.FC<{data: OutputType | undefined}> = ({
                                 id="className"
                                 value={formattedData.className}
                                 className="col-span-3"
-                                disabled
+                                readOnly
                             />
                         </div>
                         <div className="pb-3 grid grid-cols-4 items-center gap-x-3">
@@ -53,7 +54,7 @@ const ClassBasicInfomation: React.FC<{data: OutputType | undefined}> = ({
                                 id="grade"
                                 value={formattedData.grade}
                                 className="col-span-3"
-                                disabled
+                                readOnly
                             />
                         </div>
                         <div className="pb-3 grid grid-cols-4 items-center gap-x-3">
@@ -64,7 +65,7 @@ const ClassBasicInfomation: React.FC<{data: OutputType | undefined}> = ({
                                 id="startDate"
                                 value={formattedData.startDate}
                                 className="col-span-3"
-                                disabled
+                                readOnly
                             />
                         </div>
                         <div className="pb-3 grid grid-cols-4 items-center gap-x-3">
@@ -75,15 +76,28 @@ const ClassBasicInfomation: React.FC<{data: OutputType | undefined}> = ({
                                 id="endDate"
                                 value={formattedData.endDate}
                                 className="col-span-3"
-                                disabled
+                                readOnly
+                            />
+                        </div>
+                        <div className="pb-3 grid grid-cols-4 items-center gap-x-3">
+                            <Label htmlFor="timeZone" className="text-left">
+                                Time zone
+                            </Label>
+                            <Input
+                                id="timeZone"
+                                value="Ho Chi Minh"
+                                className="col-span-3"
+                                readOnly
                             />
                         </div>
                     </CardContent>
                 </Card>
             </div>
-            <div className="col-span-3">
-                <Card className="">
-                    <CardContent className=""></CardContent>
+            <div className="col-span-3 ">
+                <Card className="min-h-[340px] max-h-[340px]">
+                    <CardContent className="flex justify-center items-center">
+                        <ClassChart />
+                    </CardContent>
                 </Card>
             </div>
         </div>

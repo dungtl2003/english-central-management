@@ -14,11 +14,13 @@ import {Button} from "./ui/button";
 interface ConfirmDialogProps {
     title: string;
     customClass?: string;
+    onConfirm?: () => void;
 }
 
 const ConfirmDialog = ({
     title,
     customClass,
+    onConfirm,
 }: ConfirmDialogProps): ReactElement => {
     return (
         <AlertDialog>
@@ -40,7 +42,10 @@ const ConfirmDialog = ({
                     <AlertDialogCancel className="min-w-[160px] text-md justify-self-center">
                         Cancel
                     </AlertDialogCancel>
-                    <AlertDialogAction className="min-w-[160px] text-md justify-self-center">
+                    <AlertDialogAction
+                        onClick={onConfirm ? onConfirm : undefined}
+                        className="min-w-[160px] text-md justify-self-center"
+                    >
                         Save
                     </AlertDialogAction>
                 </AlertDialogFooter>
