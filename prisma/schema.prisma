@@ -193,7 +193,8 @@ model StudentsInClasses {
     classId String @db.Uuid
     student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
     studentId String @db.Uuid
-    joinedAt DateTime @default(now())
+    registeredAt DateTime @default(now())
+    approvedAt DateTime?
     leftAt DateTime?
 
     @@id([classId, studentId])
