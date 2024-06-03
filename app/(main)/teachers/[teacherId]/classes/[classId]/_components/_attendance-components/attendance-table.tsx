@@ -26,7 +26,7 @@ const AttendanceTable = (): ReactElement => {
                     <TableRow>
                         <TableHead className="max-w-[50px]"></TableHead>
                         <TableHead className="w-[250px]">Full name</TableHead>
-                        <TableHead className="">Student code</TableHead>
+                        <TableHead className="">Email</TableHead>
                         <TableHead className="w-[200px]">Attendance</TableHead>
                         <TableHead className="">Note</TableHead>
                     </TableRow>
@@ -39,7 +39,7 @@ const AttendanceTable = (): ReactElement => {
                                 <TableCell className="text-left">
                                     {student.fullName}
                                 </TableCell>
-                                <TableCell>{student.studentCode}</TableCell>
+                                <TableCell>{student.email}</TableCell>
                                 <TableCell>
                                     <Select defaultValue="PRESENT">
                                         <SelectTrigger className="w-[180px]">

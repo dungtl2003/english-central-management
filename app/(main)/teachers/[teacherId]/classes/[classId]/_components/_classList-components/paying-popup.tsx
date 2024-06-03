@@ -50,7 +50,9 @@ const PayingPopup = ({data}: PayingPopupProps): ReactElement => {
                     <DialogTitle className="text-2xl">
                         {data.fullName}
                     </DialogTitle>
-                    <DialogDescription>{data.studentCode}</DialogDescription>
+                    <DialogDescription>
+                        Đoạn này để mã học sinh
+                    </DialogDescription>
                 </DialogHeader>
                 <PayingPopupContent />
                 <div className="flex items-center justify-center">
