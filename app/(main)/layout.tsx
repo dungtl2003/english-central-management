@@ -22,7 +22,7 @@ const MainLayout: React.FC<{children: React.ReactNode}> = ({
             router.push("/404");
         }
 
-        if (!metadata.role) {
+        if (!metadata || !metadata.role) {
             router.push("/complete-profile");
         }
     }, [isLoaded, isSignedIn, metadata, router]);

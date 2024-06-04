@@ -11,6 +11,7 @@ interface DisplayData {
     grade: string;
     startDate: string;
     endDate: string;
+    timeZone: string;
 }
 
 const formatData = (data: OutputType | undefined): DisplayData => {
@@ -19,6 +20,7 @@ const formatData = (data: OutputType | undefined): DisplayData => {
         grade: data ? String(data.unit.grade) : "",
         startDate: data ? String(formatDate(new Date(data.startTime))) : "",
         endDate: data ? String(formatDate(new Date(data.endTime))) : "",
+        timeZone: data ? data.timeZone : "",
     };
 };
 
@@ -85,7 +87,7 @@ const ClassBasicInfomation: React.FC<{data: OutputType | undefined}> = ({
                             </Label>
                             <Input
                                 id="timeZone"
-                                value="Ho Chi Minh"
+                                value={formattedData.timeZone}
                                 className="col-span-3"
                                 readOnly
                             />

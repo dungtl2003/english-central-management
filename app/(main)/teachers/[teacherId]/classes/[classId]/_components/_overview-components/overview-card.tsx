@@ -12,7 +12,11 @@ interface DisplayData {
 const formatData = (data: OutputType | undefined): DisplayData => {
     return {
         numberOfStudents: data ? String(data.students.length) : "",
-        classProgress: data ? String(data.sessions.length) : "",
+        classProgress: data
+            ? String(
+                  data.sessions.filter((session) => session.attendedTime).length
+              )
+            : "",
         classGoal: data ? String(data.unit.maxSessions) : "",
         totalFee: data
             ? "$" +

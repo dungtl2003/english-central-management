@@ -21,8 +21,8 @@ export type OutputType =
           students: (StudentsInClasses & {
               student: Student & {
                   user: User;
-                  tuitions: Tuition;
-                  attendances: Attendance;
+                  tuitions: Tuition[];
+                  attendances: Attendance[];
               };
           })[];
       })
