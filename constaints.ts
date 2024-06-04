@@ -10,3 +10,7 @@ export interface UserJwtSessionClaims extends CustomJwtSessionClaims {
         role: UserRole;
     };
 }
+
+export interface PublicMetadata extends UserPublicMetadata {
+    role?: string;
+}

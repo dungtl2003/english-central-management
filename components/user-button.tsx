@@ -8,7 +8,8 @@ const UserButton = () => {
             appearance={{
                 elements: {avatarBox: {height: 42, width: 42}},
             }}
-        />
+            userProfileUrl="/user-profile"
+        ></NextUserButton>
     );
 };
 
