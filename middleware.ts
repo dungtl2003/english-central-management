@@ -86,7 +86,7 @@ export default clerkMiddleware(
         //public route or the user is authorized
         return NextResponse.next();
     },
-    {debug: true}
+    {debug: false}
 );
 
 export const config = {

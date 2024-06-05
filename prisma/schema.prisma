@@ -194,6 +194,7 @@ model StudentsInClasses {
     student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
     studentId String @db.Uuid
     registeredAt DateTime @default(now())
+    rejectedAt DateTime?
     approvedAt DateTime?
     leftAt DateTime?
 
