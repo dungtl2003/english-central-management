@@ -3,7 +3,7 @@ export type TableDictionary = {
 };
 
 export type StudentInfo = {
-    index: string;
+    index?: string;
     fullName: string;
     email: string;
     birthday: string;
