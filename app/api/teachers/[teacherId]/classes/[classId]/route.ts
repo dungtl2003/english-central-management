@@ -72,6 +72,9 @@ export async function GET(
                                     },
                                 },
                                 attendances: {
+                                    include: {
+                                        session: true,
+                                    },
                                     where: {
                                         session: {
                                             classId: classId,

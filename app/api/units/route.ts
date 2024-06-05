@@ -15,19 +15,13 @@ export async function POST(req: NextRequest) {
 
     try {
         await authHandler();
-    } catch (error) {
-        console.log("Error: ", (<Error>error).message);
-        return NextResponse.json({error: error}, {status: 401});
-    }
 
-    const clerkUserId = auth().userId;
-    const role: UserRole | null = getClerkRole();
+        const clerkUserId = auth().userId;
+        const role: UserRole | null = getClerkRole();
+        if (!role || role !== UserRole.ADMIN) {
+            throw new Error("No right permission");
+        }
 
-    if (!role || role !== UserRole.ADMIN) {
-        return NextResponse.json({error: "No right permission"}, {status: 401});
-    }
-
-    try {
         const admin = await db.user.findFirst({
             where: {
                 referId: clerkUserId!,
@@ -42,7 +36,7 @@ export async function POST(req: NextRequest) {
         }
     } catch (error) {
         console.log("Error: ", (<Error>error).message);
-        return NextResponse.json({error: "No right permission"}, {status: 401});
+        return NextResponse.json({error: error}, {status: 401});
     }
 
     const body: Post = await req.json();

@@ -1,6 +1,16 @@
 import {UserRole} from "@prisma/client";
 import {z} from "zod";
 
+const HasStudentId = z
+    .object({
+        studentId: z.string({
+            invalid_type_error: "Student ID must be a string",
+            required_error: "Student ID is required",
+            description: "Refer student ID of who wants to join the class",
+        }),
+    })
+    .strict();
+
 const BaseQueryParamsSchema = z
     .object({
         teacherId: z.string({
@@ -93,15 +103,9 @@ export const PostClassSchema = z
     })
     .strict();
 
-export const PostApproveSchema = z
-    .object({
-        studentId: z.string({
-            invalid_type_error: "Student ID must be a string",
-            required_error: "Student ID is required",
-            description: "Refer student ID of who wants to join the class",
-        }),
-    })
-    .strict();
+export const PostApproveSchema = HasStudentId.strict();
+
+export const PostRegisterSchema = HasStudentId.strict();
 
 export const QueryParamsWithTeacherRoleSchema = BaseQueryParamsSchema;
 export const QueryParamsWithStudentRoleSchema = BaseQueryParamsSchema.omit({
@@ -121,6 +125,8 @@ export type Schedule = z.infer<typeof ScheduleSchema>;
 export type PostClass = z.infer<typeof PostClassSchema>;
 
 export type PostApprove = z.infer<typeof PostApproveSchema>;
+
+export type PostRegister = z.infer<typeof PostRegisterSchema>;
 
 export function getSchemaByRole(role: string) {
     switch (role) {

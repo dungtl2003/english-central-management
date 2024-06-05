@@ -14,6 +14,13 @@ import {
 
 export type InputType = z.infer<typeof RequestSchema>;
 
+export type TotalPriceByMonthYear = {
+    year: number;
+    month: number;
+    isPaid: boolean;
+    total: number;
+};
+
 export type OutputType =
     | (Class & {
           unit: Unit;
@@ -22,7 +29,10 @@ export type OutputType =
               student: Student & {
                   user: User;
                   tuitions: Tuition[];
-                  attendances: Attendance[];
+                  attendances: (Attendance & {
+                      session: Session;
+                  })[];
+                  totalPriceByMonthYearList: TotalPriceByMonthYear[];
               };
           })[];
       })
