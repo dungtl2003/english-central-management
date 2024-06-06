@@ -11,13 +11,12 @@ import {
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
+    Menubar,
+    MenubarContent,
+    MenubarItem,
+    MenubarMenu,
+    MenubarTrigger,
+} from "@/components/ui/menubar";
 
 const AdminNavigation = () => {
     return (
@@ -55,7 +54,6 @@ const AdminNavigation = () => {
                                     </svg>
                                 </NavigationMenuLink>
                             </Link>
-
                             <Link
                                 className="mr-auto flex gap-x-2 "
                                 href="#"
@@ -71,7 +69,6 @@ const AdminNavigation = () => {
                                     Dashboard
                                 </NavigationMenuLink>
                             </Link>
-
                             <Link
                                 className="mr-auto flex gap-x-2"
                                 href="/admins/1/calendar"
@@ -87,31 +84,33 @@ const AdminNavigation = () => {
                                     Calendar
                                 </NavigationMenuLink>
                             </Link>
-                            <Select>
-                                <SelectTrigger className="w-[160px]">
-                                    <SelectValue placeholder="Manage data" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                        <SelectItem value="Manage teacher">
-                                            <Link href="#">
+                            <Menubar>
+                                <MenubarMenu>
+                                    <MenubarTrigger>Manage data</MenubarTrigger>
+                                    <MenubarContent>
+                                        <Link href="/admins/1/teachers">
+                                            <MenubarItem>
                                                 Manage teachers
-                                            </Link>
-                                        </SelectItem>
-                                        <SelectItem value="Manage classes">
-                                            <Link href="#">Manage classes</Link>
-                                        </SelectItem>
-                                        <SelectItem value="Manage parents">
-                                            <Link href="#">Manage parents</Link>
-                                        </SelectItem>
-                                        <SelectItem value="Manage students">
-                                            <Link href="#">
+                                            </MenubarItem>
+                                        </Link>
+                                        <Link href="/teachers/1/classes/1">
+                                            <MenubarItem>
+                                                Manage classes
+                                            </MenubarItem>
+                                        </Link>
+                                        <Link href="#">
+                                            <MenubarItem>
+                                                Manage parents
+                                            </MenubarItem>
+                                        </Link>
+                                        <Link href="#">
+                                            <MenubarItem>
                                                 Manage students
-                                            </Link>
-                                        </SelectItem>
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
+                                            </MenubarItem>
+                                        </Link>
+                                    </MenubarContent>
+                                </MenubarMenu>
+                            </Menubar>
                         </NavigationMenuItem>
                         <NavigationMenuItem className="ml-auto flex items-center gap-x-4">
                             <ThemeToggle />

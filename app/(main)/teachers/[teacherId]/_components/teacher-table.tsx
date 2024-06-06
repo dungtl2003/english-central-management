@@ -18,13 +18,11 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 
-// Get columns model
 const columns: ColumnDef<ClassInfo>[] = TeacherTableColumns;
 
 export function TeacherTable() {
     const data: ClassInfo[] = DummyData;
     const [sorting, _setSorting] = React.useState<SortingState>([]);
-    // Define how many rows can be display
     const [pagination, setPagination] = React.useState<PaginationState>({
         pageIndex: 0,
         pageSize: 5,
@@ -46,7 +44,7 @@ export function TeacherTable() {
     });
     return (
         <>
-            <div className="w-11/12 pt-[120px]">
+            <div className="w-[80%] pt-[120px]">
                 <TableFilter table={table} />
                 <TableContent table={table} columns={columns} />
                 <TablePagination table={table} />

@@ -43,6 +43,9 @@ const ClassListPreview: React.FC<ClassListPreviewProps> = ({
                         <div className="grid gap-4 py-4">
                             {StudentInfoArray.map((obj) => {
                                 const key = obj.key as keyof StudentInfo;
+                                if (obj.key === "index") {
+                                    return;
+                                }
                                 return (
                                     <div
                                         key={obj.key}

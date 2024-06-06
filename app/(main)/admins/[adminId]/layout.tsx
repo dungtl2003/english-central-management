@@ -3,7 +3,7 @@
 // import {auth} from "@clerk/nextjs/server";
 // import {redirect} from "next/navigation";
 import {ReactElement} from "react";
-import AdminNavigation from "./_components/adminNavigation";
+import AdminNavigation from "./_components/admin-navigation";
 
 const AdminLayout: React.FC<{children: React.ReactNode}> = ({
     children,
