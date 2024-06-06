@@ -10,13 +10,13 @@ npm install
 
 in clerk's session token, add:
 
-```json
+````json
 {
-	"metadata": "{{user.public_metadata}}",
-	"last_name": "{{user.last_name}}",
-	"first_name": "{{user.first_name}}"
-}
-```
+	"metadata": {
+		"public": "{{user.public_metadata}}",
+		"unsafe": "{{user.unsafe_metadata}}"
+	}
+}```
 
 you also need to have `.env` file in root project, in the file you need `key=value` each line<br>
 required environment variables:<br>
@@ -46,7 +46,7 @@ yarn dev
 pnpm dev
 # or
 bun dev
-```
+````
 
 Update database schema:
 
