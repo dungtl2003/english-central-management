@@ -53,7 +53,6 @@ const formatData = (fetchedData: OutputType): ClassInfo[] | undefined => {
     return displayData;
 };
 
-// Get columns model
 const columns: ColumnDef<ClassInfo>[] = TeacherTableColumns;
 
 const fallbackDisplayData: ClassInfo[] = [];
@@ -110,25 +109,23 @@ export function TeacherTable() {
     }, [isLoaded, userId, execute]);
 
     return (
-        <>
-            <div className="w-11/12 pt-[120px]">
-                {/* <Button onClick={() => bypass(userId!)}>bypass</Button> */}
-                {isLoading ? (
-                    <SkeletonTableFilter />
-                ) : (
-                    <TableFilter table={table} />
-                )}
-                {isLoading ? (
-                    <SkeletonTableContent />
-                ) : (
-                    <TableContent table={table} columns={columns} />
-                )}
-                {isLoading ? (
-                    <SkeletonTablePagination />
-                ) : (
-                    <TablePagination table={table} />
-                )}
-            </div>
-        </>
+        <div className="w-11/12 pt-[120px]">
+            {/* <Button onClick={() => bypass(userId!)}>bypass</Button> */}
+            {isLoading ? (
+                <SkeletonTableFilter />
+            ) : (
+                <TableFilter table={table} />
+            )}
+            {isLoading ? (
+                <SkeletonTableContent />
+            ) : (
+                <TableContent table={table} columns={columns} />
+            )}
+            {isLoading ? (
+                <SkeletonTablePagination />
+            ) : (
+                <TablePagination table={table} />
+            )}
+        </div>
     );
 }
