@@ -4,6 +4,17 @@ import {PublicMetadata} from "@/constaints";
 import {UserProfile, useUser} from "@clerk/nextjs";
 import * as theme from "@clerk/themes";
 
+// type userForm = {
+//     id:string,//userId
+//     phoneNumber:string,
+//     identifyCard:string,
+//     birthday:Date,
+//     gender:Gender,
+//     role:UserRole,
+//     createdAt:Date,
+//     updatedAt:Date
+// }
+
 const CustomPage = () => {
     const {user} = useUser();
     const personalInformation: PublicMetadata | undefined =
