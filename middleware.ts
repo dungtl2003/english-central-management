@@ -61,7 +61,8 @@ export default clerkMiddleware(
         console.log("Redirect to ", req.nextUrl.pathname);
         const userId: string | null = auth().userId;
         const jwt: UserJwtSessionClaims | null = auth().sessionClaims;
-        const role: UserRole | null = (jwt?.metadata?.role as UserRole) ?? null;
+        const role: UserRole | null =
+            (jwt?.metadata?.public?.role as UserRole) ?? null;
 
         //the user isn't authenticated
         if (!userId && isProtectedRoute(req)) {

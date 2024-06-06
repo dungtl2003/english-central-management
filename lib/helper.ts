@@ -9,7 +9,7 @@ export async function authHandler(): Promise<void> {
     }
 
     const jwt: UserJwtSessionClaims | null = auth().sessionClaims;
-    const role: string | null = jwt?.metadata?.role ?? null;
+    const role: string | null = jwt?.metadata?.public?.role ?? null;
 
     const user = await db.user.findFirst({
         where: {
@@ -27,7 +27,7 @@ export async function authHandler(): Promise<void> {
 
 export function getClerkRole(): UserRole | null {
     const jwt: UserJwtSessionClaims | null = auth().sessionClaims;
-    return (jwt?.metadata?.role as UserRole) ?? null;
+    return (jwt?.metadata?.public?.role as UserRole) ?? null;
 }
 
 export function convertQueryParamsToJsonObject(

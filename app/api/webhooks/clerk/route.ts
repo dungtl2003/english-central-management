@@ -1,8 +1,10 @@
 import {NextRequest, NextResponse} from "next/server";
 import {headers} from "next/headers";
 import {Webhook} from "svix";
-import {WebhookEvent} from "@clerk/nextjs/server";
+import {WebhookEvent, auth} from "@clerk/nextjs/server";
 import {db} from "@/lib/db";
+import {UnsafeMetadata, UserJwtSessionClaims} from "@/constaints";
+import {User} from "@prisma/client";
 
 interface Payload {
     data: {
@@ -21,6 +23,7 @@ interface Payload {
 enum EventTypes {
     DELETE = "user.deleted",
     CREATE = "user.created",
+    UPDATE = "user.updated",
 }
 
 export async function POST(req: NextRequest) {
@@ -76,8 +79,8 @@ export async function POST(req: NextRequest) {
     console.log("Webhook body: ", payload);
 
     switch (eventType) {
-        case EventTypes.CREATE:
-            return await createUserHandler(payload);
+        case EventTypes.CREATE || EventTypes.UPDATE:
+            return await upsertUserHandler(payload);
         case EventTypes.DELETE:
             return await deleteUserHandler(payload);
         default:
@@ -88,7 +91,7 @@ export async function POST(req: NextRequest) {
     }
 }
 
-const createUserHandler = async (payload: Payload): Promise<NextResponse> => {
+const upsertUserHandler = async (payload: Payload): Promise<NextResponse> => {
     const data = payload.data;
     const primaryEmailId = data.primary_email_address_id;
     const emails = (data.email_addresses || []).filter(
@@ -102,13 +105,19 @@ const createUserHandler = async (payload: Payload): Promise<NextResponse> => {
         );
     }
 
+    const jwt: UserJwtSessionClaims | null = auth().sessionClaims;
+    const unsafe: UnsafeMetadata | undefined = jwt?.metadata?.unsafe;
     const userData = {
         referId: data.id,
         firstName: data.first_name,
         lastName: data.last_name,
         email: emails[0].email_address,
         imageUrl: data.profile_image_url,
-    };
+        phoneNumber: unsafe?.phoneNumber,
+        identifyCard: unsafe?.identifyCard,
+        gender: unsafe?.gender,
+        birthday: unsafe?.birthday,
+    } as User;
 
     try {
         const user = await db.user.upsert({
