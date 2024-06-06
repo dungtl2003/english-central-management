@@ -1,11 +1,21 @@
 import {UserRole} from "@prisma/client";
 import {z} from "zod";
 
+const HasStudentId = z
+    .object({
+        studentId: z.string({
+            invalid_type_error: "Student ID must be a string",
+            required_error: "Student ID is required",
+            description: "Refer student ID of who wants to join the class",
+        }),
+    })
+    .strict();
+
 const BaseQueryParamsSchema = z
     .object({
         teacherId: z.string({
             invalid_type_error: "Teacher ID must be a string",
-            description: "Teacher ID of class",
+            description: "Refer teacher ID of class",
         }),
     })
     .partial()
@@ -60,33 +70,42 @@ const ScheduleSchema = z
         location: true,
     });
 
-export const PostSchema = z.object({
-    unitId: z.string({
-        invalid_type_error: "Unit ID must be a string",
-        required_error: "Unit ID is required",
-        description: "Unit ID of class",
-    }),
-    teacherId: z.string({
-        invalid_type_error: "Teacher ID must be a string",
-        required_error: "Teacher ID is required",
-        description: "Refer teacher ID of class",
-    }),
-    startDate: z.coerce.date({
-        invalid_type_error: "Start date must be a date",
-        required_error: "Start date is required",
-        description: "Start date of class",
-    }),
-    timeZone: z
-        .string({
-            invalid_type_error: "Time zone must be a string",
-            required_error: "Time zone is required",
-            description: "Time zone of class",
-        })
-        .refine(() => Intl.supportedValuesOf("timeZone"), "Unknown time zone"),
-    schedules: z
-        .array(ScheduleSchema)
-        .min(1, "There must be at least 1 schedule"),
-});
+export const PostClassSchema = z
+    .object({
+        unitId: z.string({
+            invalid_type_error: "Unit ID must be a string",
+            required_error: "Unit ID is required",
+            description: "Unit ID of class",
+        }),
+        teacherId: z.string({
+            invalid_type_error: "Teacher ID must be a string",
+            required_error: "Teacher ID is required",
+            description: "Refer teacher ID of class",
+        }),
+        startDate: z.coerce.date({
+            invalid_type_error: "Start date must be a date",
+            required_error: "Start date is required",
+            description: "Start date of class",
+        }),
+        timeZone: z
+            .string({
+                invalid_type_error: "Time zone must be a string",
+                required_error: "Time zone is required",
+                description: "Time zone of class",
+            })
+            .refine(
+                () => Intl.supportedValuesOf("timeZone"),
+                "Unknown time zone"
+            ),
+        schedules: z
+            .array(ScheduleSchema)
+            .min(1, "There must be at least 1 schedule"),
+    })
+    .strict();
+
+export const PostApproveSchema = HasStudentId.strict();
+
+export const PostRegisterSchema = HasStudentId.strict();
 
 export const QueryParamsWithTeacherRoleSchema = BaseQueryParamsSchema;
 export const QueryParamsWithStudentRoleSchema = BaseQueryParamsSchema.omit({
@@ -103,7 +122,11 @@ export type BaseQueryParams = z.infer<typeof BaseQueryParamsSchema>;
 
 export type Schedule = z.infer<typeof ScheduleSchema>;
 
-export type Post = z.infer<typeof PostSchema>;
+export type PostClass = z.infer<typeof PostClassSchema>;
+
+export type PostApprove = z.infer<typeof PostApproveSchema>;
+
+export type PostRegister = z.infer<typeof PostRegisterSchema>;
 
 export function getSchemaByRole(role: string) {
     switch (role) {

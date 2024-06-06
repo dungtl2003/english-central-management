@@ -81,7 +81,7 @@ const ClassDetailPage: React.FC<{
                         )}
                     </TabsList>
                     <TabOverview data={data} isLoading={isLoading} />
-                    <TabClassList />
+                    <TabClassList data={data} />
                     <TabAttendanceHistory />
                 </Tabs>
             </div>

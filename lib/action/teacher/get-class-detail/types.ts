@@ -2,15 +2,24 @@ import {z} from "zod";
 import {RequestSchema} from "./schema";
 import {ActionState} from "@/lib/create-safe-action";
 import {
+    Attendance,
     Class,
     Session,
     Student,
     StudentsInClasses,
+    Tuition,
     Unit,
     User,
 } from "@prisma/client";
 
 export type InputType = z.infer<typeof RequestSchema>;
+
+export type TotalPriceByMonthYear = {
+    year: number;
+    month: number;
+    isPaid: boolean;
+    total: number;
+};
 
 export type OutputType =
     | (Class & {
@@ -19,6 +28,11 @@ export type OutputType =
           students: (StudentsInClasses & {
               student: Student & {
                   user: User;
+                  tuitions: Tuition[];
+                  attendances: (Attendance & {
+                      session: Session;
+                  })[];
+                  totalPriceByMonthYearList: TotalPriceByMonthYear[];
               };
           })[];
       })

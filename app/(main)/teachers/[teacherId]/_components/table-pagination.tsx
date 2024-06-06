@@ -35,7 +35,10 @@ const TablePagination = (props: TablePaginationProps): ReactElement => {
                     <div>Page</div>
                     <strong>
                         {pageIndex + 1} of{" "}
-                        {props.table.getPageCount().toLocaleString()}
+                        {Math.max(
+                            props.table.getPageCount(),
+                            1
+                        ).toLocaleString()}
                     </strong>
                 </span>
                 <span className="flex pl-1.5 items-center gap-1">
