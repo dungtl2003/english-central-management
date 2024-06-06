@@ -8,21 +8,14 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
-import {
-    StudentInfo,
-    StudentInfoArray,
-} from "../_attendance-components/student-info";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import React, {ReactElement} from "react";
 import PayingPopup from "./paying-popup";
+import {StudentInfoData, StudentInfoArray} from "./types";
 
-type ClassListPreviewProps = {
-    data: StudentInfo;
-};
-
-const ClassListPreview: React.FC<ClassListPreviewProps> = ({
+const ClassListPreview: React.FC<{data: StudentInfoData}> = ({
     data,
 }): ReactElement => {
     return (
@@ -42,7 +35,7 @@ const ClassListPreview: React.FC<ClassListPreviewProps> = ({
                         </SheetHeader>
                         <div className="grid gap-4 py-4">
                             {StudentInfoArray.map((obj) => {
-                                const key = obj.key as keyof StudentInfo;
+                                const key = obj.key as keyof StudentInfoData;
                                 return (
                                     <div
                                         key={obj.key}
@@ -56,7 +49,14 @@ const ClassListPreview: React.FC<ClassListPreviewProps> = ({
                                         </Label>
                                         <Input
                                             id={obj.key}
-                                            value={data[key] || ""}
+                                            value={
+                                                ((typeof data[key] ===
+                                                    "string" ||
+                                                    typeof data[key] ===
+                                                        "number") &&
+                                                    String(data[key])) ||
+                                                ""
+                                            }
                                             className="col-span-3"
                                             readOnly
                                         />

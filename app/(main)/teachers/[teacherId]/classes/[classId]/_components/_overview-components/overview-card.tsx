@@ -1,15 +1,9 @@
 import React, {ReactElement} from "react";
 import OverviewCardContent from "./overview-card-content";
 import {OutputType} from "@/lib/action/teacher/get-class-detail/types";
+import {OverviewCardData, OverviewTitle} from "./types";
 
-interface DisplayData {
-    numberOfStudents: string;
-    classProgress: string;
-    classGoal: string;
-    totalFee: string;
-}
-
-const formatData = (data: OutputType | undefined): DisplayData => {
+const formatData = (data: OutputType | undefined): OverviewCardData => {
     return {
         numberOfStudents: data ? String(data.students.length) : "",
         classProgress: data
@@ -18,45 +12,36 @@ const formatData = (data: OutputType | undefined): DisplayData => {
               )
             : "",
         classGoal: data ? String(data.unit.maxSessions) : "",
-        totalFee: data
-            ? "$" +
-              String(
-                  Math.round(
-                      Number(data.unit.pricePerSession) *
-                          data.unit.maxSessions *
-                          100
-                  ) / 100
-              )
-            : "",
+        pricePerSession: data ? `$${Number(data.unit.pricePerSession)}` : "",
     };
 };
 
 const OverviewCard: React.FC<{data: OutputType | undefined}> = ({
     data,
 }): ReactElement => {
-    const formattedData: DisplayData = formatData(data);
+    const formattedData: OverviewCardData = formatData(data);
 
     return (
         <div className="pt-3 flex flex-row">
             <div className="min-w-full grid grid-cols-4 gap-x-5">
                 <OverviewCardContent
-                    cardTitle="Number of students"
+                    cardTitle={OverviewTitle.STUDENTS}
                     cardValue={formattedData.numberOfStudents}
                 />
 
                 <OverviewCardContent
-                    cardTitle="Class progress"
+                    cardTitle={OverviewTitle.PROGRESS}
                     cardValue={formattedData.classProgress}
                 />
 
                 <OverviewCardContent
-                    cardTitle="Class goal"
+                    cardTitle={OverviewTitle.GOAL}
                     cardValue={formattedData.classGoal}
                 />
 
                 <OverviewCardContent
-                    cardTitle="Total fee"
-                    cardValue={formattedData.totalFee}
+                    cardTitle={OverviewTitle.PRICE_PER_SESSION}
+                    cardValue={formattedData.pricePerSession}
                 />
             </div>
         </div>

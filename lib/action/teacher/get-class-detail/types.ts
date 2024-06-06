@@ -4,6 +4,7 @@ import {ActionState} from "@/lib/create-safe-action";
 import {
     Attendance,
     Class,
+    Parent,
     Session,
     Student,
     StudentsInClasses,
@@ -18,17 +19,23 @@ export type TotalPriceByMonthYear = {
     year: number;
     month: number;
     isPaid: boolean;
-    total: number;
+    totalPrice: number;
+    attendances: number;
 };
 
 export type OutputType =
     | (Class & {
           unit: Unit;
-          sessions: Session[];
+          sessions: (Session & {
+              attendances: Attendance[];
+          })[];
           students: (StudentsInClasses & {
               student: Student & {
                   user: User;
                   tuitions: Tuition[];
+                  parents: (Parent & {
+                      user: User;
+                  })[];
                   attendances: (Attendance & {
                       session: Session;
                   })[];

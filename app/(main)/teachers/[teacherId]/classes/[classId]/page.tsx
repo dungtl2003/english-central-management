@@ -13,13 +13,13 @@ import {OutputType} from "@/lib/action/teacher/get-class-detail/types";
 import {toast} from "@/components/ui/use-toast";
 import {Tabs, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import TabOverview from "./_components/tab-overview";
-import TabClassList from "./_components/tab-class-list";
 import TabAttendanceHistory from "./_components/tab-attendance";
 import {format} from "date-fns";
 import {Calendar as CalendarIcon} from "lucide-react";
 import {cn} from "@/lib/utils";
 import {Button} from "@/components/ui/button";
 import {SkeletonClassDetailTabList} from "../../_components/skeleton-teacher";
+import TabClassList from "./_components/tab-student-list";
 
 const ClassDetailPage: React.FC<{
     params: {teacherId: string; classId: string};
@@ -71,8 +71,8 @@ const ClassDetailPage: React.FC<{
                                 <TabsTrigger value="overview">
                                     Overview
                                 </TabsTrigger>
-                                <TabsTrigger value="classList">
-                                    Class list
+                                <TabsTrigger value="studentList">
+                                    Student list
                                 </TabsTrigger>
                                 <TabsTrigger value="attendanceHistory">
                                     Attendance
@@ -82,7 +82,7 @@ const ClassDetailPage: React.FC<{
                     </TabsList>
                     <TabOverview data={data} isLoading={isLoading} />
                     <TabClassList data={data} />
-                    <TabAttendanceHistory />
+                    <TabAttendanceHistory data={data} />
                 </Tabs>
             </div>
         </div>

@@ -14,11 +14,12 @@ export interface ClassInfoDef {
 }
 
 export const ClassInfoArray: ClassInfoDef[] = [
+    {key: "classId", title: "ID"},
     {key: "className", title: "Class name"},
     {key: "year", title: "Year"},
     {key: "start", title: "Start"},
     {key: "end", title: "End"},
-    {key: "price", title: "Price"},
+    {key: "price", title: "Price/session"},
     {key: "teacher", title: "Teacher"},
 ];
 
@@ -27,7 +28,7 @@ export const ClassInfoDictionary: TableDictionary = {
     year: "Year",
     start: "Start",
     end: "End",
-    price: "Price",
+    price: "Price/session",
     teacher: "Teacher",
 };
 

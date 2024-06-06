@@ -1,15 +1,12 @@
 "Use client";
 
 import React from "react";
-import {PayingPopupModel, PayingPopupDictionary} from "./paying-popup-model";
 import {ColumnDef} from "@tanstack/react-table";
 import {Button} from "@/components/ui/button";
 import {Checkbox} from "@/components/ui/checkbox";
+import {PayingPopupDictionary, PayingPopupData} from "./types";
 
-function createColumns(
-    key: string,
-    title: string
-): ColumnDef<PayingPopupModel> {
+function createColumns(key: string, title: string): ColumnDef<PayingPopupData> {
     return {
         accessorKey: key,
         header: () => <Button variant="ghost">{title}</Button>,
@@ -22,8 +19,8 @@ interface ColumnProps {
 
 const PayingPopupColumns = ({
     handleSelectAllChange,
-}: ColumnProps): ColumnDef<PayingPopupModel>[] => {
-    const columns: ColumnDef<PayingPopupModel>[] = [];
+}: ColumnProps): ColumnDef<PayingPopupData>[] => {
+    const columns: ColumnDef<PayingPopupData>[] = [];
     columns.push({
         id: "select",
         header: ({table}) => {

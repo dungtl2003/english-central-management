@@ -16,10 +16,35 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
+import {OutputType} from "@/lib/action/teacher/get-class-detail/types";
+//import {formatDate} from "@/lib/utils";
+//import {Time} from "@/lib/time";
+//
+//TODO: update data, it need to have number of presence students in sessions
+//const formatData = (data: OutputType | undefined): SessionTableModel[] => {
+//    const displayData: SessionTableModel[] = [];
+//
+//    if (!data) return displayData;
+//
+//    data.sessions.forEach((session) => {
+//        const startTime = session.actualStartTime ?? session.estimatedStartTime;
+//        displayData.push({
+//            className: `${data.unit.grade}.${data.index}`,
+//            attendanceDate: formatDate(new Date(startTime)),
+//            startTime: Time.from(new Date(startTime)).toString(),
+//            endTime: Time.from(new Date(startTime)).toString(),
+//            presences: session.
+//        });
+//    });
+//
+//    return displayData;
+//};
 
 const columns: ColumnDef<SessionTableModel>[] = SessionTableColumns;
 
-const AttendanceTable = (): ReactElement => {
+const AttendanceTable: React.FC<{
+    data: OutputType | undefined;
+}> = ({}): ReactElement => {
     const data: SessionTableModel[] = SessionDummyData;
     const [sorting, _setSorting] = React.useState<SortingState>([]);
     const [pagination, setPagination] = React.useState<PaginationState>({

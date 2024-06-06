@@ -52,8 +52,41 @@ export function formatDate(date: Date): string {
     return dd + "/" + mm + "/" + yyyy;
 }
 
+export function concatName(
+    firstName: string | null,
+    lastName: string | null,
+    reversed: boolean = false
+): string {
+    if (!firstName) return lastName || "";
+    if (!lastName) return firstName || "";
+
+    return reversed ? `${lastName} ${firstName}` : `${firstName} ${lastName}`;
+}
+
 export function generateRandomName() {
     return nameList[Math.floor(Math.random() * nameList.length)];
+}
+
+export const monthNumberToLabelMap: MonthNumberToLabelMap = {
+    0: {long: "January", short: "Jan"},
+    1: {long: "February", short: "Feb"},
+    2: {long: "March", short: "Mar"},
+    3: {long: "April", short: "Apr"},
+    4: {long: "May", short: "May"},
+    5: {long: "June", short: "Jun"},
+    6: {long: "July", short: "Jul"},
+    7: {long: "August", short: "Aug"},
+    8: {long: "September", short: "Sep"},
+    9: {long: "October", short: "Oct"},
+    10: {long: "November", short: "Nov"},
+    11: {long: "December", short: "Dec"},
+};
+
+interface MonthNumberToLabelMap {
+    [key: number]: {
+        long: string;
+        short: string;
+    };
 }
 
 const nameList = [

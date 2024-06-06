@@ -1,13 +1,13 @@
 import React, {ReactElement} from "react";
-import ClassListTableHeader from "./class-list-table-header";
-import ClassListTableBody from "./class-list-table-body";
 import {Table as T} from "@/components/ui/table";
 import {ColumnDef, Table} from "@tanstack/react-table";
-import {StudentInfo} from "../_attendance-components/student-info";
+import ClassListTableBody from "./student-list-table-body";
+import ClassListTableHeader from "./student-list-table-header";
+import {StudentInfoData} from "./types";
 
 type TableContentProps = {
-    table: Table<StudentInfo>;
-    columns: ColumnDef<StudentInfo>[];
+    table: Table<StudentInfoData>;
+    columns: ColumnDef<StudentInfoData>[];
 };
 
 const ClassListTableContent = (props: TableContentProps): ReactElement => {

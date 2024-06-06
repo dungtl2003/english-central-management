@@ -1,10 +1,10 @@
 import React, {ReactElement} from "react";
 import {TableHeader as THead, TableHead, TableRow} from "@/components/ui/table";
 import {Table, flexRender} from "@tanstack/react-table";
-import {StudentInfo} from "../_attendance-components/student-info";
+import {StudentInfoData} from "./types";
 
 interface TableHeaderProps {
-    table: Table<StudentInfo>;
+    table: Table<StudentInfoData>;
 }
 
 const ClassListTableHeader = (props: TableHeaderProps): ReactElement => {

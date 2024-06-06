@@ -53,12 +53,13 @@ const updateData = (data: OutputType): void => {
                     month: tuition.month,
                     year: tuition.year,
                     isPaid: isPaid,
-                    total: !isPaid
+                    totalPrice: !isPaid
                         ? (attendancesByMonthYear[key] *
                               data!.unit.pricePerSession.toNumber() *
                               student.student.discount) /
                           100
                         : tuition.amount,
+                    attendances: attendancesByMonthYear[key],
                 } as TotalPriceByMonthYear;
             });
     });

@@ -21,7 +21,7 @@ import {handler} from "@/lib/action/teacher/get-classes";
 import {OutputType} from "@/lib/action/teacher/get-classes/types";
 import {toast} from "@/components/ui/use-toast";
 import {useAuth} from "@clerk/nextjs";
-import {formatDate} from "@/lib/utils";
+import {concatName, formatDate} from "@/lib/utils";
 import {Button} from "@/components/ui/button";
 import {
     SkeletonTableContent,
@@ -38,19 +38,15 @@ const formatData = (fetchedData: OutputType): ClassInfo[] | undefined => {
         displayData.push({
             classId: data.id,
             className: `${data.unit.grade}.${data.index}`,
-            teacher: `${data.teacher.user.lastName} ${data.teacher.user.firstName}`,
+            teacher: concatName(
+                data.teacher.user.lastName,
+                data.teacher.user.firstName,
+                true
+            ),
             year: String(data.unit.year),
             start: formatDate(new Date(data.startTime)),
             end: formatDate(new Date(data.endTime)),
-            price:
-                "$" +
-                String(
-                    Math.round(
-                        Number(data.unit.pricePerSession) *
-                            data.unit.maxSessions *
-                            100
-                    ) / 100
-                ),
+            price: "$" + Number(data.unit.pricePerSession),
         })
     );
 
