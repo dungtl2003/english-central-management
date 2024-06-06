@@ -1,13 +1,11 @@
 import React, {ReactElement} from "react";
 import {flexRender, Table} from "@tanstack/react-table";
 import {TableBody, TableCell, TableRow} from "@/components/ui/table";
-import {PayingPopupModel} from "./paying-popup-model";
+import {PayingPopupData, PayingPopupStatus} from "./types";
 
-interface PayingPopupBodyProps {
-    table: Table<PayingPopupModel>;
-}
-
-const PayingPopupBody = ({table}: PayingPopupBodyProps): ReactElement => {
+const PayingPopupBody: React.FC<{table: Table<PayingPopupData>}> = ({
+    table,
+}): ReactElement => {
     return (
         <TableBody>
             {table.getRowModel().rows?.length ? (
@@ -15,7 +13,7 @@ const PayingPopupBody = ({table}: PayingPopupBodyProps): ReactElement => {
                     <TableRow
                         key={row.id}
                         className={
-                            row.original.status == "Paid"
+                            row.original.status == PayingPopupStatus.PAID
                                 ? "opacity-50 pointer-events-none"
                                 : ""
                         }

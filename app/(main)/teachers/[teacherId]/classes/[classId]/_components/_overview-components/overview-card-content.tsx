@@ -1,5 +1,6 @@
 import React, {ReactElement} from "react";
 import {Card, CardContent} from "@/components/ui/card";
+import {OverviewTitle} from "./types";
 
 interface OverviewCardProps {
     cardTitle: string;
@@ -7,7 +8,7 @@ interface OverviewCardProps {
 }
 
 function getIcon(title: string): ReactElement {
-    if (title.toLocaleLowerCase().includes("student")) {
+    if (title === OverviewTitle.STUDENTS) {
         return (
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -26,7 +27,7 @@ function getIcon(title: string): ReactElement {
         );
     }
 
-    if (title.toLocaleLowerCase().includes("progress")) {
+    if (title === OverviewTitle.PROGRESS) {
         return (
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -41,7 +42,7 @@ function getIcon(title: string): ReactElement {
         );
     }
 
-    if (title.toLocaleLowerCase().includes("goal")) {
+    if (title === OverviewTitle.GOAL) {
         return (
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -59,7 +60,7 @@ function getIcon(title: string): ReactElement {
         );
     }
 
-    if (title.toLocaleLowerCase().includes("fee")) {
+    if (title === OverviewTitle.PRICE_PER_SESSION) {
         return (
             <svg
                 xmlns="http://www.w3.org/2000/svg"

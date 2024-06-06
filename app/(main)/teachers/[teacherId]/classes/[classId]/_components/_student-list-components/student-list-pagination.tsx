@@ -1,11 +1,11 @@
 import React, {ReactElement, useEffect} from "react";
-import {StudentInfo} from "../_attendance-components/student-info";
 import {Table} from "@tanstack/react-table";
 import {Button} from "@/components/ui/button";
-import ClassListTableFilter from "./class-list-table-filter";
+import ClassListTableFilter from "./student-list-table-filter";
+import {StudentInfoData} from "./types";
 
 type TablePaginationProps = {
-    table: Table<StudentInfo>;
+    table: Table<StudentInfoData>;
 };
 
 const ClassListPagination = (props: TablePaginationProps): ReactElement => {

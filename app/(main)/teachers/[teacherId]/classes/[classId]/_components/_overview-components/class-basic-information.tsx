@@ -5,16 +5,9 @@ import {Input} from "@/components/ui/input";
 import {OutputType} from "@/lib/action/teacher/get-class-detail/types";
 import {formatDate} from "@/lib/utils";
 import ClassChart from "./class-chart";
+import {ClassBasicInfoData} from "./types";
 
-interface DisplayData {
-    className: string;
-    grade: string;
-    startDate: string;
-    endDate: string;
-    timeZone: string;
-}
-
-const formatData = (data: OutputType | undefined): DisplayData => {
+const formatData = (data: OutputType | undefined): ClassBasicInfoData => {
     return {
         className: data ? `${data.unit.grade}.${data.index}` : "",
         grade: data ? String(data.unit.grade) : "",
@@ -27,7 +20,7 @@ const formatData = (data: OutputType | undefined): DisplayData => {
 const ClassBasicInfomation: React.FC<{data: OutputType | undefined}> = ({
     data,
 }): ReactElement => {
-    const formattedData: DisplayData = formatData(data);
+    const formattedData: ClassBasicInfoData = formatData(data);
 
     return (
         <div className="pt-5 grid grid-cols-5 gap-x-5">
@@ -98,7 +91,7 @@ const ClassBasicInfomation: React.FC<{data: OutputType | undefined}> = ({
             <div className="col-span-3 ">
                 <Card className="min-h-[340px] max-h-[340px]">
                     <CardContent className="flex justify-center items-center">
-                        <ClassChart />
+                        <ClassChart data={data} />
                     </CardContent>
                 </Card>
             </div>

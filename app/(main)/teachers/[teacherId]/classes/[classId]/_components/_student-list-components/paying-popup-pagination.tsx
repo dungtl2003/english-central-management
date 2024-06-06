@@ -1,11 +1,11 @@
 import React, {ReactElement} from "react";
 import {Button} from "@/components/ui/button";
-import {PayingPopupModel} from "./paying-popup-model";
 import {Checkbox} from "@/components/ui/checkbox";
 import {Table} from "@tanstack/react-table";
+import {PayingPopupData} from "./types";
 
 interface PayingPopupPaginationProps {
-    table: Table<PayingPopupModel>;
+    table: Table<PayingPopupData>;
 }
 
 const PayingPopupPagination = ({

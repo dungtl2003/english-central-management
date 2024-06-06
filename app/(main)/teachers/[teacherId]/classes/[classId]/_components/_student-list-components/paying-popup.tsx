@@ -9,14 +9,12 @@ import {
 import ConfirmDialog from "@/components/comfirm-dialog";
 import {Button} from "@/components/ui/button";
 import PayingPopupContent from "./paying-popup-content";
-import {StudentInfo} from "../_attendance-components/student-info";
 import {DialogDescription} from "@radix-ui/react-dialog";
+import {StudentInfoData} from "./types";
 
-type PayingPopupProps = {
-    data: StudentInfo;
-};
-
-const PayingPopup = ({data}: PayingPopupProps): ReactElement => {
+const PayingPopup: React.FC<{data: StudentInfoData}> = ({
+    data,
+}): ReactElement => {
     const [open, setOpen] = React.useState(false);
 
     return (
@@ -50,11 +48,9 @@ const PayingPopup = ({data}: PayingPopupProps): ReactElement => {
                     <DialogTitle className="text-2xl">
                         {data.fullName}
                     </DialogTitle>
-                    <DialogDescription>
-                        Đoạn này để mã học sinh
-                    </DialogDescription>
+                    <DialogDescription>{data.id}</DialogDescription>
                 </DialogHeader>
-                <PayingPopupContent />
+                <PayingPopupContent data={data} />
                 <div className="flex items-center justify-center">
                     <ConfirmDialog customClass="w-[150px]" title="Save" />
                 </div>

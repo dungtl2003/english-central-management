@@ -17,19 +17,18 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import {Table} from "@/components/ui/table";
-import {PayingPopupDummyData} from "./paying-popup-dummy-data";
-import {PayingPopupModel} from "./paying-popup-model";
 import PayingPopupColumns from "./paying-popup-columns";
 import PayingPopupHeader from "./paying-popup-header";
 import PayingPopupBody from "./paying-popup-body";
-import PayingPopupPagination from "./paing-popup-pagination";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {Button} from "@/components/ui/button";
+import PayingPopupPagination from "./paying-popup-pagination";
+import {PayingPopupStatus, StudentInfoData} from "./types";
 
-const data: PayingPopupModel[] = PayingPopupDummyData;
-
-const PayingPopupContent = (): ReactElement => {
+const PayingPopupContent: React.FC<{data: StudentInfoData}> = ({
+    data,
+}): ReactElement => {
     const [rowSelection, setRowSelection] = React.useState({});
     const [pagination, setPagination] = React.useState<PaginationState>({
         pageIndex: 0,
@@ -39,8 +38,8 @@ const PayingPopupContent = (): ReactElement => {
     const handleSelectAllChange = (isChecked: boolean) => {
         const newSelection: boolean[] = [];
         if (isChecked) {
-            data.forEach((row, index) => {
-                if (row.status === "Debt") {
+            data.payments.forEach((row, index) => {
+                if (row.status === PayingPopupStatus.DEBT) {
                     newSelection[index] = true;
                 }
             });
@@ -48,10 +47,12 @@ const PayingPopupContent = (): ReactElement => {
         setRowSelection(newSelection);
     };
     const [columnFilters, setColumnFilters] =
-        React.useState<ColumnFiltersState>([{id: "status", value: "Debt"}]);
+        React.useState<ColumnFiltersState>([
+            {id: "status", value: PayingPopupStatus.DEBT},
+        ]);
 
     const table = useReactTable({
-        data,
+        data: data.payments,
         columns: PayingPopupColumns({handleSelectAllChange}),
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
@@ -60,7 +61,8 @@ const PayingPopupContent = (): ReactElement => {
         onRowSelectionChange: setRowSelection,
         onPaginationChange: setPagination,
         onColumnFiltersChange: setColumnFilters,
-        enableRowSelection: (row) => row.original.status !== "Paid",
+        enableRowSelection: (row) =>
+            row.original.status !== PayingPopupStatus.PAID,
         state: {
             rowSelection,
             pagination,
@@ -89,12 +91,14 @@ const PayingPopupContent = (): ReactElement => {
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
-                                    <SelectItem value="idParent1">
-                                        Parent 1
-                                    </SelectItem>
-                                    <SelectItem value="idParent2">
-                                        Parent 2
-                                    </SelectItem>
+                                    {data.parents?.map((parent) => (
+                                        <SelectItem
+                                            key={parent.id}
+                                            value={parent.fullName}
+                                        >
+                                            {parent.fullName}
+                                        </SelectItem>
+                                    ))}
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
@@ -127,7 +131,7 @@ const PayingPopupContent = (): ReactElement => {
                                 id="fullName"
                                 type="text"
                                 className="mt-1"
-                                value="10%"
+                                value={`${data.discount}%`}
                                 readOnly
                             />
                         </div>

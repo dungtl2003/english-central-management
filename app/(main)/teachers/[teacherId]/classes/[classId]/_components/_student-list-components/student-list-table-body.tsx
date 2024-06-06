@@ -1,11 +1,11 @@
 import React, {ReactElement} from "react";
 import {TableBody as TBody, TableCell, TableRow} from "@/components/ui/table";
 import {ColumnDef, Table, flexRender} from "@tanstack/react-table";
-import {StudentInfo} from "../_attendance-components/student-info";
+import {StudentInfoData} from "./types";
 
 type TableBodyProps = {
-    table: Table<StudentInfo>;
-    columns: ColumnDef<StudentInfo>[];
+    table: Table<StudentInfoData>;
+    columns: ColumnDef<StudentInfoData>[];
 };
 
 const ClassListTableBody = (props: TableBodyProps): ReactElement => {
