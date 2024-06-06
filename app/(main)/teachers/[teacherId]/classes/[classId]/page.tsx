@@ -1,6 +1,12 @@
 "use client";
 
-import React, {ReactElement, useCallback, useEffect, useMemo} from "react";
+import React, {
+    ReactElement,
+    useCallback,
+    useEffect,
+    useMemo,
+    useState,
+} from "react";
 import {UseActionOptions, useAction} from "@/hooks/use-action";
 import {handler} from "@/lib/action/teacher/get-class-detail";
 import {OutputType} from "@/lib/action/teacher/get-class-detail/types";
@@ -13,6 +19,7 @@ import {format} from "date-fns";
 import {Calendar as CalendarIcon} from "lucide-react";
 import {cn} from "@/lib/utils";
 import {Button} from "@/components/ui/button";
+import {SkeletonClassDetailTabList} from "../../_components/skeleton-teacher";
 
 const ClassDetailPage: React.FC<{
     params: {teacherId: string; classId: string};
@@ -32,8 +39,11 @@ const ClassDetailPage: React.FC<{
     }, []);
     const {data, execute} = useAction(getDetailHandler, event);
 
+    const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
-        execute({teacherId: params.teacherId, classId: params.classId});
+        execute({teacherId: params.teacherId, classId: params.classId}).then(
+            () => setIsLoading(false)
+        );
     }, [execute, params.teacherId, params.classId]);
 
     return (
@@ -55,13 +65,22 @@ const ClassDetailPage: React.FC<{
                 </div>
                 <Tabs defaultValue="overview" className="mt-[15px] w-full">
                     <TabsList>
-                        <TabsTrigger value="overview">Overview</TabsTrigger>
-                        <TabsTrigger value="classList">Class list</TabsTrigger>
-                        <TabsTrigger value="attendanceHistory">
-                            Attendance
-                        </TabsTrigger>
+                        {isLoading && <SkeletonClassDetailTabList />}
+                        {!isLoading && (
+                            <>
+                                <TabsTrigger value="overview">
+                                    Overview
+                                </TabsTrigger>
+                                <TabsTrigger value="classList">
+                                    Class list
+                                </TabsTrigger>
+                                <TabsTrigger value="attendanceHistory">
+                                    Attendance
+                                </TabsTrigger>
+                            </>
+                        )}
                     </TabsList>
-                    <TabOverview data={data} />
+                    <TabOverview data={data} isLoading={isLoading} />
                     <TabClassList data={data} />
                     <TabAttendanceHistory />
                 </Tabs>
