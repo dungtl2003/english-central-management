@@ -12,18 +12,23 @@ export class Time {
     }
 
     /**
-     * Convert string to Time object.
+     * Convert to Time object.
      * @param time - if it is a string, it must follow format `HH:MM:SS`. If it is
-     * a number, it must be a positive integer and lower than 86400 (a day).
+     * a number, it must be a positive integer and lower than 86400 (a day). If
+     * it is a Date object, it will return the `local` time of the date.
      * @throws Error - if `time` is in wrong format.
      */
-    public static from(time: string | number): Time {
+    public static from(time: string | number | Date): Time {
         if (typeof time === "string") {
             return Time.convertStringToTime(String(time));
         }
 
         if (typeof time === "number") {
             return Time.convertSecondsToTime(Number(time));
+        }
+
+        if (time instanceof Date) {
+            return Time.convertLocalDateToTime(time);
         }
 
         throw Error("Unsupported time");
@@ -110,5 +115,9 @@ export class Time {
         const second = Number(parts[2]);
 
         return new Time(hour, minute, second);
+    }
+
+    private static convertLocalDateToTime(date: Date): Time {
+        return new Time(date.getHours(), date.getMinutes(), date.getSeconds());
     }
 }
