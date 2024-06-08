@@ -206,7 +206,7 @@ model Session {
     class Class @relation(fields: [classId], references: [id], onDelete: Cascade)
     classId String @db.Uuid
     estimatedStartTime DateTime
-    actualStartTime DateTime
+    actualStartTime DateTime?
     attendedTime DateTime?
 
     attendances Attendance[]
