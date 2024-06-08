@@ -12,7 +12,7 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import {OutputType} from "@/lib/action/teacher/get-class-detail/types";
-import {concatName, formatDate, monthNumberToLabelMap} from "@/lib/utils";
+import {concatName, monthNumberToLabelMap} from "@/lib/utils";
 import ClassListTableColumns from "./student-list-table-columns";
 import ClassListTableContent from "./student-list-table-content";
 import ClassListPagination from "./student-list-pagination";
@@ -22,6 +22,7 @@ import {
     PayingPopupStatus,
     StudentInfoData,
 } from "./types";
+import {format} from "date-fns";
 
 const formatData = (data: OutputType | undefined): StudentInfoData[] => {
     const displayData: StudentInfoData[] = [];
@@ -71,11 +72,11 @@ const formatData = (data: OutputType | undefined): StudentInfoData[] => {
             fullName: `${student.student.user.lastName} ${student.student.user.firstName}`,
             email: student.student.user.email,
             birthday: student.student.user.birthday
-                ? formatDate(new Date(student.student.user.birthday))
+                ? format(student.student.user.birthday, "dd/MM/yyyy")
                 : "",
             tuitionPaid: tuitionPaid,
             phoneNumber: student.student.user.phoneNumber,
-            gender: student.student.user.gender ?? "Unknown",
+            gender: student.student.user.gender ?? "Not set",
             payments: payments,
             discount: student.student.discount.toString(),
             parents: parents,

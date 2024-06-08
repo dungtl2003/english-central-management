@@ -15,9 +15,12 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import React, {ReactElement} from "react";
-import {StudentDummyData} from "./student-dummy-data";
+import {SessionTableModel} from "./types";
+import {AttendanceStatus} from "@prisma/client";
 
-const AttendanceTable = (): ReactElement => {
+const AttendanceTable: React.FC<{data: SessionTableModel}> = ({
+    data,
+}): ReactElement => {
     let order: number = 1;
     return (
         <div className="relative max-h-[400px] overflow-y-auto">
@@ -32,7 +35,7 @@ const AttendanceTable = (): ReactElement => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {StudentDummyData.map((student) => {
+                    {data.students.map((student) => {
                         return (
                             <TableRow key={order++}>
                                 <TableCell>{order}</TableCell>
@@ -41,18 +44,26 @@ const AttendanceTable = (): ReactElement => {
                                 </TableCell>
                                 <TableCell>{student.email}</TableCell>
                                 <TableCell>
-                                    <Select defaultValue="PRESENT">
+                                    <Select
+                                        defaultValue={AttendanceStatus.PRESENT}
+                                    >
                                         <SelectTrigger className="w-[180px]">
                                             <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="PRESENT">
+                                            <SelectItem
+                                                value={AttendanceStatus.PRESENT}
+                                            >
                                                 Present
                                             </SelectItem>
-                                            <SelectItem value="ABSENT">
+                                            <SelectItem
+                                                value={AttendanceStatus.ABSENT}
+                                            >
                                                 Absent
                                             </SelectItem>
-                                            <SelectItem value="LATE">
+                                            <SelectItem
+                                                value={AttendanceStatus.LATE}
+                                            >
                                                 Late
                                             </SelectItem>
                                         </SelectContent>

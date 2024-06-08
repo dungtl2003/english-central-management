@@ -8,15 +8,13 @@ import {Button} from "@/components/ui/button";
 import React, {ReactElement} from "react";
 import {FaEdit} from "react-icons/fa";
 import AttendanceTable from "./attendance-table";
-import {SessionTableModel} from "./session-table-model";
 import AttendanceTimer from "./attendance-timer";
 import ConfirmDialog from "@/components/comfirm-dialog";
+import {SessionTableModel} from "./types";
 
-interface SessionEditProps {
-    data: SessionTableModel;
-}
-
-export function SessionEdit({data}: SessionEditProps): ReactElement {
+export const SessionEdit: React.FC<{data: SessionTableModel}> = ({
+    data,
+}): ReactElement => {
     const [open, setOpen] = React.useState(false);
     const handleClose = () => setOpen(false);
 
@@ -56,7 +54,7 @@ export function SessionEdit({data}: SessionEditProps): ReactElement {
                     disabled={disabled}
                     handleOnSaveTime={handleOnSaveTime}
                 />
-                {confirmedTime ? <AttendanceTable /> : ""}
+                {confirmedTime ? <AttendanceTable data={data} /> : ""}
                 <DialogFooter>
                     {confirmedTime ? (
                         <ConfirmDialog
@@ -70,4 +68,4 @@ export function SessionEdit({data}: SessionEditProps): ReactElement {
             </DialogContent>
         </Dialog>
     );
-}
+};

@@ -3,16 +3,16 @@ import {Card, CardContent, CardHeader} from "@/components/ui/card";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {OutputType} from "@/lib/action/teacher/get-class-detail/types";
-import {formatDate} from "@/lib/utils";
 import ClassChart from "./class-chart";
 import {ClassBasicInfoData} from "./types";
+import {format} from "date-fns";
 
 const formatData = (data: OutputType | undefined): ClassBasicInfoData => {
     return {
         className: data ? `${data.unit.grade}.${data.index}` : "",
         grade: data ? String(data.unit.grade) : "",
-        startDate: data ? String(formatDate(new Date(data.startTime))) : "",
-        endDate: data ? String(formatDate(new Date(data.endTime))) : "",
+        startDate: data ? format(data.startTime, "dd/MM/yyyy") : "",
+        endDate: data ? format(data.endTime, "dd/MM/yyyy") : "",
         timeZone: data ? data.timeZone : "",
     };
 };

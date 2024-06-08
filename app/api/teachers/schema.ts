@@ -6,7 +6,7 @@ const HasId = z.object({
         .string({
             required_error: "ID is required",
             invalid_type_error: "ID must be a string",
-            description: "ID of the teacher",
+            description: "Refer ID of the teacher",
         })
         .min(1, "ID is too short"),
 });

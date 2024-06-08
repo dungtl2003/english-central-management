@@ -1,14 +1,14 @@
 import React, {ReactElement} from "react";
 import {Table} from "@tanstack/react-table";
-import {SessionTableModel} from "./session-table-model";
 import {Input} from "@/components/ui/input";
+import {SessionTableModel} from "./types";
 
 interface TableFilterProps {
     table: Table<SessionTableModel>;
 }
 
 const SessionTableFilter = ({table}: TableFilterProps): ReactElement => {
-    const filterType: string = "attendanceDate";
+    const filterType: string = "formattedAttendanceDate";
     const searchBar = React.useRef<HTMLInputElement>(null);
     return (
         <div className="flex flex-row gap-x-4">

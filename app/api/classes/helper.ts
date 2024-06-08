@@ -111,7 +111,6 @@ export function buildSessionCreateManyClassInputEnvelopeObject(
         sessionDates.map((sessionDate) => {
             return {
                 estimatedStartTime: sessionDate,
-                actualStartTime: sessionDate,
             } as Prisma.SessionCreateManyClassInput;
         });
 

@@ -65,10 +65,13 @@ export async function POST(
             },
         });
 
-        let studentInClass = await db.studentsInClasses.findFirst({
+        const studentInClass = await db.studentsInClasses.findFirst({
             where: {
                 studentId: student!.student!.id,
                 classId: params.classId,
+            },
+            include: {
+                class: true,
             },
         });
 
@@ -84,7 +87,11 @@ export async function POST(
             );
         }
 
-        studentInClass = await db.studentsInClasses.update({
+        if (studentInClass.class.closedAt) {
+            throw new Error("This class has already closed");
+        }
+
+        await db.studentsInClasses.update({
             where: {
                 classId_studentId: {
                     studentId: studentInClass.studentId,
@@ -96,8 +103,8 @@ export async function POST(
             },
         });
 
-        console.log("Approved student: ", studentInClass);
-        return NextResponse.json(studentInClass, {status: 200});
+        console.log("Approved");
+        return NextResponse.json("", {status: 200});
     } catch (error) {
         console.log("Error: ", (<Error>error).message);
         return NextResponse.json(

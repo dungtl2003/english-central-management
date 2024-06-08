@@ -72,7 +72,7 @@ const ClassDetailPage: React.FC<{
                                     Overview
                                 </TabsTrigger>
                                 <TabsTrigger value="studentList">
-                                    Student list
+                                    Class list
                                 </TabsTrigger>
                                 <TabsTrigger value="attendanceHistory">
                                     Attendance

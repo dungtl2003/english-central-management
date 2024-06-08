@@ -1,7 +1,7 @@
 import React, {ReactElement} from "react";
 import {TableHeader as THead, TableHead, TableRow} from "@/components/ui/table";
 import {Table, flexRender} from "@tanstack/react-table";
-import {SessionTableModel} from "./session-table-model";
+import {SessionTableModel} from "./types";
 
 interface TableHeaderProps {
     table: Table<SessionTableModel>;

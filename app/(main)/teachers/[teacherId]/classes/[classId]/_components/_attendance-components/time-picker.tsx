@@ -15,6 +15,8 @@ interface TimePickerProps {
     defaultHour: string;
     defaultMinute: string;
     disabled: boolean;
+    onHourChange: (value: string) => void;
+    onMinuteChange: (value: string) => void;
 }
 
 const TimePicker = ({
@@ -24,12 +26,18 @@ const TimePicker = ({
     disabled,
     defaultHour,
     defaultMinute,
+    onHourChange,
+    onMinuteChange,
 }: TimePickerProps): ReactElement => {
     return (
         <div className="col-span-2 grid grid-rows-2 items-center justify-center">
             <div className="text-center text-[14px]">{title}</div>
             <div className="grid grid-cols-2 gap-x-2">
-                <Select disabled={disabled} defaultValue={defaultHour}>
+                <Select
+                    disabled={disabled}
+                    defaultValue={defaultHour}
+                    onValueChange={onHourChange}
+                >
                     <SelectTrigger className="w-[135px]">
                         <SelectValue />
                     </SelectTrigger>
@@ -45,7 +53,11 @@ const TimePicker = ({
                         </SelectGroup>
                     </SelectContent>
                 </Select>
-                <Select disabled={disabled} defaultValue={defaultMinute}>
+                <Select
+                    disabled={disabled}
+                    defaultValue={defaultMinute}
+                    onValueChange={onMinuteChange}
+                >
                     <SelectTrigger className="w-[135px]">
                         <SelectValue />
                     </SelectTrigger>

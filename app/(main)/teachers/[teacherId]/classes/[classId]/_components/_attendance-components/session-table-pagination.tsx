@@ -1,8 +1,8 @@
 import React, {ReactElement, useEffect} from "react";
-import {SessionTableModel} from "./session-table-model";
 import {Table} from "@tanstack/react-table";
 import {Button} from "@/components/ui/button";
 import SessionTableFilter from "./session-table-filter";
+import {SessionTableModel} from "./types";
 
 interface TablePaginationProps {
     table: Table<SessionTableModel>;

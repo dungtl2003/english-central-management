@@ -1,6 +1,5 @@
 import {DialogHeader, DialogTitle} from "@/components/ui/dialog";
-import React, {ReactElement} from "react";
-import {SessionTableModel} from "./session-table-model";
+import React, {ReactElement, useState} from "react";
 import {format} from "date-fns";
 import {Calendar as CalendarIcon} from "lucide-react";
 import {cn} from "@/lib/utils";
@@ -20,25 +19,41 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {Input} from "@/components/ui/input";
+import {SessionTableModel} from "./types";
+import {Time} from "@/lib/time";
 
-interface SessionEditHeaderProps {
+function calculateEndTime(
+    startHour: number,
+    startMinute: number,
+    studyHour: number,
+    studyMinute: number
+): string {
+    return new Time(startHour, startMinute, 0)
+        .plus(new Time(studyHour, studyMinute, 0))
+        .toString();
+}
+
+const AttendanceTimer: React.FC<{
     data: SessionTableModel;
     handleOnSaveTime: () => void;
     disabled: boolean;
-}
-
-const AttendanceTimer = ({
-    data,
-    handleOnSaveTime,
-    disabled,
-}: SessionEditHeaderProps): ReactElement => {
-    const estimateDate: Date = new Date(data.attendanceDate);
-    const [date, setDate] = React.useState<Date | undefined>(estimateDate);
-
-    const [estimateStartHour, estimateStartMinute]: string[] =
-        data.startTime.split("h");
-    const [estimateEndHour, estimateEndMinute]: string[] =
-        data.endTime.split("h");
+}> = ({data, handleOnSaveTime, disabled}): ReactElement => {
+    const [date, setDate] = React.useState<Date | undefined>(
+        new Date(data.attendanceDate)
+    );
+    const estimateStartTimeParts = data.startTime.split(":");
+    const [estimateStartHour, setEstimatedStartHour] = useState<string>(
+        estimateStartTimeParts[0]
+    );
+    const [estimateStartMinute, setEstimatedStartMinute] = useState<string>(
+        estimateStartTimeParts[1]
+    );
+    const [estimateEndHour, estimateEndMinute] = calculateEndTime(
+        Number(estimateStartHour),
+        Number(estimateStartMinute),
+        data.studyHour,
+        data.studyMinute
+    ).split(":");
 
     return (
         <>
@@ -49,7 +64,7 @@ const AttendanceTimer = ({
                             <div className="text-center text-[14px]">
                                 Attendance date
                             </div>
-                            <Popover>
+                            <Popover modal={true}>
                                 <PopoverTrigger asChild>
                                     <Button
                                         disabled={disabled}
@@ -80,12 +95,14 @@ const AttendanceTimer = ({
                             minute={minute}
                             title="Start time"
                             disabled={disabled}
-                            defaultHour={
-                                estimateStartHour ? estimateStartHour : "0"
-                            }
-                            defaultMinute={
-                                estimateStartMinute ? estimateStartMinute : "00"
-                            }
+                            defaultHour={estimateStartHour}
+                            defaultMinute={estimateStartMinute}
+                            onHourChange={(hour) => {
+                                setEstimatedStartHour(hour);
+                            }}
+                            onMinuteChange={(minute) => {
+                                setEstimatedStartMinute(minute);
+                            }}
                         />
 
                         <div className="col-span-2 grid grid-rows-2 items-center justify-center">
@@ -97,14 +114,14 @@ const AttendanceTimer = ({
                                     disabled={disabled}
                                     readOnly
                                     className="w-[135px]"
-                                    defaultValue={estimateEndHour}
+                                    value={estimateEndHour}
                                 />
 
                                 <Input
                                     disabled={disabled}
                                     readOnly
                                     className="w-[135px]"
-                                    defaultValue={estimateEndMinute}
+                                    value={estimateEndMinute}
                                 />
                             </div>
                         </div>

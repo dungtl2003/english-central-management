@@ -11,8 +11,11 @@ import {
     NavigationMenuList,
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import {OutputType} from "@/lib/action/teacher/get-teacher-detail/types";
 
-const TeacherNavigation = (): ReactElement => {
+const TeacherNavigation: React.FC<{data: OutputType | undefined}> = ({
+    data,
+}): ReactElement => {
     return (
         <div>
             <NavigationMenu className="fixed w-full h-16 p-4 border-b shadow-sm flex items-center">
@@ -89,7 +92,7 @@ const TeacherNavigation = (): ReactElement => {
                                         " rounded-md border border-slate-200 dark:border-slate-800"
                                     }
                                 >
-                                    {"Salary: $150 / month"}
+                                    {`Salary: $${data ? data?.teacher.baseSalary : 0} / month`}
                                 </NavigationMenuLink>
                             </Link>
                             <ThemeToggle />

@@ -1,10 +1,10 @@
 "Use client";
 
 import React from "react";
-import {SessionTableModel, SessionTableDictionary} from "./session-table-model";
 import {ColumnDef} from "@tanstack/react-table";
 import {Button} from "@/components/ui/button";
 import {SessionEdit} from "./session-edit";
+import {SessionTableDictionary, SessionTableModel} from "./types";
 
 function createColumns(
     key: string,
@@ -16,15 +16,15 @@ function createColumns(
     };
 }
 
-const SessionTableColumns: ColumnDef<SessionTableModel>[] = [];
+const sessionTableColumns: ColumnDef<SessionTableModel>[] = [];
 for (const key in SessionTableDictionary) {
-    SessionTableColumns.push(createColumns(key, SessionTableDictionary[key]));
+    sessionTableColumns.push(createColumns(key, SessionTableDictionary[key]));
 }
 
-SessionTableColumns.push({
+sessionTableColumns.push({
     id: "actions",
     enableHiding: false,
     cell: ({row}) => <SessionEdit data={row.original} />,
 });
 
-export default SessionTableColumns;
+export default sessionTableColumns;

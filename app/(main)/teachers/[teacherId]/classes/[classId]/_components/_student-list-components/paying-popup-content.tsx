@@ -1,4 +1,4 @@
-import React, {ReactElement} from "react";
+import React, {ReactElement, useCallback} from "react";
 import {
     PaginationState,
     getCoreRowModel,
@@ -7,6 +7,8 @@ import {
     getSortedRowModel,
     useReactTable,
     ColumnFiltersState,
+    ColumnDef,
+    flexRender,
 } from "@tanstack/react-table";
 import {
     Select,
@@ -16,15 +18,34 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import {Table} from "@/components/ui/table";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import PayingPopupColumns from "./paying-popup-columns";
-import PayingPopupHeader from "./paying-popup-header";
-import PayingPopupBody from "./paying-popup-body";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {Button} from "@/components/ui/button";
-import PayingPopupPagination from "./paying-popup-pagination";
-import {PayingPopupStatus, StudentInfoData} from "./types";
+import {
+    PayingPopupData,
+    PayingPopupDictionary,
+    PayingPopupStatus,
+    StudentInfoData,
+} from "./types";
+import {Checkbox} from "@/components/ui/checkbox";
+
+function createColumns(key: string, title: string): ColumnDef<PayingPopupData> {
+    return {
+        accessorKey: key,
+        header: () => <Button variant="ghost">{title}</Button>,
+    };
+}
+
+const columns: ColumnDef<PayingPopupData>[] = [];
 
 const PayingPopupContent: React.FC<{data: StudentInfoData}> = ({
     data,
@@ -34,7 +55,20 @@ const PayingPopupContent: React.FC<{data: StudentInfoData}> = ({
         pageIndex: 0,
         pageSize: 4,
     });
+    const [showPaid, setShowPaid] = React.useState(false);
+    const [totalAmountNoDiscount, setTotalAmountNoDiscount] = React.useState(0);
+    const [totalAmountWithDiscount, setTotalAmountWithDiscount] =
+        React.useState(0);
 
+    const handleCheckboxChange = (isChecked: boolean) => {
+        setShowPaid(isChecked);
+        table.setColumnFilters((old) => [
+            ...old.filter((filter) => filter.id !== "status"),
+            ...(isChecked
+                ? []
+                : [{id: "status", value: PayingPopupStatus.DEBT}]),
+        ]);
+    };
     const handleSelectAllChange = (isChecked: boolean) => {
         const newSelection: boolean[] = [];
         if (isChecked) {
@@ -46,11 +80,36 @@ const PayingPopupContent: React.FC<{data: StudentInfoData}> = ({
         }
         setRowSelection(newSelection);
     };
+    columns.push({
+        id: "select",
+        header: ({table}) => {
+            return (
+                <Checkbox
+                    checked={
+                        table.getIsAllPageRowsSelected() ||
+                        (table.getIsSomePageRowsSelected() && "indeterminate")
+                    }
+                    onCheckedChange={(value) => handleSelectAllChange(!!value)}
+                />
+            );
+        },
+        cell: ({row}) => (
+            <Checkbox
+                checked={row.getIsSelected()}
+                onCheckedChange={(value) => row.toggleSelected(!!value)}
+            />
+        ),
+        enableSorting: false,
+        enableHiding: false,
+    });
+    for (const key in PayingPopupDictionary) {
+        columns.push(createColumns(key, PayingPopupDictionary[key]));
+    }
+
     const [columnFilters, setColumnFilters] =
         React.useState<ColumnFiltersState>([
             {id: "status", value: PayingPopupStatus.DEBT},
         ]);
-
     const table = useReactTable({
         data: data.payments,
         columns: PayingPopupColumns({handleSelectAllChange}),
@@ -70,17 +129,128 @@ const PayingPopupContent: React.FC<{data: StudentInfoData}> = ({
         },
     });
 
+    const calculateTotals = useCallback(() => {
+        const selectedRows = table
+            .getSelectedRowModel()
+            .rows.map((row) => row.original);
+        const totalNoDiscount = selectedRows.reduce(
+            (sum, row) => sum + parseFloat(row.monthlyFee),
+            0
+        );
+        const totalWithDiscount: number =
+            totalNoDiscount * ((100 - Number(data.discount)) / 100);
+
+        setTotalAmountNoDiscount(totalNoDiscount);
+        setTotalAmountWithDiscount(totalWithDiscount);
+    }, [table, data.discount]);
+
+    React.useEffect(() => {
+        calculateTotals();
+    }, [rowSelection, calculateTotals]);
+
     return (
         <>
             <div className="grid grid-cols-2 gap-x-4">
                 <div className="min-h-[300px]">
                     <div className="rounded-md border">
                         <Table>
-                            <PayingPopupHeader table={table} />
-                            <PayingPopupBody table={table} />
+                            <TableHeader>
+                                {table.getHeaderGroups().map((headerGroup) => (
+                                    <TableRow key={headerGroup.id}>
+                                        {headerGroup.headers.map((header) => {
+                                            return (
+                                                <TableHead key={header.id}>
+                                                    {header.isPlaceholder
+                                                        ? null
+                                                        : flexRender(
+                                                              header.column
+                                                                  .columnDef
+                                                                  .header,
+                                                              header.getContext()
+                                                          )}
+                                                </TableHead>
+                                            );
+                                        })}
+                                    </TableRow>
+                                ))}
+                            </TableHeader>
+                            <TableBody>
+                                {table.getRowModel().rows?.length ? (
+                                    table.getRowModel().rows.map((row) => (
+                                        <TableRow
+                                            key={row.id}
+                                            className={
+                                                row.original.status ==
+                                                PayingPopupStatus.PAID
+                                                    ? "opacity-50 pointer-events-none"
+                                                    : ""
+                                            }
+                                            data-state={
+                                                row.getIsSelected() &&
+                                                "selected"
+                                            }
+                                        >
+                                            {row
+                                                .getVisibleCells()
+                                                .map((cell) => (
+                                                    <TableCell key={cell.id}>
+                                                        {flexRender(
+                                                            cell.column
+                                                                .columnDef.cell,
+                                                            cell.getContext()
+                                                        )}
+                                                    </TableCell>
+                                                ))}
+                                        </TableRow>
+                                    ))
+                                ) : (
+                                    <TableRow>
+                                        <TableCell
+                                            colSpan={
+                                                table.getAllColumns().length
+                                            }
+                                            className="h-24 text-center"
+                                        >
+                                            No results.
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+                            </TableBody>
                         </Table>
                     </div>
-                    <PayingPopupPagination table={table} />
+                    <div className="flex items-center justify-end space-x-2 py-4">
+                        <div className="flex-1 items-center space-x-2">
+                            <Checkbox
+                                checked={showPaid}
+                                onCheckedChange={handleCheckboxChange}
+                                id="togglePaid"
+                            />
+                            <label
+                                htmlFor="togglePaid"
+                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            >
+                                Show paid
+                            </label>
+                        </div>
+                        <div className="space-x-2">
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => table.previousPage()}
+                                disabled={!table.getCanPreviousPage()}
+                            >
+                                Previous
+                            </Button>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => table.nextPage()}
+                                disabled={!table.getCanNextPage()}
+                            >
+                                Next
+                            </Button>
+                        </div>
+                    </div>
                 </div>
                 <div className="min-h-[300px]">
                     <div className="mb-3.5">
@@ -94,7 +264,7 @@ const PayingPopupContent: React.FC<{data: StudentInfoData}> = ({
                                     {data.parents?.map((parent) => (
                                         <SelectItem
                                             key={parent.id}
-                                            value={parent.fullName}
+                                            value={parent.id}
                                         >
                                             {parent.fullName}
                                         </SelectItem>
@@ -104,31 +274,34 @@ const PayingPopupContent: React.FC<{data: StudentInfoData}> = ({
                         </Select>
                     </div>
                     <div className="mb-3.5">
-                        <Label htmlFor="fullName" className="pl-1 text-left">
+                        <Label
+                            htmlFor="totalNoDiscount"
+                            className="pl-1 text-left"
+                        >
                             Total amount{" "}
                             <span className="text-slate-400">
                                 (No discount)
                             </span>
                         </Label>
                         <Input
-                            id="fullName"
+                            id="totalNoDiscount"
                             type="text"
                             className="mt-1"
-                            value="160$"
+                            value={`$${totalAmountNoDiscount}`}
                             readOnly
                         />
                     </div>
                     <div className="mb-3.5 grid grid-cols-2 gap-x-3">
                         <div>
                             <Label
-                                htmlFor="fullName"
+                                htmlFor="discount"
                                 className="pl-1 text-left"
                             >
                                 Discount{" "}
                                 <span className="text-slate-400">(%)</span>
                             </Label>
                             <Input
-                                id="fullName"
+                                id="discount"
                                 type="text"
                                 className="mt-1"
                                 value={`${data.discount}%`}
@@ -137,7 +310,7 @@ const PayingPopupContent: React.FC<{data: StudentInfoData}> = ({
                         </div>
                         <div>
                             <Label
-                                htmlFor="fullName"
+                                htmlFor="totalWithDiscount"
                                 className="pl-1 text-left"
                             >
                                 Total amount{" "}
@@ -146,10 +319,10 @@ const PayingPopupContent: React.FC<{data: StudentInfoData}> = ({
                                 </span>
                             </Label>
                             <Input
-                                id="fullName"
+                                id="totalWithDiscount"
                                 type="text"
                                 className="mt-1"
-                                value="144$"
+                                value={`$${totalAmountWithDiscount}`}
                                 readOnly
                             />
                         </div>

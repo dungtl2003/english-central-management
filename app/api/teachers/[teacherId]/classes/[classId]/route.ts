@@ -55,7 +55,11 @@ export async function GET(
             },
             include: {
                 unit: true,
-                sessions: true,
+                sessions: {
+                    include: {
+                        attendances: true,
+                    },
+                },
                 students: {
                     where: {
                         approvedAt: {
@@ -69,6 +73,15 @@ export async function GET(
                                 tuitions: {
                                     where: {
                                         classId: classId,
+                                    },
+                                },
+                                parents: {
+                                    include: {
+                                        parent: {
+                                            include: {
+                                                user: true,
+                                            },
+                                        },
                                     },
                                 },
                                 attendances: {

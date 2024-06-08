@@ -21,7 +21,7 @@ import {handler} from "@/lib/action/teacher/get-classes";
 import {OutputType} from "@/lib/action/teacher/get-classes/types";
 import {toast} from "@/components/ui/use-toast";
 import {useAuth} from "@clerk/nextjs";
-import {concatName, formatDate} from "@/lib/utils";
+import {concatName} from "@/lib/utils";
 import {Button} from "@/components/ui/button";
 import {
     SkeletonTableContent,
@@ -29,6 +29,7 @@ import {
     SkeletonTablePagination,
 } from "./skeleton-teacher";
 import {bypass} from "@/lib/create-temp-data/teacher";
+import {format} from "date-fns";
 
 const formatData = (fetchedData: OutputType): ClassInfo[] | undefined => {
     if (!fetchedData) return undefined;
@@ -44,8 +45,8 @@ const formatData = (fetchedData: OutputType): ClassInfo[] | undefined => {
                 true
             ),
             year: String(data.unit.year),
-            start: formatDate(new Date(data.startTime)),
-            end: formatDate(new Date(data.endTime)),
+            start: format(data.startTime, "dd/MM/yyyy"),
+            end: format(data.endTime, "dd/MM/yyyy"),
             price: "$" + Number(data.unit.pricePerSession),
         })
     );

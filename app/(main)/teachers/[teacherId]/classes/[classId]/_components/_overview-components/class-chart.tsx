@@ -7,13 +7,12 @@ import {
 } from "@unovis/react";
 import {GroupedBar} from "@unovis/ts";
 import {OutputType} from "@/lib/action/teacher/get-class-detail/types";
-import {formatDate} from "@/lib/utils";
 import {ClassChartData} from "./types";
-import {Time} from "@/lib/time";
+import {format} from "date-fns";
 
 const x = (d: ClassChartData) => d.x;
 const y = [(d: ClassChartData) => d.presents];
-const color = (d: ClassChartData, i: number) => ["#00E7B4"][i];
+const color = (_: ClassChartData, i: number) => ["#00E7B4"][i];
 
 const formatData = (rawData: OutputType | undefined): ClassChartData[] => {
     const records: ClassChartData[] = [];
@@ -24,8 +23,8 @@ const formatData = (rawData: OutputType | undefined): ClassChartData[] => {
         .filter((session) => session.actualStartTime)
         .sort(
             (session1, session2) =>
-                new Date(session2.actualStartTime).getTime() -
-                new Date(session1.actualStartTime).getTime()
+                new Date(session2.actualStartTime!).getTime() -
+                new Date(session1.actualStartTime!).getTime()
         )
         .slice(0, 5)
         .reverse()
@@ -38,7 +37,7 @@ const formatData = (rawData: OutputType | undefined): ClassChartData[] => {
             ).length;
 
             records.push({
-                dateTime: `${formatDate(new Date(session.actualStartTime))}\n${Time.from(new Date(session.actualStartTime)).toString()}`,
+                dateTime: `${format(session.actualStartTime!, "dd/MM/yyyy")}\n${format(session.actualStartTime!, "HH:mm:ss")}`,
                 x: index++,
                 presents: presents,
                 absents: absents,
