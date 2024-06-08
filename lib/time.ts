@@ -1,14 +1,14 @@
 import {time24HoursFormat} from "./regex";
 
 export class Time {
-    private _hour: number;
-    private _minute: number;
-    private _second: number;
+    private _hour: number = 0;
+    private _minute: number = 0;
+    private _second: number = 0;
 
     constructor(hour?: number, minute?: number, second?: number) {
-        this._hour = hour ?? 0;
-        this._minute = minute ?? 0;
-        this._second = second ?? 0;
+        this.hour = hour ?? 0;
+        this.minute = minute ?? 0;
+        this.second = second ?? 0;
     }
 
     /**
@@ -47,14 +47,20 @@ export class Time {
     }
 
     public set hour(hour: number) {
+        if (hour > 23 || hour < 0 || !Number.isInteger(hour))
+            throw new Error("Invalid hour");
         this._hour = hour;
     }
 
     public set minute(minute: number) {
+        if (minute > 59 || minute < 0 || !Number.isInteger(minute))
+            throw new Error("Invalid minute");
         this._minute = minute;
     }
 
     public set second(second: number) {
+        if (second > 59 || second < 0 || !Number.isInteger(second))
+            throw new Error("Invalid second");
         this._second = second;
     }
 
@@ -74,6 +80,21 @@ export class Time {
         if (this.second !== other.second) return this.second - other.second;
 
         return 0;
+    }
+
+    /**
+     * Plus 2 time objects.
+     * If the time is larger than 23:59:59 then it will calculate back to 00:00:00.
+     */
+    public plus(other: Time): Time {
+        let added: boolean;
+        const second = this.second + other.second;
+        added = second > 59;
+        const minute = this.minute + other.minute + (added ? 1 : 0);
+        added = minute > 59;
+        const hour = this.hour + other.hour + (added ? 1 : 0);
+
+        return new Time(hour % 24, minute % 60, second % 60);
     }
 
     /**

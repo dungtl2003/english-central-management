@@ -38,18 +38,10 @@ export function getRandomInt(min: number, max: number) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-/**
- * return date string of format dd/mm/yyyy
- */
-export function formatDate(date: Date): string {
-    const yyyy = date.getFullYear();
-    let mm: string = String(date.getMonth() + 1); // Months start at 0!
-    let dd: string = String(date.getDate());
-
-    if (Number(dd) < 10) dd = "0" + dd;
-    if (Number(mm) < 10) mm = "0" + mm;
-
-    return dd + "/" + mm + "/" + yyyy;
+export function getRandomDate(min: Date, max: Date): Date {
+    return new Date(
+        min.getTime() + Math.random() * (max.getTime() - min.getTime())
+    );
 }
 
 export function concatName(
