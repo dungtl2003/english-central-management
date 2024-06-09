@@ -1,4 +1,4 @@
-import {TeacherListModel} from "./teacher-list-model";
+import {TeacherListModel} from "./types";
 
 export const TeacherListDummyData: TeacherListModel[] = [
     {

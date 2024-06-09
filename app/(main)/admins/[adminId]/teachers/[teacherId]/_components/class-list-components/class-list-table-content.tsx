@@ -2,20 +2,20 @@ import React, {ReactElement} from "react";
 import {
     TableHeader,
     TableBody,
-    TableCell,
-    TableRow,
     TableHead,
+    TableRow,
+    TableCell,
 } from "@/components/ui/table";
-import {ColumnDef, Table, flexRender} from "@tanstack/react-table";
 import {Table as T} from "@/components/ui/table";
-import {TeacherListModel} from "./teacher-list-model";
+import {ColumnDef, Table, flexRender} from "@tanstack/react-table";
+import {ClasslistColumns} from "./types";
 
-type TableContentProps = {
-    table: Table<TeacherListModel>;
-    columns: ColumnDef<TeacherListModel>[];
-};
+interface TableContentProps {
+    table: Table<ClasslistColumns>;
+    columns: ColumnDef<ClasslistColumns>[];
+}
 
-const TeacherListContent = ({
+const ClassListTableContent = ({
     table,
     columns,
 }: TableContentProps): ReactElement => {
@@ -45,24 +45,14 @@ const TeacherListContent = ({
                     {table.getRowModel().rows?.length ? (
                         table.getRowModel().rows.map((row) => (
                             <TableRow key={row.id}>
-                                {row.getAllCells().map((cell) => {
-                                    const isFullNameColumn =
-                                        cell.column.id === "fullName";
-                                    const cn: string = isFullNameColumn
-                                        ? " text-left pl-7"
-                                        : "";
-                                    return (
-                                        <TableCell
-                                            key={cell.id}
-                                            className={"w-2/12" + cn}
-                                        >
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext()
-                                            )}
-                                        </TableCell>
-                                    );
-                                })}
+                                {row.getAllCells().map((cell) => (
+                                    <TableCell key={cell.id} className="w-2/12">
+                                        {flexRender(
+                                            cell.column.columnDef.cell,
+                                            cell.getContext()
+                                        )}
+                                    </TableCell>
+                                ))}
                             </TableRow>
                         ))
                     ) : (
@@ -81,4 +71,4 @@ const TeacherListContent = ({
     );
 };
 
-export default TeacherListContent;
+export default ClassListTableContent;

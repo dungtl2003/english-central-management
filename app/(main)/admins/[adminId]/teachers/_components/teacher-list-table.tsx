@@ -10,7 +10,7 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import TeacherListColumns from "./teacher-list-columns";
-import {TeacherListModel} from "./teacher-list-model";
+import {TeacherListModel} from "./types";
 import {TeacherListDummyData} from "./teacher-list-dummy-data";
 import TeacherListFilter from "./teacher-list-filter";
 import TeacherListPagination from "./teacher-list-pagination";

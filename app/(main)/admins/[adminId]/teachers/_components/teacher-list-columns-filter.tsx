@@ -9,7 +9,7 @@ import {ChevronDown} from "lucide-react";
 import {RadioGroup} from "@/components/ui/radio-group";
 import {RadioGroupItem} from "@/components/ui/radio-group";
 import {Label} from "@radix-ui/react-label";
-import {TeacherListInfo} from "./teacher-list-model";
+import {TeacherListInfo} from "./types";
 
 type TableFilterOptionsProps = {
     tableColumns: TeacherListInfo[];

@@ -11,12 +11,12 @@ import {
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import {
-    Menubar,
-    MenubarContent,
-    MenubarItem,
-    MenubarMenu,
-    MenubarTrigger,
-} from "@/components/ui/menubar";
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {Button} from "@/components/ui/button";
 
 const AdminNavigation = () => {
     return (
@@ -84,33 +84,35 @@ const AdminNavigation = () => {
                                     Calendar
                                 </NavigationMenuLink>
                             </Link>
-                            <Menubar>
-                                <MenubarMenu>
-                                    <MenubarTrigger>Manage data</MenubarTrigger>
-                                    <MenubarContent>
-                                        <Link href="/admins/1/teachers">
-                                            <MenubarItem>
-                                                Manage teachers
-                                            </MenubarItem>
-                                        </Link>
-                                        <Link href="/teachers/1/classes/1">
-                                            <MenubarItem>
-                                                Manage classes
-                                            </MenubarItem>
-                                        </Link>
-                                        <Link href="#">
-                                            <MenubarItem>
-                                                Manage parents
-                                            </MenubarItem>
-                                        </Link>
-                                        <Link href="#">
-                                            <MenubarItem>
-                                                Manage students
-                                            </MenubarItem>
-                                        </Link>
-                                    </MenubarContent>
-                                </MenubarMenu>
-                            </Menubar>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="outline">
+                                        Manage data
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    <Link href="/admins/1/teachers">
+                                        <DropdownMenuItem>
+                                            Manage teachers
+                                        </DropdownMenuItem>
+                                    </Link>
+                                    <Link href="/teachers/1/classes/1">
+                                        <DropdownMenuItem>
+                                            Manage classes
+                                        </DropdownMenuItem>
+                                    </Link>
+                                    <Link href="#">
+                                        <DropdownMenuItem>
+                                            Manage parents
+                                        </DropdownMenuItem>
+                                    </Link>
+                                    <Link href="#">
+                                        <DropdownMenuItem>
+                                            Manage students
+                                        </DropdownMenuItem>
+                                    </Link>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </NavigationMenuItem>
                         <NavigationMenuItem className="ml-auto flex items-center gap-x-4">
                             <ThemeToggle />

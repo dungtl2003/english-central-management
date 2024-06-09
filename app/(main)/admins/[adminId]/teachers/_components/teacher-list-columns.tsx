@@ -1,14 +1,12 @@
 "Use client";
 
 import React from "react";
-import {
-    TeacherListModel,
-    TeacherListInfoDictionary,
-} from "./teacher-list-model";
+import {TeacherListModel, TeacherListInfoDictionary} from "./types";
 import {ArrowUpDown} from "lucide-react";
 import {ColumnDef} from "@tanstack/react-table";
 import {Button} from "@/components/ui/button";
 import {FaArrowUpRightFromSquare} from "react-icons/fa6";
+import Link from "next/link";
 function createColumns(
     key: string,
     title: string
@@ -38,12 +36,14 @@ TeacherListColumns.push({
     id: "actions",
     enableHiding: false,
     cell: () => (
-        <Button variant="outline">
-            Detail
-            <span className="pl-2">
-                <FaArrowUpRightFromSquare size={13} />
-            </span>
-        </Button>
+        <Link href="/admins/1/teachers/1">
+            <Button variant="outline">
+                Detail
+                <span className="pl-2">
+                    <FaArrowUpRightFromSquare size={13} />
+                </span>
+            </Button>
+        </Link>
     ),
 });
 

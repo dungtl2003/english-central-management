@@ -4,7 +4,7 @@ import {
     TeacherListModel,
     TeacherListInfoArray,
     TeacherListInfoDictionary,
-} from "./teacher-list-model";
+} from "./types";
 import TeacherListSearchBar from "./teacher-list-search-bar";
 import TeacherListColumnsFilter from "./teacher-list-columns-filter";
 import TeacherListRowsFilter from "./teacher-list-rows-filter";
