@@ -1,4 +1,5 @@
 const hour: string[] = [
+    "0",
     "1",
     "2",
     "3",
@@ -22,7 +23,7 @@ const hour: string[] = [
     "21",
     "22",
     "23",
-    "24",
+    "23",
 ];
 
 const minute: string[] = [

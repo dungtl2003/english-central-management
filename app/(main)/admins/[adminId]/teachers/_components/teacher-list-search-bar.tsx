@@ -1,6 +1,6 @@
 import {Input} from "@/components/ui/input";
 import React, {ReactElement} from "react";
-import {TeacherListModel, TeacherListDictionary} from "./teacher-list-model";
+import {TeacherListModel, TeacherListDictionary} from "./types";
 import {Table} from "@tanstack/react-table";
 
 type TableSearchBarProps = {
