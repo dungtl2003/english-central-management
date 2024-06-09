@@ -11,13 +11,12 @@ import {
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {Button} from "@/components/ui/button";
 
 const AdminNavigation = () => {
     return (
@@ -55,7 +54,6 @@ const AdminNavigation = () => {
                                     </svg>
                                 </NavigationMenuLink>
                             </Link>
-
                             <Link
                                 className="mr-auto flex gap-x-2 "
                                 href="#"
@@ -71,7 +69,6 @@ const AdminNavigation = () => {
                                     Dashboard
                                 </NavigationMenuLink>
                             </Link>
-
                             <Link
                                 className="mr-auto flex gap-x-2"
                                 href="/admins/1/calendar"
@@ -87,31 +84,35 @@ const AdminNavigation = () => {
                                     Calendar
                                 </NavigationMenuLink>
                             </Link>
-                            <Select>
-                                <SelectTrigger className="w-[160px]">
-                                    <SelectValue placeholder="Manage data" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                        <SelectItem value="Manage teacher">
-                                            <Link href="#">
-                                                Manage teachers
-                                            </Link>
-                                        </SelectItem>
-                                        <SelectItem value="Manage classes">
-                                            <Link href="#">Manage classes</Link>
-                                        </SelectItem>
-                                        <SelectItem value="Manage parents">
-                                            <Link href="#">Manage parents</Link>
-                                        </SelectItem>
-                                        <SelectItem value="Manage students">
-                                            <Link href="#">
-                                                Manage students
-                                            </Link>
-                                        </SelectItem>
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="outline">
+                                        Manage data
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    <Link href="/admins/1/teachers">
+                                        <DropdownMenuItem>
+                                            Manage teachers
+                                        </DropdownMenuItem>
+                                    </Link>
+                                    <Link href="/teachers/1/classes/1">
+                                        <DropdownMenuItem>
+                                            Manage classes
+                                        </DropdownMenuItem>
+                                    </Link>
+                                    <Link href="#">
+                                        <DropdownMenuItem>
+                                            Manage parents
+                                        </DropdownMenuItem>
+                                    </Link>
+                                    <Link href="#">
+                                        <DropdownMenuItem>
+                                            Manage students
+                                        </DropdownMenuItem>
+                                    </Link>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </NavigationMenuItem>
                         <NavigationMenuItem className="ml-auto flex items-center gap-x-4">
                             <ThemeToggle />

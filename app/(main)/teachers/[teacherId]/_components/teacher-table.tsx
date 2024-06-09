@@ -66,7 +66,6 @@ const formatData = (fetchedData: OutputType): ClassInfo[] | undefined => {
     return displayData;
 };
 
-// Get columns model
 const columns: ColumnDef<ClassInfo>[] = TeacherTableColumns;
 
 const fallbackDisplayData: ClassInfo[] = [];
@@ -116,7 +115,7 @@ export function TeacherTable() {
     }, [isLoaded]);
     return (
         <>
-            <div className="w-11/12 pt-[120px]">
+            <div className="w-[80%] pt-[120px]">
                 <TableFilter table={table} />
                 <TableContent table={table} columns={columns} />
                 <TablePagination table={table} />

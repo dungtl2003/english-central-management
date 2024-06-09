@@ -20,3 +20,7 @@ export enum UserRole {
     STUDENT = "STUDENT",
     PARENT = "PARENT",
 }
+
+export interface PublicMetadata extends UserPublicMetadata {
+    role?: string;
+}

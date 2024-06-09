@@ -30,10 +30,23 @@ const page = (): ReactElement => {
                     </div>
                 </div>
                 <Tabs defaultValue="overview" className="mt-[15px] w-full">
-                    <TabsList>
-                        <TabsTrigger value="overview">Overview</TabsTrigger>
-                        <TabsTrigger value="classList">Class list</TabsTrigger>
-                        <TabsTrigger value="attendanceHistory">
+                    <TabsList className="inline-flex h-10 items-center justify-center  dark:bg-slate-800 bg-slate-100">
+                        <TabsTrigger
+                            className="text-sm inline-flex items-center justify-center dark:data-[state=active]:bg-slate-950 dark:data-[state=active]:text-slate-50 data-[state=active]:bg-white data-[state=active]:text-slate-950"
+                            value="overview"
+                        >
+                            Overview
+                        </TabsTrigger>
+                        <TabsTrigger
+                            className="text-sm inline-flex items-center justify-center dark:data-[state=active]:bg-slate-950 dark:data-[state=active]:text-slate-50 data-[state=active]:bg-white data-[state=active]:text-slate-950"
+                            value="classList"
+                        >
+                            Class list
+                        </TabsTrigger>
+                        <TabsTrigger
+                            className="text-sm inline-flex items-center justify-center dark:data-[state=active]:bg-slate-950 dark:data-[state=active]:text-slate-50 data-[state=active]:bg-white data-[state=active]:text-slate-950"
+                            value="attendanceHistory"
+                        >
                             Attendance
                         </TabsTrigger>
                     </TabsList>
