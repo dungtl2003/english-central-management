@@ -1,10 +1,11 @@
+"use server";
+
 import {NextRequest, NextResponse} from "next/server";
 import {headers} from "next/headers";
 import {Webhook} from "svix";
-import {WebhookEvent, auth} from "@clerk/nextjs/server";
+import {WebhookEvent} from "@clerk/nextjs/server";
 import {db} from "@/lib/db";
-import {UnsafeMetadata, UserJwtSessionClaims} from "@/constaints";
-import {User} from "@prisma/client";
+import {Gender, User} from "@prisma/client";
 
 interface Payload {
     data: {
@@ -17,6 +18,12 @@ interface Payload {
             id: string;
             email_address: string;
         }[];
+        unsafe_metadata: {
+            birthday: string;
+            gender: Gender;
+            identityCard: string;
+            phoneNumber: string;
+        };
     };
 }
 
@@ -79,7 +86,9 @@ export async function POST(req: NextRequest) {
     console.log("Webhook body: ", payload);
 
     switch (eventType) {
-        case EventTypes.CREATE || EventTypes.UPDATE:
+        case EventTypes.CREATE:
+            return await upsertUserHandler(payload);
+        case EventTypes.UPDATE:
             return await upsertUserHandler(payload);
         case EventTypes.DELETE:
             return await deleteUserHandler(payload);
@@ -105,18 +114,19 @@ const upsertUserHandler = async (payload: Payload): Promise<NextResponse> => {
         );
     }
 
-    const jwt: UserJwtSessionClaims | null = auth().sessionClaims;
-    const unsafe: UnsafeMetadata | undefined = jwt?.metadata?.unsafe;
     const userData = {
         referId: data.id,
         firstName: data.first_name,
         lastName: data.last_name,
         email: emails[0].email_address,
         imageUrl: data.profile_image_url,
-        phoneNumber: unsafe?.phoneNumber,
-        identifyCard: unsafe?.identifyCard,
-        gender: unsafe?.gender,
-        birthday: unsafe?.birthday,
+        phoneNumber: data.unsafe_metadata.phoneNumber,
+        identifyCard: data.unsafe_metadata.identityCard,
+        gender: data.unsafe_metadata.gender,
+        //birthday:unsafe?.birthday,
+        birthday: data.unsafe_metadata.birthday
+            ? new Date(data.unsafe_metadata.birthday as string)
+            : undefined,
     } as User;
 
     try {
