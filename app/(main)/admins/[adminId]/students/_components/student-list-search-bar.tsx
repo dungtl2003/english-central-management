@@ -1,16 +1,16 @@
 import {Input} from "@/components/ui/input";
 import React, {ReactElement} from "react";
-import {TeacherListModel, TeacherListDictionary} from "./types";
+import {StudentListModel, StudentListDictionary} from "./types";
 import {Table} from "@tanstack/react-table";
 
 interface TableSearchBarProps {
-    classInfoDictionary: TeacherListDictionary;
+    classInfoDictionary: StudentListDictionary;
     searchBar: React.RefObject<HTMLInputElement>;
-    table: Table<TeacherListModel>;
+    table: Table<StudentListModel>;
     filterType: string;
 }
 
-const TeacherListSearchBar = ({
+const StudentListSearchBar = ({
     classInfoDictionary,
     filterType,
     searchBar,
@@ -33,4 +33,4 @@ const TeacherListSearchBar = ({
     );
 };
 
-export default TeacherListSearchBar;
+export default StudentListSearchBar;

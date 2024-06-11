@@ -1,14 +1,14 @@
 import React, {ChangeEvent, ReactElement, useEffect} from "react";
-import {TeacherListModel} from "./types";
+import {StudentListModel} from "./types";
 import {Table} from "@tanstack/react-table";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 
 interface TablePaginationProps {
-    table: Table<TeacherListModel>;
+    table: Table<StudentListModel>;
 }
 
-const TeacherListPagination = ({table}: TablePaginationProps): ReactElement => {
+const StudentListPagination = ({table}: TablePaginationProps): ReactElement => {
     const pageIndexInput = React.useRef<HTMLInputElement>(null);
     const pageIndex = table.getState().pagination.pageIndex;
 
@@ -71,4 +71,4 @@ const TeacherListPagination = ({table}: TablePaginationProps): ReactElement => {
     );
 };
 
-export default TeacherListPagination;
+export default StudentListPagination;

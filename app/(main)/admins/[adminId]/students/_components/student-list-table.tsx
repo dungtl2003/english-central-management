@@ -9,18 +9,18 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import TeacherListColumns from "./teacher-list-columns";
-import {TeacherListModel} from "./types";
-import {teacherListDummyData} from "./teacher-list-dummy-data";
-import TeacherListFilter from "./teacher-list-filter";
-import TeacherListPagination from "./teacher-list-pagination";
-import TeacherListContent from "./teacher-list-content";
-import {Status} from "./teacher-list-rows-filter";
+import StudentListColumns from "./student-list-columns";
+import {StudentListModel} from "./types";
+import {studentListDummyData} from "./student-list-dummy-data";
+import StudentListFilter from "./student-list-filter";
+import StudentListPagination from "./student-list-pagination";
+import StudentListContent from "./student-list-content";
+import {Status} from "./student-list-rows-filter";
 
-export const columns: ColumnDef<TeacherListModel>[] = TeacherListColumns;
+export const columns: ColumnDef<StudentListModel>[] = StudentListColumns;
 
-const TeacherListTable = (): ReactElement => {
-    const data: TeacherListModel[] = teacherListDummyData;
+const StudentListTable = (): ReactElement => {
+    const data: StudentListModel[] = studentListDummyData;
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [selectedStatus, setSelectedStatus] = React.useState<string[]>([
         "All",
@@ -73,15 +73,15 @@ const TeacherListTable = (): ReactElement => {
 
     return (
         <div className="w-[80%] pt-[120px]">
-            <TeacherListFilter
+            <StudentListFilter
                 table={table}
                 selectedStatus={selectedStatus}
                 handleStatusChange={handleStatusChange}
             />
-            <TeacherListContent table={table} columns={columns} />
-            <TeacherListPagination table={table} />
+            <StudentListContent table={table} columns={columns} />
+            <StudentListPagination table={table} />
         </div>
     );
 };
 
-export default TeacherListTable;
+export default StudentListTable;

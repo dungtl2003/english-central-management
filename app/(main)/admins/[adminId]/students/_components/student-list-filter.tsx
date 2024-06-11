@@ -1,21 +1,21 @@
 import React, {ReactElement} from "react";
 import {Table} from "@tanstack/react-table";
 import {
-    TeacherListModel,
-    TeacherListInfoArray,
-    TeacherListInfoDictionary,
+    StudentListModel,
+    StudentListInfoArray,
+    StudentListInfoDictionary,
 } from "./types";
-import TeacherListSearchBar from "./teacher-list-search-bar";
-import TeacherListColumnsFilter from "./teacher-list-columns-filter";
-import TeacherListRowsFilter from "./teacher-list-rows-filter";
+import StudentListSearchBar from "./student-list-search-bar";
+import StudentListColumnsFilter from "./student-list-columns-filter";
+import StudentListRowsFilter from "./student-list-rows-filter";
 
 interface TableFilterProps {
-    table: Table<TeacherListModel>;
+    table: Table<StudentListModel>;
     selectedStatus: string[];
     handleStatusChange: (status: string) => void;
 }
 
-const TeacherListFilter = ({
+const StudentListFilter = ({
     table,
     selectedStatus,
     handleStatusChange,
@@ -42,19 +42,19 @@ const TeacherListFilter = ({
     return (
         <div className="flex items-center py-4">
             <div className="flex flex-row gap-x-4">
-                <TeacherListSearchBar
-                    classInfoDictionary={TeacherListInfoDictionary}
+                <StudentListSearchBar
+                    classInfoDictionary={StudentListInfoDictionary}
                     searchBar={searchBar}
                     table={table}
                     filterType={filterType}
                 />
-                <TeacherListColumnsFilter
-                    tableColumns={TeacherListInfoArray}
+                <StudentListColumnsFilter
+                    tableColumns={StudentListInfoArray}
                     selectedOptions={selectedRadio}
                     searchBarRef={searchBar}
                     handleOnSelect={handleRadioClick}
                 />
-                <TeacherListRowsFilter
+                <StudentListRowsFilter
                     selectedStatus={selectedStatus}
                     handleStatusChange={handleStatusChange}
                 />
@@ -63,4 +63,4 @@ const TeacherListFilter = ({
     );
 };
 
-export default TeacherListFilter;
+export default StudentListFilter;
