@@ -9,7 +9,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {useForm} from "react-hook-form";
 import {z} from "zod";
 import {Button} from "@/components/ui/button";
-import {format} from "date-fns";
+import {format, isValid, parse} from "date-fns";
 import {
     Form,
     FormControl,
@@ -21,7 +21,6 @@ import {
 import {Input} from "@/components/ui/input";
 import {toast} from "@/components/ui/use-toast";
 import * as theme from "@clerk/themes";
-import {cn} from "@/lib/utils";
 import {Calendar} from "@/components/ui/calendar";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {
@@ -71,7 +70,37 @@ const CustomPage = (): ReactElement => {
         });
     }
 
-    const [date, setDate] = useState<Date>(); // Nếu có ngày sinh nhật thì để vào đây
+    const [month, setMonth] = useState(new Date());
+
+    // Hold the selected date in state
+    const [selectedDate, setSelectedDate] = useState<Date>(); // Nếu có ngày sinh nhật thì để vào đây
+
+    // Hold the input value in state
+    const [inputValue, setInputValue] = useState("");
+
+    const handleDayPickerSelect = (date: Date | undefined) => {
+        if (!date) {
+            setInputValue("");
+            setSelectedDate(undefined);
+        } else {
+            setSelectedDate(date);
+            setMonth(date);
+            setInputValue(format(date, "MM/dd/yyyy"));
+        }
+    };
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInputValue(e.target.value); // keep the input value in sync
+
+        const parsedDate = parse(e.target.value, "dd/MM/yyyy", new Date());
+
+        if (isValid(parsedDate)) {
+            setSelectedDate(parsedDate);
+            setMonth(parsedDate);
+        } else {
+            setSelectedDate(undefined);
+        }
+    };
 
     return (
         <Form {...form}>
@@ -189,38 +218,32 @@ const CustomPage = (): ReactElement => {
                         name="birthday"
                         render={() => (
                             <FormItem>
-                                <FormLabel className="text-md">
-                                    Birthday
-                                </FormLabel>
-                                <FormControl>
+                                <FormLabel className="flex flex-row items-center text-md">
+                                    Birthday{" "}
                                     <Popover>
                                         <PopoverTrigger asChild>
-                                            <Button
-                                                variant={"outline"}
-                                                className={cn(
-                                                    "w-full justify-start text-left font-normal",
-                                                    !date &&
-                                                        "text-muted-foreground"
-                                                )}
-                                            >
-                                                <CalendarIcon className="mr-2 h-4 w-4" />
-                                                {date ? (
-                                                    format(date, "PPP")
-                                                ) : (
-                                                    <span>Pick a date</span>
-                                                )}
-                                            </Button>
+                                            <span className="pl-2">
+                                                <CalendarIcon className="mr-2 h-4 w-4 hover:cursor-pointer" />
+                                            </span>
                                         </PopoverTrigger>
                                         <PopoverContent className="w-auto p-0">
                                             <Calendar
+                                                month={month}
+                                                onMonthChange={setMonth}
                                                 mode="single"
-                                                selected={date}
-                                                onSelect={setDate}
+                                                selected={selectedDate}
+                                                onSelect={handleDayPickerSelect}
                                                 initialFocus
                                             />
                                         </PopoverContent>
                                     </Popover>
-                                </FormControl>
+                                </FormLabel>
+                                <Input
+                                    type="text"
+                                    placeholder="dd/MM/yyyy"
+                                    value={inputValue}
+                                    onChange={handleInputChange}
+                                />
                                 <FormMessage />
                             </FormItem>
                         )}
