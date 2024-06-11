@@ -8,17 +8,17 @@ import {
 import {Button} from "@/components/ui/button";
 import {ChevronDown} from "lucide-react";
 
-export const Status: string[] = ["All", "Teaching", "Pending", "Retired"];
+export const Status: string[] = ["All", "Learning", "Pending", "Graduated"];
 
-interface TeacherListRowsFilterProps {
+interface StudentListRowsFilterProps {
     selectedStatus: string[];
     handleStatusChange: (status: string) => void;
 }
 
-const TeacherListRowsFilter = ({
+const StudentListRowsFilter = ({
     selectedStatus,
     handleStatusChange,
-}: TeacherListRowsFilterProps): ReactElement => {
+}: StudentListRowsFilterProps): ReactElement => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -43,4 +43,4 @@ const TeacherListRowsFilter = ({
     );
 };
 
-export default TeacherListRowsFilter;
+export default StudentListRowsFilter;

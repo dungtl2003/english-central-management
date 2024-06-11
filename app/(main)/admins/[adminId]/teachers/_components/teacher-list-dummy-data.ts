@@ -1,6 +1,6 @@
 import {TeacherListModel} from "./types";
 
-export const TeacherListDummyData: TeacherListModel[] = [
+export const teacherListDummyData: TeacherListModel[] = [
     {
         fullName: "Nguyễn Văn An",
         salary: "$5000",

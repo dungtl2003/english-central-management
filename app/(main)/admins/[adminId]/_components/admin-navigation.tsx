@@ -56,7 +56,7 @@ const AdminNavigation = () => {
                             </Link>
                             <Link
                                 className="mr-auto flex gap-x-2 "
-                                href="#"
+                                href="/admins/1/dashboard"
                                 legacyBehavior
                                 passHref
                             >
@@ -101,14 +101,14 @@ const AdminNavigation = () => {
                                             Manage classes
                                         </DropdownMenuItem>
                                     </Link>
-                                    <Link href="#">
+                                    <Link href="/admins/1/students">
                                         <DropdownMenuItem>
-                                            Manage parents
+                                            Manage students
                                         </DropdownMenuItem>
                                     </Link>
                                     <Link href="#">
                                         <DropdownMenuItem>
-                                            Manage students
+                                            Manage parents
                                         </DropdownMenuItem>
                                     </Link>
                                 </DropdownMenuContent>

@@ -9,10 +9,10 @@ import {ChevronDown} from "lucide-react";
 import {RadioGroup} from "@/components/ui/radio-group";
 import {RadioGroupItem} from "@/components/ui/radio-group";
 import {Label} from "@radix-ui/react-label";
-import {TeacherListInfo} from "./types";
+import {StudentListInfo} from "./types";
 
 interface TableFilterOptionsProps {
-    tableColumns: TeacherListInfo[];
+    tableColumns: StudentListInfo[];
     selectedOptions: string;
     searchBarRef: React.RefObject<HTMLInputElement>;
     handleOnSelect: (
@@ -22,7 +22,7 @@ interface TableFilterOptionsProps {
     ) => void;
 }
 
-const TeacherListColumnsFilter = ({
+const StudentListColumnsFilter = ({
     handleOnSelect,
     searchBarRef,
     selectedOptions,
@@ -65,4 +65,4 @@ const TeacherListColumnsFilter = ({
     );
 };
 
-export default TeacherListColumnsFilter;
+export default StudentListColumnsFilter;

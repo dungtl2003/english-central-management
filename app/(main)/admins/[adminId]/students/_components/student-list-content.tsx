@@ -8,11 +8,11 @@ import {
 } from "@/components/ui/table";
 import {ColumnDef, Table, flexRender} from "@tanstack/react-table";
 import {Table as T} from "@/components/ui/table";
-import {TeacherListModel} from "./types";
+import {StudentListModel} from "./types";
 
 interface TableContentProps {
-    table: Table<TeacherListModel>;
-    columns: ColumnDef<TeacherListModel>[];
+    table: Table<StudentListModel>;
+    columns: ColumnDef<StudentListModel>[];
 }
 
 const TeacherListContent = ({
