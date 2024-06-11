@@ -1,7 +1,7 @@
 import {DialogHeader, DialogTitle} from "@/components/ui/dialog";
-import React, {ReactElement, useState} from "react";
+import React, {ReactElement, useCallback, useMemo, useState} from "react";
 import {format} from "date-fns";
-import {Calendar as CalendarIcon} from "lucide-react";
+import {Calendar as CalendarIcon, Loader2} from "lucide-react";
 import {cn} from "@/lib/utils";
 import {Button} from "@/components/ui/button";
 import {Calendar} from "@/components/ui/calendar";
@@ -21,6 +21,10 @@ import {
 import {Input} from "@/components/ui/input";
 import {SessionTableModel} from "./types";
 import {Time} from "@/lib/time";
+import {UseActionOptions, useAction} from "@/hooks/use-action";
+import {OutputType} from "@/lib/action/teacher/update-session/types";
+import {useToast} from "@/components/ui/use-toast";
+import {handler} from "@/lib/action/teacher/update-session";
 
 function calculateEndTime(
     startHour: number,
@@ -35,25 +39,58 @@ function calculateEndTime(
 
 const AttendanceTimer: React.FC<{
     data: SessionTableModel;
-    handleOnSaveTime: () => void;
-    disabled: boolean;
-}> = ({data, handleOnSaveTime, disabled}): ReactElement => {
-    const [date, setDate] = React.useState<Date | undefined>(
-        new Date(data.attendanceDate)
-    );
-    const estimateStartTimeParts = data.startTime.split(":");
-    const [estimateStartHour, setEstimatedStartHour] = useState<string>(
-        estimateStartTimeParts[0]
-    );
-    const [estimateStartMinute, setEstimatedStartMinute] = useState<string>(
-        estimateStartTimeParts[1]
-    );
-    const [estimateEndHour, estimateEndMinute] = calculateEndTime(
-        Number(estimateStartHour),
-        Number(estimateStartMinute),
+}> = ({data}): ReactElement => {
+    const {toast} = useToast();
+    const memoHandler = useCallback(handler, []);
+    const memoEvent = useMemo(() => {
+        return {
+            onSuccess: () => {
+                toast({
+                    title: "Success",
+                    description: "Updated schedule",
+                });
+
+                window.location.reload();
+            },
+            onError: (error) => {
+                toast({
+                    title: "Error updating schedule",
+                    variant: "destructive",
+                    description: error,
+                });
+            },
+        } as UseActionOptions<OutputType>;
+    }, []);
+    const {execute, isLoading} = useAction(memoHandler, memoEvent);
+    const isEditable: boolean = data.actualStartTime === null;
+
+    const startDate = data.actualStartTime ?? data.estimatedStartTime;
+    const [date, setDate] = React.useState<Date | undefined>(startDate);
+    const startTimeParts = data.startTime.split(":");
+    const [startHour, setStartHour] = useState<string>(startTimeParts[0]);
+    const [startMinute, setStartMinute] = useState<string>(startTimeParts[1]);
+    const [endHour, endMinute] = calculateEndTime(
+        Number(startHour),
+        Number(startMinute),
         data.studyHour,
         data.studyMinute
     ).split(":");
+
+    const actualStudyTime = new Date(
+        date!.getFullYear(),
+        date!.getMonth(),
+        date!.getDate(),
+        Number(startHour),
+        Number(startMinute),
+        0
+    );
+
+    const updateScheduleTimeHandler = () => {
+        execute({
+            sessionId: data.sessionId,
+            actualTime: actualStudyTime,
+        });
+    };
 
     return (
         <>
@@ -67,16 +104,14 @@ const AttendanceTimer: React.FC<{
                             <Popover modal={true}>
                                 <PopoverTrigger asChild>
                                     <Button
-                                        disabled={disabled}
+                                        disabled={!isEditable || isLoading}
                                         variant={"outline"}
                                         className={cn(
                                             "w-[280px] justify-start text-left font-normal"
                                         )}
                                     >
                                         <CalendarIcon className="mr-2 h-4 w-4" />
-                                        {date
-                                            ? format(date, "PPP")
-                                            : "Select a date"}
+                                        {format(date!, "PPP")}
                                     </Button>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-auto p-0">
@@ -94,14 +129,14 @@ const AttendanceTimer: React.FC<{
                             hour={hour}
                             minute={minute}
                             title="Start time"
-                            disabled={disabled}
-                            defaultHour={estimateStartHour}
-                            defaultMinute={estimateStartMinute}
+                            disabled={!isEditable || isLoading}
+                            defaultHour={startHour}
+                            defaultMinute={startMinute}
                             onHourChange={(hour) => {
-                                setEstimatedStartHour(hour);
+                                setStartHour(hour);
                             }}
                             onMinuteChange={(minute) => {
-                                setEstimatedStartMinute(minute);
+                                setStartMinute(minute);
                             }}
                         />
 
@@ -111,17 +146,17 @@ const AttendanceTimer: React.FC<{
                             </div>
                             <div className="grid grid-cols-2 gap-x-2">
                                 <Input
-                                    disabled={disabled}
+                                    disabled={!isEditable}
                                     readOnly
                                     className="w-[135px]"
-                                    value={estimateEndHour}
+                                    value={endHour}
                                 />
 
                                 <Input
-                                    disabled={disabled}
+                                    disabled={!isEditable}
                                     readOnly
                                     className="w-[135px]"
-                                    value={estimateEndMinute}
+                                    value={endMinute}
                                 />
                             </div>
                         </div>
@@ -131,15 +166,22 @@ const AttendanceTimer: React.FC<{
                                 <AlertDialog>
                                     <AlertDialogTrigger asChild>
                                         <Button
-                                            disabled={disabled}
+                                            disabled={!isEditable || isLoading}
                                             type="submit"
                                         >
-                                            Save calendar
+                                            {isLoading && (
+                                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                            )}
+                                            {isLoading
+                                                ? "Please wait..."
+                                                : "Save calendar"}
                                         </Button>
                                     </AlertDialogTrigger>
                                     <AlertDialogContent className="h-[180px]">
                                         <AlertDialogHeader className="flex items-center justify-center">
                                             <AlertDialogTitle className="flex items-center justify-center text-2xl">
+                                                This cannot be undone.
+                                                <br />
                                                 Are you absolutely sure?
                                             </AlertDialogTitle>
                                         </AlertDialogHeader>
@@ -148,7 +190,9 @@ const AttendanceTimer: React.FC<{
                                                 Cancel
                                             </AlertDialogCancel>
                                             <AlertDialogAction
-                                                onClick={handleOnSaveTime}
+                                                onClick={
+                                                    updateScheduleTimeHandler
+                                                }
                                                 className="min-w-[160px] text-md justify-self-center"
                                             >
                                                 Save

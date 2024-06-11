@@ -221,7 +221,7 @@ model Attendance {
     sessionId String @db.Uuid
     student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
     studentId String @db.Uuid
-    status AttendanceStatus
+    status AttendanceStatus?
     description String?
 
     createdAt DateTime @default(now())

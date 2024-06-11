@@ -35,20 +35,23 @@ const AttendanceTable: React.FC<{data: SessionTableModel}> = ({
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {data.students.map((student) => {
+                    {data.attendances.map((attendance) => {
                         return (
                             <TableRow key={order++}>
                                 <TableCell>{order}</TableCell>
                                 <TableCell className="text-left">
-                                    {student.fullName}
+                                    {attendance.fullName}
                                 </TableCell>
-                                <TableCell>{student.email}</TableCell>
+                                <TableCell>{attendance.email}</TableCell>
                                 <TableCell>
                                     <Select
-                                        defaultValue={AttendanceStatus.PRESENT}
+                                        defaultValue={
+                                            attendance.attendanceStatus ||
+                                            undefined
+                                        }
                                     >
                                         <SelectTrigger className="w-[180px]">
-                                            <SelectValue />
+                                            <SelectValue placeholder="Choose status" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectItem

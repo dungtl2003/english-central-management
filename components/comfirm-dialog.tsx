@@ -35,7 +35,7 @@ const ConfirmDialog = ({
             <AlertDialogContent className="h-[180px]">
                 <AlertDialogHeader className="flex items-center justify-center">
                     <AlertDialogTitle className="flex items-center justify-center text-2xl">
-                        Are you absolutely sure?
+                        Are you sure?
                     </AlertDialogTitle>
                 </AlertDialogHeader>
                 <AlertDialogFooter className="grid grid-cols-2 items-center ">

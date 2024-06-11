@@ -1,3 +1,4 @@
+import {ErrorType} from "../../generic";
 import {
     InputType,
     OutputType,
@@ -87,7 +88,7 @@ export const handler = async (data: InputType): Promise<ReturnType> => {
         console.log("Received: ", body);
 
         if (response.status !== 200) {
-            return {error: body};
+            return {error: (<ErrorType>body).error};
         }
 
         const data = body as OutputType;

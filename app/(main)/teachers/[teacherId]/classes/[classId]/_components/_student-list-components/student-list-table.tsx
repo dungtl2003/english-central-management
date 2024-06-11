@@ -73,10 +73,10 @@ const formatData = (data: OutputType | undefined): StudentInfoData[] => {
             email: student.student.user.email,
             birthday: student.student.user.birthday
                 ? format(student.student.user.birthday, "dd/MM/yyyy")
-                : "",
+                : "___",
             tuitionPaid: tuitionPaid,
-            phoneNumber: student.student.user.phoneNumber,
-            gender: student.student.user.gender ?? "Not set",
+            phoneNumber: student.student.user.phoneNumber ?? "___",
+            gender: student.student.user.gender ?? "___",
             payments: payments,
             discount: student.student.discount.toString(),
             parents: parents,

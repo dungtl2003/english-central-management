@@ -18,27 +18,27 @@ export async function GET(
 
     try {
         await authHandler();
+
+        const clerkUserId = auth().userId;
+        const teacherId = params.teacherId;
+        const role: UserRole | null = getClerkRole();
+
+        if (
+            !role ||
+            role !== UserRole.TEACHER ||
+            (role === UserRole.TEACHER && clerkUserId !== teacherId)
+        ) {
+            throw new Error("No right permission");
+        }
     } catch (error) {
-        console.log("Error: ", (<Error>error).message);
+        console.error("Error: ", (<Error>error).message);
         return NextResponse.json({error: error}, {status: 401});
-    }
-
-    const clerkUserId = auth().userId;
-    const teacherId = params.teacherId;
-    const role: UserRole | null = getClerkRole();
-
-    if (
-        !role ||
-        role !== UserRole.TEACHER ||
-        (role === UserRole.TEACHER && clerkUserId !== teacherId)
-    ) {
-        return NextResponse.json({error: "No right permission"}, {status: 401});
     }
 
     try {
         const teacher = await db.user.findFirst({
             where: {
-                referId: teacherId,
+                referId: params.teacherId,
             },
             include: {
                 teacher: true,
@@ -48,7 +48,7 @@ export async function GET(
         console.log("Got teacher: ", teacher);
         return NextResponse.json(teacher, {status: 200});
     } catch (error) {
-        console.log("Error: ", (<Error>error).message);
+        console.error("Error: ", (<Error>error).message);
         return NextResponse.json(
             {error: "Failed to get teacher"},
             {status: 500}

@@ -27,7 +27,11 @@ export type OutputType =
     | (Class & {
           unit: Unit;
           sessions: (Session & {
-              attendances: Attendance[];
+              attendances: (Attendance & {
+                  student: Student & {
+                      user: User;
+                  };
+              })[];
           })[];
           students: (StudentsInClasses & {
               student: Student & {

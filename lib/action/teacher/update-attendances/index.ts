@@ -6,14 +6,20 @@ export const handler = async (data: InputType): Promise<ReturnType> => {
 
     const domain = process.env.NEXT_PUBLIC_DOMAIN;
     const protocol = process.env.NEXT_PUBLIC_PROTOCOL;
-    const teacherId = data.teacherId;
 
-    const url = `${protocol}://${domain}/api/teachers/${teacherId}`;
-    console.log(`Sending GET request to ${url}`);
+    const url = `${protocol}://${domain}/api/attendances`;
+
+    console.log(`Sending PATCH request to ${url}`);
+
+    const payload = {
+        sessionId: data.sessionId,
+        attendances: data.attendances,
+    };
 
     try {
         const response = await fetch(url, {
-            method: "GET",
+            method: "PATCH",
+            body: JSON.stringify(payload),
         });
 
         const body = await response.json();

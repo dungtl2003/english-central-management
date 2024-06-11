@@ -79,7 +79,8 @@ export async function POST(req: NextRequest) {
     console.log("Webhook body: ", payload);
 
     switch (eventType) {
-        case EventTypes.CREATE || EventTypes.UPDATE:
+        case EventTypes.CREATE:
+        case EventTypes.UPDATE:
             return await upsertUserHandler(payload);
         case EventTypes.DELETE:
             return await deleteUserHandler(payload);
@@ -125,7 +126,10 @@ const upsertUserHandler = async (payload: Payload): Promise<NextResponse> => {
                 referId: data.id,
             },
             create: userData,
-            update: userData,
+            update: {
+                ...userData,
+                updatedAt: new Date(),
+            } as User,
         });
         console.log("Upserted user: ", user);
         return NextResponse.json("", {status: 200});

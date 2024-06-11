@@ -35,8 +35,11 @@ export const StudentInfoDictionary: TableDictionary = {
 
 export type SessionTableModel = {
     className: string;
-    attendanceDate: Date;
-    formattedAttendanceDate: string;
+    sessionId: string;
+    estimatedStartTime: Date;
+    actualStartTime: Date | null;
+    attendedTime: Date | null;
+    attendanceDate: string;
     startTime: string;
     endTime: string;
     presences: string;
@@ -44,6 +47,15 @@ export type SessionTableModel = {
     students: StudentAttendModel[];
     studyHour: number;
     studyMinute: number;
+    attendances: AttendanceModel[];
+};
+
+export type AttendanceModel = {
+    attendanceId: string;
+    fullName: string;
+    email: string;
+    attendanceStatus: AttendanceStatus | null;
+    note: string;
 };
 
 type StudentAttendModel = {
@@ -58,7 +70,7 @@ export type SessionTableDef = {
 };
 
 export const SessisonTableArray: SessionTableDef[] = [
-    {key: "formattedAttendanceDate", title: "Attendance date"},
+    {key: "attendanceDate", title: "Attendance date"},
     {key: "startTime", title: "Start time"},
     {key: "endTime", title: "End time"},
     {key: "presences", title: "Presences"},
@@ -66,7 +78,7 @@ export const SessisonTableArray: SessionTableDef[] = [
 ];
 
 export const SessionTableDictionary: TableDictionary = {
-    formattedAttendanceDate: "Attendance date",
+    attendanceDate: "Attendance date",
     startTime: "Start time",
     endTime: "End time",
     presences: "Presences",

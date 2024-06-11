@@ -1,5 +1,6 @@
 import {UserRole} from "@prisma/client";
 import {Body, InputType, ReturnType} from "./types";
+import {ErrorType} from "../generic";
 
 export const handler = async (data: InputType): Promise<ReturnType> => {
     console.log("Timestamp: ", new Date().toLocaleString());
@@ -13,7 +14,7 @@ export const handler = async (data: InputType): Promise<ReturnType> => {
     }
 
     const url = `${protocol}://${domain}/api/${role.toLowerCase()}s`;
-    const bodyData: Body = {
+    const payload: Body = {
         id: data.id,
     };
 
@@ -22,14 +23,14 @@ export const handler = async (data: InputType): Promise<ReturnType> => {
     try {
         const response = await fetch(url, {
             method: "POST",
-            body: JSON.stringify(bodyData),
+            body: JSON.stringify(payload),
         });
 
         const body = await response.json();
         console.log("Received: ", body);
 
         if (response.status !== 200) {
-            return {error: body};
+            return {error: (<ErrorType>body).error};
         }
 
         return {data: JSON.stringify(body)};

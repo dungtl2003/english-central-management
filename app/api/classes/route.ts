@@ -157,11 +157,18 @@ export async function POST(req: NextRequest) {
         const sortedScheduleTimesSameDay = groupAndSortScheduleTimesInSameDay(
             validBody.data!.schedules
         );
+
+        const startDate = new Date(validBody.data!.startDate);
+        startDate.setUTCHours(0);
+        startDate.setUTCMinutes(0);
+        startDate.setUTCSeconds(0);
+        startDate.setUTCMilliseconds(0);
+
         validateScheduleTime(sortedScheduleTimesSameDay, studyTime.toSeconds());
         const sortedSessionDates = buildSortedSessionDates(
             sortedScheduleTimesSameDay,
             unit!.maxSessions,
-            validBody.data!.startDate,
+            startDate,
             validBody.data!.timeZone
         );
         const endDate = sortedSessionDates[sortedSessionDates.length - 1];
@@ -170,7 +177,7 @@ export async function POST(req: NextRequest) {
             data: {
                 unitId: validBody.data!.unitId,
                 teacherId: user!.teacher!.id,
-                startTime: validBody.data!.startDate,
+                startTime: startDate,
                 endTime: endDate,
                 index: numberOfClasses + 1,
                 timeZone: validBody.data!.timeZone,

@@ -8,7 +8,7 @@ interface TableFilterProps {
 }
 
 const SessionTableFilter = ({table}: TableFilterProps): ReactElement => {
-    const filterType: string = "formattedAttendanceDate";
+    const filterType: string = "attendanceDate";
     const searchBar = React.useRef<HTMLInputElement>(null);
     return (
         <div className="flex flex-row gap-x-4">

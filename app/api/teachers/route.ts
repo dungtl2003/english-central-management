@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
     try {
         await authHandler();
     } catch (error) {
-        console.log("Error: ", (<Error>error).message);
+        console.error("Error: ", (<Error>error).message);
         return NextResponse.json({error: error}, {status: 401});
     }
 
@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
         console.log("Got teachers: ", teachers);
         return NextResponse.json(teachers, {status: 200});
     } catch (error) {
-        console.log("Error: ", error);
+        console.error("Error: ", error);
         return NextResponse.json(
             {error: "Failed to get teachers"},
             {status: 500}
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
     const body: Post = await req.json();
     const validBody = PostSchema.safeParse(body);
     if (validBody.error) {
-        console.log("Error: ", validBody.error.flatten());
+        console.error("Error: ", validBody.error.flatten());
         return NextResponse.json({error: "Wrong body format"}, {status: 400});
     }
 
@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
         console.log("Updated clerk user: ", clerkUser);
         return NextResponse.json(teacher, {status: 200});
     } catch (error) {
-        console.log("Error: ", (<Error>error).message);
+        console.error("Error: ", (<Error>error).message);
         return NextResponse.json(
             {error: "Failed to create teacher"},
             {status: 500}

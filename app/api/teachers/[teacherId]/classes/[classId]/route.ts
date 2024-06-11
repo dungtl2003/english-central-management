@@ -57,7 +57,15 @@ export async function GET(
                 unit: true,
                 sessions: {
                     include: {
-                        attendances: true,
+                        attendances: {
+                            include: {
+                                student: {
+                                    include: {
+                                        user: true,
+                                    },
+                                },
+                            },
+                        },
                     },
                 },
                 students: {
