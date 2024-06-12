@@ -1,29 +1,21 @@
-import {
-    Dialog,
-    DialogContent,
-    DialogFooter,
-    DialogTrigger,
-} from "@/components/ui/dialog";
+import {Dialog, DialogContent, DialogTrigger} from "@/components/ui/dialog";
 import {Button} from "@/components/ui/button";
 import React, {ReactElement} from "react";
 import {FaEdit} from "react-icons/fa";
-import AttendanceTable from "./attendance-table";
 import AttendanceTimer from "./attendance-timer";
-import ConfirmDialog from "@/components/comfirm-dialog";
 import {SessionTableModel} from "./types";
+import AttendanceTable from "./attendance-table";
 
 export const SessionEdit: React.FC<{data: SessionTableModel}> = ({
     data,
 }): ReactElement => {
     const [open, setOpen] = React.useState(false);
-    const handleClose = () => setOpen(false);
 
     const canSeeAttendances = data.actualStartTime !== null;
-    const canSaveAttendances =
+    const canSaveAttendances = !!(
         data.actualStartTime &&
-        data.actualStartTime.getTime() <= new Date().getTime();
-
-    //const saveAttendancesHandler = () => {};
+        data.actualStartTime.getTime() <= new Date().getTime()
+    );
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -40,17 +32,14 @@ export const SessionEdit: React.FC<{data: SessionTableModel}> = ({
                 onInteractOutside={(e) => e.preventDefault()}
             >
                 <AttendanceTimer data={data} />
-                {canSeeAttendances ? <AttendanceTable data={data} /> : ""}
-                <DialogFooter>
-                    {canSaveAttendances ? (
-                        <ConfirmDialog
-                            onConfirm={handleClose}
-                            title="Save attendance"
-                        />
-                    ) : (
-                        ""
-                    )}
-                </DialogFooter>
+                {canSeeAttendances ? (
+                    <AttendanceTable
+                        data={data}
+                        canSaveAttendances={canSaveAttendances}
+                    />
+                ) : (
+                    ""
+                )}
             </DialogContent>
         </Dialog>
     );

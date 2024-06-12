@@ -20,7 +20,7 @@ const formatData = (rawData: OutputType | undefined): ClassChartData[] => {
 
     let index: number = 1;
     rawData.sessions
-        .filter((session) => session.actualStartTime)
+        .filter((session) => session.attendedTime)
         .sort(
             (session1, session2) =>
                 new Date(session2.actualStartTime!).getTime() -
@@ -35,11 +35,15 @@ const formatData = (rawData: OutputType | undefined): ClassChartData[] => {
             const absents = session.attendances.filter(
                 (attendance) => attendance.status === "ABSENT"
             ).length;
+            const lates = session.attendances.filter(
+                (attendance) => attendance.status === "LATE"
+            ).length;
 
             records.push({
                 dateTime: `${format(session.actualStartTime!, "dd/MM/yyyy")}\n${format(session.actualStartTime!, "HH:mm:ss")}`,
                 x: index++,
                 presents: presents,
+                lates: lates,
                 absents: absents,
             });
         });
@@ -53,7 +57,7 @@ const ClassChart: React.FC<{data: OutputType | undefined}> = ({
     const records = formatData(data);
     const triggers = {
         [GroupedBar.selectors.bar]: (d: ClassChartData) =>
-            `Present:  ${d.presents}<br / >Absent :  ${d.absents}`,
+            `Present:  ${d.presents}<br / >Late :  ${d.lates}<br / >Absent :  ${d.absents}`,
     };
 
     const dateMap = records.reduce(

@@ -17,7 +17,7 @@ export type StudentInfoDef = {
     title: string;
 };
 
-export const StudentInfoArray: StudentInfoDef[] = [
+export const studentInfoArray: StudentInfoDef[] = [
     {key: "index", title: ""},
     {key: "fullName", title: "Full name"},
     {key: "email", title: "Email"},
@@ -25,7 +25,7 @@ export const StudentInfoArray: StudentInfoDef[] = [
     {key: "tuitionPaid", title: "Tuition fee"},
 ];
 
-export const StudentInfoDictionary: TableDictionary = {
+export const studentInfoDictionary: TableDictionary = {
     index: "",
     fullName: "Full name",
     email: "Email",
@@ -47,15 +47,15 @@ export type SessionTableModel = {
     students: StudentAttendModel[];
     studyHour: number;
     studyMinute: number;
-    attendances: AttendanceModel[];
+    attendances: AttendanceTableModel[];
 };
 
-export type AttendanceModel = {
+export type AttendanceTableModel = {
     attendanceId: string;
     fullName: string;
     email: string;
-    attendanceStatus: AttendanceStatus | null;
-    note: string;
+    status: AttendanceStatus | undefined;
+    description: string | null;
 };
 
 type StudentAttendModel = {
@@ -69,7 +69,7 @@ export type SessionTableDef = {
     title: string;
 };
 
-export const SessisonTableArray: SessionTableDef[] = [
+export const sessisonTableArray: SessionTableDef[] = [
     {key: "attendanceDate", title: "Attendance date"},
     {key: "startTime", title: "Start time"},
     {key: "endTime", title: "End time"},
@@ -77,10 +77,17 @@ export const SessisonTableArray: SessionTableDef[] = [
     {key: "status", title: "Status"},
 ];
 
-export const SessionTableDictionary: TableDictionary = {
+export const sessionTableDictionary: TableDictionary = {
     attendanceDate: "Attendance date",
     startTime: "Start time",
     endTime: "End time",
     presences: "Presences",
     status: "Status",
+};
+
+export const attendanceTableDictionary: TableDictionary = {
+    fullName: "Full name",
+    email: "Email",
+    status: "Status",
+    description: "Description",
 };

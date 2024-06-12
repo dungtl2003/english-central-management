@@ -15,7 +15,7 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import {OutputType} from "@/lib/action/teacher/get-class-detail/types";
-import {AttendanceModel, SessionTableModel} from "./types";
+import {AttendanceTableModel, SessionTableModel} from "./types";
 import {format, add} from "date-fns";
 import {concatName} from "@/lib/utils";
 
@@ -39,7 +39,7 @@ const formatData = (data: OutputType | undefined): SessionTableModel[] => {
                 );
             }
 
-            return s1.attendedTime ? -1 : 1;
+            return s1.attendedTime ? 1 : -1;
         })
         .forEach((session) => {
             const startTime =
@@ -49,7 +49,7 @@ const formatData = (data: OutputType | undefined): SessionTableModel[] => {
                 minutes: data.unit.studyMinute,
                 seconds: data.unit.studySecond,
             });
-            const attendances: AttendanceModel[] = [];
+            const attendances: AttendanceTableModel[] = [];
             session.attendances.forEach((a) => {
                 attendances.push({
                     attendanceId: a.id,
@@ -61,7 +61,9 @@ const formatData = (data: OutputType | undefined): SessionTableModel[] => {
                     email: a.student.user.email,
                     attendanceStatus: a.status,
                     note: a.description,
-                } as AttendanceModel);
+                    status: a.status,
+                    description: a.description,
+                } as AttendanceTableModel);
             });
             displayData.push({
                 className: `${data.unit.grade}.${data.index}`,

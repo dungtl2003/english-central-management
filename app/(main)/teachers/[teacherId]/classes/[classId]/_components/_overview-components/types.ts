@@ -9,6 +9,7 @@ export interface ClassChartData {
     dateTime: string;
     x: number;
     presents: number;
+    lates: number;
     absents: number;
 }
 

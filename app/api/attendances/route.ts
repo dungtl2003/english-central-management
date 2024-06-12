@@ -1,6 +1,6 @@
 import {db} from "@/lib/db";
 import {NextRequest, NextResponse} from "next/server";
-import {buildSessionUpdateInputObj, handlePatchAuth} from "./helper";
+import {buildAttendanceUpdateQueries, handlePatchAuth} from "./helper";
 import {Patch, PatchSchema} from "./schema";
 
 /**
@@ -45,18 +45,23 @@ export async function PATCH(req: NextRequest) {
             return NextResponse.json({error: msg}, {status: 400});
         }
 
-        const attendances = await db.session.update({
-            where: {
-                id: session.id,
-            },
-            data: buildSessionUpdateInputObj(
-                validBody.data.attendances,
-                session
+        await db.$transaction([
+            db.session.update({
+                where: {
+                    id: session.id,
+                },
+                data: {
+                    attendedTime: session.attendedTime ?? new Date(),
+                },
+            }),
+            ...buildAttendanceUpdateQueries(
+                session.id,
+                validBody.data.attendances
             ),
-        });
+        ]);
 
-        console.log("Updated attendances: ", attendances);
-        return NextResponse.json("", {status: 200});
+        console.log("Updated attendances");
+        return NextResponse.json("ok", {status: 200});
     } catch (error) {
         const msg = (<Error>error).message;
         console.error("Error: ", msg);

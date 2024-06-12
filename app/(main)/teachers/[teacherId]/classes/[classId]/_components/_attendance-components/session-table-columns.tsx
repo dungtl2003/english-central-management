@@ -4,7 +4,7 @@ import React from "react";
 import {ColumnDef} from "@tanstack/react-table";
 import {Button} from "@/components/ui/button";
 import {SessionEdit} from "./session-edit";
-import {SessionTableDictionary, SessionTableModel} from "./types";
+import {sessionTableDictionary, SessionTableModel} from "./types";
 
 function createColumns(
     key: string,
@@ -17,8 +17,8 @@ function createColumns(
 }
 
 const sessionTableColumns: ColumnDef<SessionTableModel>[] = [];
-for (const key in SessionTableDictionary) {
-    sessionTableColumns.push(createColumns(key, SessionTableDictionary[key]));
+for (const key in sessionTableDictionary) {
+    sessionTableColumns.push(createColumns(key, sessionTableDictionary[key]));
 }
 
 sessionTableColumns.push({

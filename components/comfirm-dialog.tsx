@@ -10,27 +10,43 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {Button} from "./ui/button";
+import {Loader2} from "lucide-react";
 
 interface ConfirmDialogProps {
     title: string;
     customClass?: string;
     onConfirm?: () => void;
+    isLoading?: boolean;
 }
 
 const ConfirmDialog = ({
     title,
     customClass,
     onConfirm,
+    isLoading,
 }: ConfirmDialogProps): ReactElement => {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button
-                    className={customClass ? customClass : ""}
-                    type="submit"
-                >
-                    {title}
-                </Button>
+                {isLoading !== undefined ? (
+                    <Button
+                        className={customClass ? customClass : ""}
+                        type="submit"
+                        disabled={isLoading}
+                    >
+                        {isLoading && (
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        )}
+                        {isLoading ? "Please wait" : title}
+                    </Button>
+                ) : (
+                    <Button
+                        className={customClass ? customClass : ""}
+                        type="submit"
+                    >
+                        {title}
+                    </Button>
+                )}
             </AlertDialogTrigger>
             <AlertDialogContent className="h-[180px]">
                 <AlertDialogHeader className="flex items-center justify-center">

@@ -1,7 +1,7 @@
 import {db} from "@/lib/db";
 import {authHandler, getClerkRole} from "@/lib/helper";
 import {auth} from "@clerk/nextjs/server";
-import {Prisma, Session, UserRole} from "@prisma/client";
+import {UserRole} from "@prisma/client";
 import {Attendance} from "./schema";
 
 export const handlePatchAuth = async (): Promise<string> => {
@@ -32,31 +32,21 @@ export const handlePatchAuth = async (): Promise<string> => {
     return teacher.teacher!.id;
 };
 
-export const buildSessionUpdateInputObj = (
-    attendances: Attendance[],
-    session: Session
-): Prisma.SessionUpdateInput => {
-    const attendanceUpdateManyMutationInputObjs: Prisma.AttendanceUpdateManyMutationInput[] =
-        [];
-    attendances.forEach((attendance) => {
-        attendanceUpdateManyMutationInputObjs.push({
-            id: attendance.attendanceId,
-            status: attendance.status,
-            description: attendance.description,
-            updatedAt: new Date(),
-        } as Prisma.AttendanceUpdateManyMutationInput);
-    });
-
-    return {
-        id: session.id,
-        attendedTime: session.attendedTime ?? new Date(),
-        attendances: {
-            updateMany: {
-                where: {
-                    sessionId: session.id,
-                },
-                data: attendanceUpdateManyMutationInputObjs,
+export const buildAttendanceUpdateQueries = (
+    sessionId: string,
+    attendances: Attendance[]
+) => {
+    return attendances.map((attendance) => {
+        return db.attendance.update({
+            where: {
+                id: attendance.attendanceId,
+                sessionId: sessionId,
             },
-        },
-    } as Prisma.SessionUpdateInput;
+            data: {
+                status: attendance.status,
+                description: attendance.description,
+                updatedAt: new Date(),
+            },
+        });
+    });
 };

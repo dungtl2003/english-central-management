@@ -60,7 +60,7 @@ const AttendanceTimer: React.FC<{
                 });
             },
         } as UseActionOptions<OutputType>;
-    }, []);
+    }, [toast]);
     const {execute, isLoading} = useAction(memoHandler, memoEvent);
     const isEditable: boolean = data.actualStartTime === null;
 

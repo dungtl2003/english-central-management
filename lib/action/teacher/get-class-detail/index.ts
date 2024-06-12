@@ -21,7 +21,7 @@ const updateData = (data: OutputType): void => {
 
         const attendancesByMonthYear = student.student.attendances
             .filter((attendance) => {
-                const attendedTime = attendance.session.attendedTime!;
+                const attendedTime = new Date(attendance.session.attendedTime!);
                 const attendedYear = attendedTime.getUTCFullYear();
                 const attendedMonth = attendedTime.getUTCMonth();
                 if (
