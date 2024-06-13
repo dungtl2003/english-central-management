@@ -4,14 +4,16 @@ import React, {ReactElement} from "react";
 import {Button} from "@/components/ui/button";
 import {Card} from "@/components/ui/card";
 import {Tabs} from "@/components/ui/tabs";
-import InformationTab from "./teacher-information-components/teacher-information-tab";
-import TeacherDetailHeader from "./teacher-detail-header";
-import TeacherDetailTabslist from "./teacher-detail-tabs-list";
-import ClassListTab from "./class-list-components/class-list-tab";
-import SalaryDetailTab from "./salary-detail-components/salary-detail-tab";
+import StudentDetailHeader from "./student-detail-header";
+import StudentDetailTabslist from "./student-detail-tabs-list";
+import StudentInformationTab from "./student-information-components/student-information-tab";
+import StudentClassListTab from "./class-list-components/class-list-tab";
+// import InformationTab from "./teacher-information-components/teacher-information-tab";
+// import ClassListTab from "./class-list-components/class-list-tab";
+// import SalaryDetailTab from "./salary-detail-components/salary-detail-tab";
 
 // Đoạn này mô tả ý tưởng về việc nếu chưa được duyệt thì sẽ hiển thị nút nào
-const status: string = "pending"; // => trạng thái của giáo viên
+const status: string = "pending"; // => trạng thái của học sinh
 const getButtonBasedOnStatus = (currentStatus: string): ReactElement => {
     // => nếu chưa được duyệt thì sẽ là nút Approve và Reject
     if (currentStatus == "pending") {
@@ -63,16 +65,17 @@ const getStatusColor = (status: string): ReactElement => {
     }
     return <span>Error</span>;
 };
-// Đoạn này mô tả ý tưởng về việc copy vào clipboard
-const teacherId: string = "0123456789123456789132456789";
 
-const TeacherDetail = (): ReactElement => {
+// Đoạn này mô tả ý tưởng về việc copy vào clipboard
+const studentId: string = "0123456789123456789132456789";
+
+const StudentDetail = (): ReactElement => {
     return (
         <div className="w-[80%] min-h-[680px] pt-[90px]">
             <Card className="min-h-full">
                 <div className="grid grid-rows-6">
-                    <TeacherDetailHeader
-                        teacherId={teacherId}
+                    <StudentDetailHeader
+                        studentId={studentId}
                         status={status}
                         getStatusColor={getStatusColor}
                     />
@@ -80,16 +83,15 @@ const TeacherDetail = (): ReactElement => {
                         <Tabs
                             orientation="vertical"
                             className="pt-3.5 grid grid-cols-4  min-h-[460px]"
-                            defaultValue="teacherInfo"
+                            defaultValue="studentInfo"
                         >
-                            <TeacherDetailTabslist
+                            <StudentDetailTabslist
                                 currentStatus={status}
                                 getButtonBasedOnStatus={getButtonBasedOnStatus}
                             />
                             <div className="col-span-3 pr-6">
-                                <InformationTab />
-                                <SalaryDetailTab />
-                                <ClassListTab />
+                                <StudentInformationTab />
+                                <StudentClassListTab />
                             </div>
                         </Tabs>
                     </div>
@@ -99,4 +101,4 @@ const TeacherDetail = (): ReactElement => {
     );
 };
 
-export default TeacherDetail;
+export default StudentDetail;

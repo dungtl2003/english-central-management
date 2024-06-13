@@ -1,3 +1,5 @@
+"use client";
+
 import React, {ReactElement} from "react";
 
 const TeacherDetailLayout: React.FC<{children: React.ReactNode}> = ({

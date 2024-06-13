@@ -8,23 +8,17 @@ import {
 } from "@/components/ui/table";
 import {ColumnDef, Table, flexRender} from "@tanstack/react-table";
 import {Table as T} from "@/components/ui/table";
-import {StudentListModel} from "./types";
-import {FaCheckCircle} from "react-icons/fa";
+import {AttendancePopupColumns} from "./types";
 
 interface TableContentProps {
-    table: Table<StudentListModel>;
-    columns: ColumnDef<StudentListModel>[];
+    table: Table<AttendancePopupColumns>;
+    columns: ColumnDef<AttendancePopupColumns>[];
 }
 
-const TeacherListContent = ({
+const AttendancePopupContent = ({
     table,
     columns,
 }: TableContentProps): ReactElement => {
-    function shortenString(input: string): string {
-        const shortened = `${input.slice(0, 12)}.....`;
-        return shortened;
-    }
-
     return (
         <div className="rounded-md border">
             <T>
@@ -57,43 +51,15 @@ const TeacherListContent = ({
                                     const cn: string = isFullNameColumn
                                         ? " text-left pl-7"
                                         : "";
-                                    const isEmailColumn =
-                                        cell.column.id === "email";
-                                    const isDesiredClassColumn =
-                                        cell.column.id === "hasDesireClass";
-
-                                    let cellContent = flexRender(
-                                        cell.column.columnDef.cell,
-                                        cell.getContext()
-                                    );
-
-                                    if (isEmailColumn) {
-                                        cellContent = shortenString(
-                                            cell.getValue() as string
-                                        );
-                                    } else if (isDesiredClassColumn) {
-                                        cellContent =
-                                            cell
-                                                .getValue<string>()
-                                                .toLowerCase() === "true" ? (
-                                                <div className="flex items-center justify-center">
-                                                    <FaCheckCircle size={25} />
-                                                </div>
-                                            ) : (
-                                                ""
-                                            );
-                                    }
                                     return (
                                         <TableCell
                                             key={cell.id}
                                             className={"w-2/12" + cn}
                                         >
-                                            {
-                                                /* {flexRender(
+                                            {flexRender(
                                                 cell.column.columnDef.cell,
                                                 cell.getContext()
-                                            )} */ cellContent
-                                            }
+                                            )}
                                         </TableCell>
                                     );
                                 })}
@@ -115,4 +81,4 @@ const TeacherListContent = ({
     );
 };
 
-export default TeacherListContent;
+export default AttendancePopupContent;

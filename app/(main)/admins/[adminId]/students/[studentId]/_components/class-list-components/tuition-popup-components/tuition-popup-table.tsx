@@ -9,21 +9,47 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import StudentListColumns from "./student-list-columns";
-import {StudentListModel} from "./types";
-import {studentListDummyData} from "./student-list-dummy-data";
-import StudentListFilter from "./student-list-filter";
-import StudentListPagination from "./student-list-pagination";
-import StudentListContent from "./student-list-content";
-import {Status} from "./student-list-rows-filter";
+import {tuitionPopupDummyData} from "./tuition-popup-dummy-data";
+import TuitionPopupFilter from "./tuition-popup-filter";
+import TuitionPopupPagination from "./tuition-popup-pagination";
+import TuitionPopupContent from "./tuition-popup-content";
+import {Status} from "./tuition-popup-rows-filter";
+import {TuitionPopupColumns, tuitionPopupColumnsDictionary} from "./types";
+import {ArrowUpDown} from "lucide-react";
+import {Button} from "@/components/ui/button";
 
-export const columns: ColumnDef<StudentListModel>[] = StudentListColumns;
+function createColumns(
+    key: string,
+    title: string
+): ColumnDef<TuitionPopupColumns> {
+    return {
+        accessorKey: key,
+        header: ({column}) => (
+            <Button
+                variant="ghost"
+                onClick={() =>
+                    column.toggleSorting(column.getIsSorted() !== "desc")
+                }
+            >
+                {title}
+                <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+        ),
+    };
+}
 
-const StudentListTable = (): ReactElement => {
-    const data: StudentListModel[] = studentListDummyData;
-    const [sorting, setSorting] = React.useState<SortingState>([
-        {id: "hasDesireClass", desc: true},
-    ]);
+const tuitionTableColumns: ColumnDef<TuitionPopupColumns>[] = [];
+for (const key in tuitionPopupColumnsDictionary) {
+    tuitionTableColumns.push(
+        createColumns(key, tuitionPopupColumnsDictionary[key])
+    );
+}
+
+export const columns: ColumnDef<TuitionPopupColumns>[] = tuitionTableColumns;
+
+const TuitionPopupTable = (): ReactElement => {
+    const data: TuitionPopupColumns[] = tuitionPopupDummyData;
+    const [sorting, setSorting] = React.useState<SortingState>([]);
     const [selectedStatus, setSelectedStatus] = React.useState<string[]>([
         "All",
     ]);
@@ -74,16 +100,16 @@ const StudentListTable = (): ReactElement => {
     });
 
     return (
-        <div className="w-[80%] pt-[120px]">
-            <StudentListFilter
+        <div className="w-full min-h-[405px]">
+            <TuitionPopupFilter
                 table={table}
                 selectedStatus={selectedStatus}
                 handleStatusChange={handleStatusChange}
             />
-            <StudentListContent table={table} columns={columns} />
-            <StudentListPagination table={table} />
+            <TuitionPopupContent table={table} columns={columns} />
+            <TuitionPopupPagination table={table} />
         </div>
     );
 };
 
-export default StudentListTable;
+export default TuitionPopupTable;
