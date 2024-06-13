@@ -1,7 +1,9 @@
-import React from "react";
+"use client";
+
+import React, {ReactElement} from "react";
 import TeacherDetail from "./_components/teacher-detail";
 
-const TeacherDetailPage = () => {
+const TeacherDetailPage = (): ReactElement => {
     return (
         <div className="flex justify-center">
             <TeacherDetail />

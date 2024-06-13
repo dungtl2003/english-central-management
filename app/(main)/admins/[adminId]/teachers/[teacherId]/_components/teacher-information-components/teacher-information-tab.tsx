@@ -66,7 +66,7 @@ const InformationTab = (): ReactElement => {
                     <div className="grid w-full items-center gap-1.5">
                         <Label className="pl-1 flex flex-row items-center text-[14px]">
                             Birthday
-                            <span className="ml-1">
+                            <span className="ml-1 text-slate-400">
                                 <CalendarIcon className="mr-2 h-4 w-4" />
                             </span>
                         </Label>
@@ -75,7 +75,7 @@ const InformationTab = (): ReactElement => {
                     <div className="grid w-full items-center gap-1.5">
                         <Label className="pl-1 flex flex-row items-center text-[14px]">
                             Create date
-                            <span className="ml-1">
+                            <span className="ml-1 text-slate-400">
                                 <CalendarIcon className="mr-2 h-4 w-4" />
                             </span>
                         </Label>
@@ -84,7 +84,7 @@ const InformationTab = (): ReactElement => {
                     <div className="grid w-full items-center gap-1.5">
                         <Label className="pl-1 flex flex-row items-center text-[14px]">
                             Accept date
-                            <span className="ml-1">
+                            <span className="ml-1 text-slate-400">
                                 <CalendarIcon className="mr-2 h-4 w-4" />
                             </span>
                         </Label>
