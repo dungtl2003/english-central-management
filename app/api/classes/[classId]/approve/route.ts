@@ -103,8 +103,7 @@ export async function POST(
             },
         });
 
-        console.log("Approved");
-        return NextResponse.json("", {status: 200});
+        return NextResponse.json("ok", {status: 200});
     } catch (error) {
         console.log("Error: ", (<Error>error).message);
         return NextResponse.json(

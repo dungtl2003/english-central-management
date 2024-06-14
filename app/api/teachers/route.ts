@@ -29,7 +29,6 @@ export async function GET(req: NextRequest) {
 
     try {
         const teachers = await db.teacher.findMany({include: {user: true}});
-        console.log("Got teachers: ", teachers);
         return NextResponse.json(teachers, {status: 200});
     } catch (error) {
         console.error("Error: ", error);
@@ -68,9 +67,7 @@ export async function POST(req: NextRequest) {
     }
 
     try {
-        const [teacher, clerkUser] = await addTeacher(clerkUserId);
-        console.log("Created teacher: ", teacher);
-        console.log("Updated clerk user: ", clerkUser);
+        const [teacher] = await addTeacher(clerkUserId);
         return NextResponse.json(teacher, {status: 200});
     } catch (error) {
         console.error("Error: ", (<Error>error).message);

@@ -200,7 +200,6 @@ export async function POST(req: NextRequest) {
             },
         });
 
-        console.log("Created class: ", _class);
         return NextResponse.json(_class, {status: 200});
     } catch (error) {
         console.log("Error: ", (<Error>error).message);

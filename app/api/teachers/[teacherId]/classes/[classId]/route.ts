@@ -112,7 +112,6 @@ export async function GET(
             },
         });
 
-        console.log("Got class: ", _class);
         return NextResponse.json(_class, {status: 200});
     } catch (error) {
         console.log("Error: ", (<Error>error).message);

@@ -45,7 +45,6 @@ export async function GET(
             },
         });
 
-        console.log("Got teacher: ", teacher);
         return NextResponse.json(teacher, {status: 200});
     } catch (error) {
         console.error("Error: ", (<Error>error).message);
@@ -114,7 +113,6 @@ export async function PATCH(req: NextRequest) {
             },
         });
 
-        console.log("Updated teacher: ", teacher);
         return NextResponse.json(teacher, {status: 200});
     } catch (error) {
         console.log("Error: ", (<Error>error).message);

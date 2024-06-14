@@ -42,7 +42,6 @@ export async function GET(req: NextRequest) {
 
     try {
         const students = await db.studentsInClasses.findMany({});
-        console.log("Got students: ", students);
         return NextResponse.json(students, {status: 200});
     } catch (error) {
         console.log("Error: ", (<Error>error).message);

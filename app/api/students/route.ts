@@ -31,9 +31,7 @@ export async function POST(req: NextRequest) {
     }
 
     try {
-        const [student, clerkUser] = await addStudent(clerkUserId);
-        console.log("Created student: ", student);
-        console.log("Updated clerk user: ", clerkUser);
+        const [student] = await addStudent(clerkUserId);
         return NextResponse.json(student, {status: 200});
     } catch (error) {
         console.log("Error: ", (<Error>error).message);

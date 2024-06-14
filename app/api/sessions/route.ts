@@ -57,7 +57,6 @@ export async function GET(req: NextRequest) {
             },
         });
 
-        console.log("Got sessions: ", sessions);
         return NextResponse.json(sessions, {status: 200});
     } catch (error) {
         console.log("Error: ", (<Error>error).message);
