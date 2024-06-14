@@ -1,6 +1,6 @@
 import React, {ReactElement} from "react";
 import {ClasslistColumns, classListColumnsDictionary} from "./types";
-import {ClassListTestData} from "./test-data";
+import {classListTestData} from "./test-data";
 import ClassListTablePagination from "./class-list-table-pagination";
 import ClassListTableFilter from "./class-list-table-filter";
 import ClassListTableContent from "./class-list-table-content";
@@ -87,7 +87,7 @@ for (const key in classListColumnsDictionary) {
 const columns: ColumnDef<ClasslistColumns>[] = classListTableColumns;
 
 const StudentClassListTab = (): ReactElement => {
-    const data: ClasslistColumns[] = ClassListTestData;
+    const data: ClasslistColumns[] = classListTestData;
     const [sorting, _setSorting] = React.useState<SortingState>([]);
     const [pagination, setPagination] = React.useState<PaginationState>({
         pageIndex: 0,

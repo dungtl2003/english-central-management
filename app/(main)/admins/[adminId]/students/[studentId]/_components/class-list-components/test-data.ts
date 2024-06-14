@@ -1,6 +1,6 @@
 import {ClasslistColumns} from "./types";
 
-export const ClassListTestData: ClasslistColumns[] = [
+export const classListTestData: ClasslistColumns[] = [
     {
         className: "3.1",
         year: "Khối 3",
