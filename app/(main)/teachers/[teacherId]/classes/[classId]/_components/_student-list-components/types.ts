@@ -9,6 +9,7 @@ export type StudentInfoData = {
     payments: PayingPopupData[];
     discount: string;
     parents: ParentInfoData[];
+    joinedAt: string;
 };
 
 export type ParentInfoData = {
@@ -28,6 +29,7 @@ export const StudentInfoArray: StudentInfoDef[] = [
     {key: "phoneNumber", title: "Phone number"},
     {key: "email", title: "Email"},
     {key: "birthday", title: "Birthday"},
+    {key: "joinedAt", title: "Joined at"},
     {key: "tuitionPaid", title: "Tuition fee"},
 ];
 
@@ -46,8 +48,8 @@ export type PayingPopupData = {
 };
 
 export enum PayingPopupStatus {
-    DEBT,
-    PAID,
+    DEBT = "DEBT",
+    PAID = "PAID",
 }
 
 export type PayingPopupDef = {
@@ -55,7 +57,7 @@ export type PayingPopupDef = {
     title: string;
 };
 
-export const SessisonTableArray: PayingPopupDef[] = [
+export const sessisonTableArray: PayingPopupDef[] = [
     {key: "time", title: "Time"}, // thời gian
     {key: "attendances", title: "Attendances"}, // số buổi học
     {key: "monthlyFee", title: "Amount"}, // tiền học tháng đó
@@ -67,8 +69,9 @@ export type TableDictionary = {
 };
 
 export const PayingPopupDictionary: TableDictionary = {
+    select: "Select",
     time: "Time",
-    attendanceCount: "Attendances",
+    attendances: "Attendances",
     monthlyFee: "Amount",
     status: "Status",
 };

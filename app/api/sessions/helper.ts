@@ -10,7 +10,7 @@ interface StudyTime {
     end: number;
 }
 
-export const handlePatchAuth = async (): Promise<string> => {
+export const handleAuth = async (): Promise<string> => {
     await authHandler();
 
     const role: UserRole | null = getClerkRole();

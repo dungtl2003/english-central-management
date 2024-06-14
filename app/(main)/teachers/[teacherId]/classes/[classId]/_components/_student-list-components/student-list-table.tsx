@@ -80,6 +80,7 @@ const formatData = (data: OutputType | undefined): StudentInfoData[] => {
             payments: payments,
             discount: student.student.discount.toString(),
             parents: parents,
+            joinedAt: format(new Date(student.approvedAt!), "dd/MM/yyyy"),
         } as StudentInfoData);
     });
     return displayData;

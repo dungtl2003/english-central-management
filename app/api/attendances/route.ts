@@ -53,6 +53,11 @@ export async function PATCH(req: NextRequest) {
                 data: {
                     attendedTime: session.attendedTime ?? new Date(),
                 },
+                // TODO: only for testing purpose
+                //data: {
+                //    attendedTime:
+                //        session.attendedTime ?? session.actualStartTime,
+                //},
             }),
             ...buildAttendanceUpdateQueries(
                 session.id,
@@ -60,7 +65,6 @@ export async function PATCH(req: NextRequest) {
             ),
         ]);
 
-        console.log("Updated attendances");
         return NextResponse.json("ok", {status: 200});
     } catch (error) {
         const msg = (<Error>error).message;

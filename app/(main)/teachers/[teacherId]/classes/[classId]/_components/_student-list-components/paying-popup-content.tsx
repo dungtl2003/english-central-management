@@ -9,7 +9,6 @@ import {
     ColumnFiltersState,
     ColumnDef,
 } from "@tanstack/react-table";
-import PayingPopupColumns from "./paying-popup-columns";
 import {Button} from "@/components/ui/button";
 import {
     PayingPopupData,
@@ -25,14 +24,43 @@ import PayingPopupDiscount from "./paying-popup-discount";
 import PayingPopupTotalAmountDiscount from "./paying-popup-total-amount-discount";
 import PayingPopupButtonPay from "./paying-popup-button-pay";
 
-function createColumns(key: string, title: string): ColumnDef<PayingPopupData> {
+function createNormalColumns(
+    key: string,
+    title: string
+): ColumnDef<PayingPopupData> {
     return {
         accessorKey: key,
         header: () => <Button variant="ghost">{title}</Button>,
     };
 }
 
-const columns: ColumnDef<PayingPopupData>[] = [];
+function createSelectColumns(
+    key: string,
+    handleSelectAllChange: (isChecked: boolean) => void
+): ColumnDef<PayingPopupData> {
+    return {
+        id: key,
+        header: ({table}) => {
+            return (
+                <Checkbox
+                    checked={
+                        table.getIsAllPageRowsSelected() ||
+                        (table.getIsSomePageRowsSelected() && "indeterminate")
+                    }
+                    onCheckedChange={(value) => handleSelectAllChange(!!value)}
+                />
+            );
+        },
+        cell: ({row}) => (
+            <Checkbox
+                checked={row.getIsSelected()}
+                onCheckedChange={(value) => row.toggleSelected(!!value)}
+            />
+        ),
+        enableSorting: false,
+        enableHiding: false,
+    };
+}
 
 const PayingPopupContent: React.FC<{data: StudentInfoData}> = ({
     data,
@@ -58,39 +86,24 @@ const PayingPopupContent: React.FC<{data: StudentInfoData}> = ({
         }
         setRowSelection(newSelection);
     };
-    columns.push({
-        id: "select",
-        header: ({table}) => {
-            return (
-                <Checkbox
-                    checked={
-                        table.getIsAllPageRowsSelected() ||
-                        (table.getIsSomePageRowsSelected() && "indeterminate")
-                    }
-                    onCheckedChange={(value) => handleSelectAllChange(!!value)}
-                />
-            );
-        },
-        cell: ({row}) => (
-            <Checkbox
-                checked={row.getIsSelected()}
-                onCheckedChange={(value) => row.toggleSelected(!!value)}
-            />
-        ),
-        enableSorting: false,
-        enableHiding: false,
-    });
+
+    const columns: ColumnDef<PayingPopupData>[] = [];
     for (const key in PayingPopupDictionary) {
-        columns.push(createColumns(key, PayingPopupDictionary[key]));
+        if (key === "select") {
+            columns.push(createSelectColumns(key, handleSelectAllChange));
+        } else {
+            columns.push(createNormalColumns(key, PayingPopupDictionary[key]));
+        }
     }
 
     const [columnFilters, setColumnFilters] =
         React.useState<ColumnFiltersState>([
             {id: "status", value: PayingPopupStatus.DEBT},
         ]);
+
     const table = useReactTable({
         data: data.payments,
-        columns: PayingPopupColumns({handleSelectAllChange}),
+        columns: columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         getSortedRowModel: getSortedRowModel(),

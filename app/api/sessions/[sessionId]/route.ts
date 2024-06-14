@@ -3,7 +3,7 @@ import {NextRequest, NextResponse} from "next/server";
 import {Patch, PatchSchema} from "../schema";
 import {
     buildAttendanceCreateManySessionInputEnvelope,
-    handlePatchAuth,
+    handleAuth,
     validateStudyTime,
 } from "../helper";
 
@@ -23,7 +23,7 @@ export async function PATCH(
 
     let teacherId;
     try {
-        teacherId = await handlePatchAuth();
+        teacherId = await handleAuth();
     } catch (error) {
         console.error("Error: ", (<Error>error).message);
         return NextResponse.json(
@@ -110,7 +110,6 @@ export async function PATCH(
             },
         });
 
-        console.log("Updated session: ", updatedSession);
         return NextResponse.json({updatedSession}, {status: 200});
     } catch (error) {
         const msg = (<Error>error).message;

@@ -24,6 +24,7 @@ const updateData = (data: OutputType): void => {
                 const attendedTime = new Date(attendance.session.attendedTime!);
                 const attendedYear = attendedTime.getUTCFullYear();
                 const attendedMonth = attendedTime.getUTCMonth();
+
                 if (
                     attendedYear > todayUTCYearAfter12Hours ||
                     (attendedYear === todayUTCYearAfter12Hours &&
@@ -35,36 +36,48 @@ const updateData = (data: OutputType): void => {
                 return true;
             })
             .reduce((result, curr) => {
-                const attendedTime = curr.session.attendedTime!;
-                const key = `${attendedTime.getUTCMonth()}_${attendedTime!.getUTCFullYear()}`;
+                const attendedTime = new Date(curr.session.attendedTime!);
+                const key = `${attendedTime.getUTCMonth()}_${attendedTime.getUTCFullYear()}`;
                 return {
                     ...result,
                     [key]: (result[key] ?? 0) + 1,
                 } as AttendancesByMonthYear;
             }, {} as AttendancesByMonthYear);
 
-        student.student.totalPriceByMonthYearList =
-            student.student.tuitions.map((tuition) => {
-                const key = `${tuition.month}_${tuition.year}`;
-                const isPaid =
-                    tuition.classId === data!.id &&
-                    key in attendancesByMonthYear;
+        student.student.totalPriceByMonthYearList = [];
+        for (const tuition of student.student.tuitions) {
+            const key = `${tuition.month}_${tuition.year}`;
+            if (tuition.classId !== data!.id) continue;
 
-                return {
-                    month: tuition.month,
-                    year: tuition.year,
-                    isPaid: isPaid,
-                    totalPrice: !isPaid
-                        ? (attendancesByMonthYear[key] *
-                              data!.unit.pricePerSession.toNumber() *
-                              student.student.discount) /
-                          100
-                        : tuition.amount,
+            student.student.totalPriceByMonthYearList.push({
+                month: tuition.month,
+                year: tuition.year,
+                isPaid: true,
+                totalPrice: Number(tuition.amount),
+                attendances: attendancesByMonthYear[key],
+            } as TotalPriceByMonthYear);
+        }
+
+        let key: string;
+        for (key in attendancesByMonthYear) {
+            if (!(key in student.student.totalPriceByMonthYearList)) {
+                console.log("price/sess: ", Number(data!.unit.pricePerSession));
+                const [month, year] = key.split("_");
+                student.student.totalPriceByMonthYearList.push({
+                    month: Number(month),
+                    year: Number(year),
+                    isPaid: false,
+                    totalPrice:
+                        Math.round(
+                            attendancesByMonthYear[key] *
+                                Number(data!.unit.pricePerSession) *
+                                100
+                        ) / 100,
                     attendances: attendancesByMonthYear[key],
-                } as TotalPriceByMonthYear;
-            });
+                } as TotalPriceByMonthYear);
+            }
+        }
     });
-    console.log(data!.students);
 };
 
 export const handler = async (data: InputType): Promise<ReturnType> => {

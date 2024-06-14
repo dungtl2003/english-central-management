@@ -14,7 +14,7 @@ const PayingPopupTotalAmountDiscount: React.FC<{
                 id="totalWithDiscount"
                 type="text"
                 className="mt-1"
-                value={`$${totalAmountWithDiscount}`}
+                value={`$${Math.round(totalAmountWithDiscount * 100) / 100}`}
                 readOnly
             />
         </div>

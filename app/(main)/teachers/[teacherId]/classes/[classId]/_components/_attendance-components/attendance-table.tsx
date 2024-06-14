@@ -113,7 +113,7 @@ const AttendanceTable2: React.FC<{
                 });
             },
         } as UseActionOptions<OutputType>;
-    }, []);
+    }, [toast]);
     const {execute, isLoading} = useAction(memoHandler, memoEvent);
 
     const columns: ColumnDef<AttendanceTableModel>[] = [];

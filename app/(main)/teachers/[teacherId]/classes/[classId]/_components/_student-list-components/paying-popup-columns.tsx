@@ -48,6 +48,8 @@ const PayingPopupColumns = ({
         enableHiding: false,
     });
     for (const key in PayingPopupDictionary) {
+        if (key === "select") {
+        }
         columns.push(createColumns(key, PayingPopupDictionary[key]));
     }
 

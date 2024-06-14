@@ -27,7 +27,7 @@ const ClassListPreview: React.FC<{data: StudentInfoData}> = ({
                     </SheetTrigger>
                     <SheetContent>
                         <SheetHeader>
-                            <SheetTitle>Student name</SheetTitle>
+                            <SheetTitle>{data.fullName}</SheetTitle>
                             <SheetDescription>
                                 View more student properties. Click close when
                                 you are done.

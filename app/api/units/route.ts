@@ -3,7 +3,7 @@ import {Post, PostSchema} from "./schema";
 import {db} from "@/lib/db";
 import {authHandler, getClerkRole} from "@/lib/helper";
 import {auth} from "@clerk/nextjs/server";
-import {UserRole} from "@prisma/client";
+import {Prisma, UserRole} from "@prisma/client";
 
 /**
  * Add unit.
@@ -56,11 +56,12 @@ export async function POST(req: NextRequest) {
                 studyHour: validBody.data!.studyHour,
                 studyMinute: validBody.data!.studyMinute,
                 studySecond: validBody.data!.studySecond,
-                pricePerSession: validBody.data!.pricePerSession,
+                pricePerSession: new Prisma.Decimal(
+                    validBody.data!.pricePerSession
+                ),
             },
         });
 
-        console.log("Added unit: ", unit);
         return NextResponse.json(unit, {status: 200});
     } catch (error) {
         console.log("Error: ", (<Error>error).message);

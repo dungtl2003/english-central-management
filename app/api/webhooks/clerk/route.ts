@@ -121,7 +121,7 @@ const upsertUserHandler = async (payload: Payload): Promise<NextResponse> => {
     } as User;
 
     try {
-        const user = await db.user.upsert({
+        await db.user.upsert({
             where: {
                 referId: data.id,
             },
@@ -131,8 +131,8 @@ const upsertUserHandler = async (payload: Payload): Promise<NextResponse> => {
                 updatedAt: new Date(),
             } as User,
         });
-        console.log("Upserted user: ", user);
-        return NextResponse.json("", {status: 200});
+
+        return NextResponse.json("ok", {status: 200});
     } catch (error) {
         console.log("Error: ", (<Error>error).message);
         return NextResponse.json(
@@ -145,13 +145,12 @@ const upsertUserHandler = async (payload: Payload): Promise<NextResponse> => {
 const deleteUserHandler = async (payload: Payload): Promise<NextResponse> => {
     const data = payload.data;
     try {
-        const user = await db.user.delete({
+        await db.user.delete({
             where: {
                 referId: data.id,
             },
         });
-        console.log("Deleted user: ", user);
-        return new NextResponse("", {status: 200});
+        return new NextResponse("ok", {status: 200});
     } catch (error) {
         console.log("Error: ", (<Error>error).message);
         return NextResponse.json(
