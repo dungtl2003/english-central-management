@@ -172,7 +172,7 @@ const StudentInformationTab = (): ReactElement => {
                                                     </div>
                                                 </div>
                                                 <div className="grid w-full items-center gap-1.5 pt-1 pb-1.5">
-                                                    <Label className="pl-1 text-sm">
+                                                    <Label className="pl-1 text-xs">
                                                         Email
                                                     </Label>
                                                     <Input
@@ -183,7 +183,7 @@ const StudentInformationTab = (): ReactElement => {
                                                     />
                                                 </div>
                                                 <div className="grid w-full items-center gap-1.5 pb-1.5">
-                                                    <Label className="pl-1 text-sm">
+                                                    <Label className="pl-1 text-xs">
                                                         Phone number
                                                     </Label>
                                                     <Input
@@ -196,7 +196,7 @@ const StudentInformationTab = (): ReactElement => {
                                                     />
                                                 </div>
                                                 <div className="grid w-full items-center gap-1.5 pb-1.5">
-                                                    <Label className="pl-1 text-sm">
+                                                    <Label className="pl-1 text-xs">
                                                         Identity card
                                                     </Label>
                                                     <Input

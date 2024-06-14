@@ -8,6 +8,7 @@ import StudentDetailHeader from "./student-detail-header";
 import StudentDetailTabslist from "./student-detail-tabs-list";
 import StudentInformationTab from "./student-information-components/student-information-tab";
 import StudentClassListTab from "./class-list-components/class-list-tab";
+import DesiredClassTab from "./desired-class-components/desired-class-tab";
 // import InformationTab from "./teacher-information-components/teacher-information-tab";
 // import ClassListTab from "./class-list-components/class-list-tab";
 // import SalaryDetailTab from "./salary-detail-components/salary-detail-tab";
@@ -92,6 +93,7 @@ const StudentDetail = (): ReactElement => {
                             <div className="col-span-3 pr-6">
                                 <StudentInformationTab />
                                 <StudentClassListTab />
+                                <DesiredClassTab />
                             </div>
                         </Tabs>
                     </div>

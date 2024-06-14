@@ -33,7 +33,7 @@ const StudentDetailTabslist = ({
                 <div>
                     <TabsTrigger
                         className="w-full text-left dark:data-[state=active]:bg-slate-700 dark:data-[state=active]:text-slate-50 data-[state=active]:bg-slate-200 data-[state=active]:text-slate-950"
-                        value="tuitionDetail"
+                        value="desiredClass"
                     >
                         Desired classes
                     </TabsTrigger>
