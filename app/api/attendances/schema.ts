@@ -21,7 +21,10 @@ const AttendanceSchema = z
             description: "Attendance's status",
         }),
     })
-    .strict();
+    .strict()
+    .partial({
+        description: true,
+    });
 
 export const PatchSchema = z.object({
     sessionId: z.string({

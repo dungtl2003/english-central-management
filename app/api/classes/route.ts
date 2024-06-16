@@ -7,15 +7,12 @@ import {
 } from "./schema";
 import {db} from "@/lib/db";
 import {Json} from "@/constaints";
-import {
-    authHandler,
-    convertQueryParamsToJsonObject,
-    getClerkRole,
-} from "@/lib/helper";
+import {convertQueryParamsToJsonObject, getClerkRole} from "@/lib/helper";
 import {UserRole} from "@prisma/client";
 import {auth} from "@clerk/nextjs/server";
 import {
-    authPostRequest,
+    authGetHandler,
+    authPostHandler,
     buildScheduleCreateManyClassInputEnvelopeObject,
     buildSessionCreateManyClassInputEnvelopeObject,
     buildSortedSessionDates,
@@ -28,7 +25,6 @@ import {Time} from "@/lib/time";
  * Get classes.
  * This will return the class, unit and teacher.
  * Admin gets all classes.
- * Teacher gets all classes he/she teaches.
  * Student gets all classes.
  * Parent gets all classes.
  */
@@ -37,7 +33,7 @@ export async function GET(req: NextRequest) {
     console.log("GET ", req.url);
 
     try {
-        await authHandler();
+        await authGetHandler();
     } catch (error) {
         console.log("Error: ", (<Error>error).message);
         return new NextResponse((<Error>error).message, {status: 401});
@@ -108,8 +104,9 @@ export async function POST(req: NextRequest) {
     console.log("Timestamp: ", new Date().toLocaleString());
     console.log("POST ", req.nextUrl.pathname);
 
+    //TESTING
     try {
-        await authPostRequest();
+        await authPostHandler();
     } catch (error) {
         console.log("Error: ", (<Error>error).message);
         return NextResponse.json({error: "No right permission"}, {status: 401});

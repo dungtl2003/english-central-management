@@ -1,8 +1,6 @@
 import {db} from "@/lib/db";
-import {authHandler, getClerkRole} from "@/lib/helper";
-import {auth} from "@clerk/nextjs/server";
-import {UserRole} from "@prisma/client";
 import {NextRequest, NextResponse} from "next/server";
+import {authGetHandler} from "./helper";
 
 /**
  * Get all students who is waiting to be added to the class or the student
@@ -14,27 +12,7 @@ export async function GET(req: NextRequest) {
     console.log("GET ", req.nextUrl.pathname);
 
     try {
-        await authHandler();
-
-        const clerkUserId = auth().userId;
-        const role: UserRole | null = getClerkRole();
-
-        if (!role || role !== UserRole.ADMIN) {
-            throw Error("No right permission");
-        }
-
-        const admin = await db.user.findFirst({
-            where: {
-                referId: clerkUserId!,
-                role: "ADMIN",
-            },
-        });
-
-        if (!admin) {
-            throw new Error(
-                `No admin with refer ID ${clerkUserId} found in database`
-            );
-        }
+        await authGetHandler();
     } catch (error) {
         console.log("Error: ", (<Error>error).message);
         return new NextResponse((<Error>error).message, {status: 401});

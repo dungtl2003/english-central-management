@@ -1,9 +1,9 @@
 import {db} from "@/lib/db";
 import {NextRequest, NextResponse} from "next/server";
-import {auth} from "@clerk/nextjs/server";
-import {authHandler, getClerkRole} from "@/lib/helper";
-import {BasePatch, getPatchSchemaByRole} from "../schema";
 import {UserRole} from "@prisma/client";
+import {authGetHandler, authPatchHandler} from "./helper";
+import {BasePatch, getPatchSchemaByRole} from "./schema";
+import {getClerkRole} from "@/lib/helper";
 
 /**
  * Get teacher's detail information.
@@ -11,25 +11,13 @@ import {UserRole} from "@prisma/client";
  */
 export async function GET(
     req: NextRequest,
-    {params}: {params: {teacherId: string}}
+    {params}: {params: {referTeacherId: string}}
 ) {
     console.log("Timestamp: ", new Date().toLocaleString());
     console.log("GET ", req.nextUrl.pathname);
 
     try {
-        await authHandler();
-
-        const clerkUserId = auth().userId;
-        const teacherId = params.teacherId;
-        const role: UserRole | null = getClerkRole();
-
-        if (
-            !role ||
-            role !== UserRole.TEACHER ||
-            (role === UserRole.TEACHER && clerkUserId !== teacherId)
-        ) {
-            throw new Error("No right permission");
-        }
+        await authGetHandler(params.referTeacherId);
     } catch (error) {
         console.error("Error: ", (<Error>error).message);
         return NextResponse.json({error: error}, {status: 401});
@@ -38,7 +26,7 @@ export async function GET(
     try {
         const teacher = await db.user.findFirst({
             where: {
-                referId: params.teacherId,
+                referId: params.referTeacherId,
             },
             include: {
                 teacher: true,
@@ -61,31 +49,23 @@ export async function GET(
  * Admin can update teacher's status and base salary only.
  * Student and parent cannot use this api.
  */
-export async function PATCH(req: NextRequest) {
+export async function PATCH(
+    req: NextRequest,
+    {params}: {params: {referTeacherId: string}}
+) {
     console.log("Timestamp: ", new Date().toLocaleString());
     console.log("PATCH ", req.nextUrl.pathname);
 
     try {
-        await authHandler();
+        await authPatchHandler(params.referTeacherId);
     } catch (error) {
         console.log("Error: ", (<Error>error).message);
         return NextResponse.json({error: error}, {status: 401});
     }
 
-    const clerkUserId = auth().userId;
-    const teacherId = req.url.substring(req.url.lastIndexOf("/") + 1);
     const role: UserRole | null = getClerkRole();
-
-    if (
-        !role ||
-        (role !== UserRole.ADMIN && role !== UserRole.TEACHER) ||
-        (role === UserRole.TEACHER && clerkUserId !== teacherId)
-    ) {
-        return NextResponse.json({error: "No right permission"}, {status: 401});
-    }
-
     const body: BasePatch = await req.json();
-    const result = getPatchSchemaByRole(role).safeParse(body);
+    const result = getPatchSchemaByRole(role!).safeParse(body);
     if (result.error) {
         console.log("Error: ", result.error.flatten());
         return NextResponse.json({error: "Wrong body format"}, {status: 400});
@@ -94,7 +74,7 @@ export async function PATCH(req: NextRequest) {
     try {
         const teacher = await db.user.update({
             where: {
-                referId: teacherId,
+                referId: params.referTeacherId,
             },
             data: {
                 firstName: body.firstName,

@@ -1,6 +1,6 @@
 import {db} from "@/lib/db";
 import {NextRequest, NextResponse} from "next/server";
-import {buildAttendanceUpdateQueries, handlePatchAuth} from "./helper";
+import {buildAttendanceUpdateQueries, authPatchHandler} from "./helper";
 import {Patch, PatchSchema} from "./schema";
 
 /**
@@ -13,7 +13,7 @@ export async function PATCH(req: NextRequest) {
 
     let teacherId;
     try {
-        teacherId = await handlePatchAuth();
+        teacherId = await authPatchHandler();
     } catch (error) {
         console.error("Error: ", (<Error>error).message);
         return NextResponse.json(
@@ -53,7 +53,7 @@ export async function PATCH(req: NextRequest) {
                 data: {
                     attendedTime: session.attendedTime ?? new Date(),
                 },
-                // TODO: only for testing purpose
+                // TESTING: only for testing purpose
                 //data: {
                 //    attendedTime:
                 //        session.attendedTime ?? session.actualStartTime,

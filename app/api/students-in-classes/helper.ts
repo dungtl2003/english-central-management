@@ -12,7 +12,7 @@ export async function authGetHandler(): Promise<void> {
     }
 
     if (!role || role !== UserRole.ADMIN) {
-        throw new Error("No right permission");
+        throw Error("No right permission");
     }
 
     const admin = await db.user.findFirst({

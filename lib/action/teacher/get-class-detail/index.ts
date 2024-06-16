@@ -61,7 +61,6 @@ const updateData = (data: OutputType): void => {
         let key: string;
         for (key in attendancesByMonthYear) {
             if (!(key in student.student.totalPriceByMonthYearList)) {
-                console.log("price/sess: ", Number(data!.unit.pricePerSession));
                 const [month, year] = key.split("_");
                 student.student.totalPriceByMonthYearList.push({
                     month: Number(month),
@@ -106,6 +105,7 @@ export const handler = async (data: InputType): Promise<ReturnType> => {
 
         const data = body as OutputType;
         updateData(data);
+        console.log(data);
         return {data: data};
     } catch (error) {
         return {error: (<Error>error).message};

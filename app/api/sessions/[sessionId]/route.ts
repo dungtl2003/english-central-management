@@ -1,11 +1,11 @@
 import {db} from "@/lib/db";
 import {NextRequest, NextResponse} from "next/server";
-import {Patch, PatchSchema} from "../schema";
+import {Patch, PatchSchema} from "./schema";
 import {
+    authPatchHandler,
     buildAttendanceCreateManySessionInputEnvelope,
-    handleAuth,
     validateStudyTime,
-} from "../helper";
+} from "./helper";
 
 /**
  * Update session actual study time.
@@ -23,7 +23,7 @@ export async function PATCH(
 
     let teacherId;
     try {
-        teacherId = await handleAuth();
+        teacherId = await authPatchHandler();
     } catch (error) {
         console.error("Error: ", (<Error>error).message);
         return NextResponse.json(

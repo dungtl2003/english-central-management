@@ -8,10 +8,7 @@ export const PostSchema = z
                 invalid_type_error: "Year must be a number",
                 description: "Year of the unit",
             })
-            .min(
-                new Date().getUTCFullYear(),
-                "Year must be atleast current UTC year"
-            )
+            .min(1, "Invalid year")
             .max(9999, "Invalid year")
             .int("Year must be an integer"),
         grade: z

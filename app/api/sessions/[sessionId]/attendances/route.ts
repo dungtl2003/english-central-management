@@ -1,6 +1,6 @@
 import {db} from "@/lib/db";
 import {NextRequest, NextResponse} from "next/server";
-import {handleAuth} from "../../helper";
+import {authGetHandler} from "./helper";
 
 /**
  * Get all attendances of this session.
@@ -15,7 +15,7 @@ export async function GET(
 
     let teacherId;
     try {
-        teacherId = await handleAuth();
+        teacherId = await authGetHandler();
     } catch (error) {
         console.error("Error: ", (<Error>error).message);
         return NextResponse.json(

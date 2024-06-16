@@ -3,7 +3,7 @@ import {getClerkRole} from "@/lib/helper";
 import {auth} from "@clerk/nextjs/server";
 import {UserRole} from "@prisma/client";
 
-export async function authGetHandler(): Promise<void> {
+export async function authPostHandler(): Promise<void> {
     const clerkUserId = auth().userId;
     const role: UserRole | null = getClerkRole();
 

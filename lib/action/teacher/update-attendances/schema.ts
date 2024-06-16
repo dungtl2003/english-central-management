@@ -21,7 +21,10 @@ export const AttendanceSchema = z
             description: "Attendance's status",
         }),
     })
-    .strict();
+    .strict()
+    .partial({
+        description: undefined,
+    });
 
 export const RequestSchema = z.object({
     sessionId: z.string({

@@ -1,7 +1,7 @@
 import {Time} from "@/lib/time";
 import {Schedule} from "./schema";
 import {Prisma, UserRole} from "@prisma/client";
-import {authHandler, getClerkRole} from "@/lib/helper";
+import {getClerkRole} from "@/lib/helper";
 import {auth} from "@clerk/nextjs/server";
 import {db} from "@/lib/db";
 
@@ -120,11 +120,35 @@ export function buildSessionCreateManyClassInputEnvelopeObject(
     };
 }
 
-export async function authPostRequest(): Promise<void> {
-    await authHandler();
-
+export async function authGetHandler(): Promise<void> {
     const clerkUserId = auth().userId;
     const role: UserRole | null = getClerkRole();
+
+    if (!clerkUserId) {
+        throw new Error("No signed in user");
+    }
+
+    const user = await db.user.findFirst({
+        where: {
+            referId: clerkUserId,
+            role: role as UserRole,
+        },
+    });
+
+    if (!user) {
+        throw new Error(
+            `Cannot find account with id ${clerkUserId} in database`
+        );
+    }
+}
+
+export async function authPostHandler(): Promise<void> {
+    const clerkUserId = auth().userId;
+    const role: UserRole | null = getClerkRole();
+
+    if (!clerkUserId) {
+        throw new Error("No signed in user");
+    }
 
     if (!role || role !== UserRole.ADMIN) {
         throw Error("No right permission");

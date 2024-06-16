@@ -1,10 +1,8 @@
 import {NextRequest, NextResponse} from "next/server";
 import {db} from "@/lib/db";
-import {authHandler, getClerkRole} from "@/lib/helper";
 import {auth} from "@clerk/nextjs/server";
 import {Post, PostSchema} from "./schema";
-import {UserRole} from "@prisma/client";
-import {addTeacher} from "./helper";
+import {addTeacher, authGetHandler} from "./helper";
 
 /**
  * Get teachers.
@@ -16,15 +14,10 @@ export async function GET(req: NextRequest) {
     console.log("GET ", req.nextUrl.pathname);
 
     try {
-        await authHandler();
+        await authGetHandler();
     } catch (error) {
         console.error("Error: ", (<Error>error).message);
         return NextResponse.json({error: error}, {status: 401});
-    }
-
-    const role: UserRole | null = getClerkRole();
-    if (!role || role !== UserRole.ADMIN) {
-        return NextResponse.json({error: "No right permission"}, {status: 401});
     }
 
     try {

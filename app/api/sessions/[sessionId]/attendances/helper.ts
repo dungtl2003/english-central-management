@@ -2,9 +2,8 @@ import {db} from "@/lib/db";
 import {getClerkRole} from "@/lib/helper";
 import {auth} from "@clerk/nextjs/server";
 import {UserRole} from "@prisma/client";
-import {Attendance} from "./schema";
 
-export const authPatchHandler = async (): Promise<string> => {
+export const authGetHandler = async (): Promise<string> => {
     const clerkUserId = auth().userId;
     const role: UserRole | null = getClerkRole();
 
@@ -33,23 +32,4 @@ export const authPatchHandler = async (): Promise<string> => {
     }
 
     return teacher.teacher!.id;
-};
-
-export const buildAttendanceUpdateQueries = (
-    sessionId: string,
-    attendances: Attendance[]
-) => {
-    return attendances.map((attendance) => {
-        return db.attendance.update({
-            where: {
-                id: attendance.attendanceId,
-                sessionId: sessionId,
-            },
-            data: {
-                status: attendance.status,
-                description: attendance.description,
-                updatedAt: new Date(),
-            },
-        });
-    });
 };

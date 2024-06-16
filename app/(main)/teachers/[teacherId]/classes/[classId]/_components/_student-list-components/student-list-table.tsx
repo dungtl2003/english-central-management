@@ -56,7 +56,8 @@ const formatData = (data: OutputType | undefined): StudentInfoData[] => {
             }
         );
 
-        const parents = student.student.parents.map((parent) => {
+        const parents = student.student.parents.map((p) => {
+            const parent = p.parent;
             return {
                 id: parent.id,
                 fullName: concatName(
@@ -76,7 +77,7 @@ const formatData = (data: OutputType | undefined): StudentInfoData[] => {
                 : "___",
             tuitionPaid: tuitionPaid,
             phoneNumber: student.student.user.phoneNumber ?? "___",
-            gender: student.student.user.gender ?? "___",
+            gender: student.student.user.gender?.toLowerCase() ?? "___",
             payments: payments,
             discount: student.student.discount.toString(),
             parents: parents,

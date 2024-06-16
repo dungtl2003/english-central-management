@@ -37,9 +37,11 @@ export type OutputType =
               student: Student & {
                   user: User;
                   tuitions: Tuition[];
-                  parents: (Parent & {
-                      user: User;
-                  })[];
+                  parents: {
+                      parent: Parent & {
+                          user: User;
+                      };
+                  }[];
                   attendances: (Attendance & {
                       session: Session;
                   })[];
