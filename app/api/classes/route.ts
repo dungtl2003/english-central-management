@@ -20,6 +20,7 @@ import {
     validateScheduleTime,
 } from "./helper";
 import {Time} from "@/lib/time";
+import {add} from "date-fns";
 
 /**
  * Get classes.
@@ -168,7 +169,10 @@ export async function POST(req: NextRequest) {
             startDate,
             validBody.data!.timeZone
         );
-        const endDate = sortedSessionDates[sortedSessionDates.length - 1];
+        const endDate = add(sortedSessionDates[sortedSessionDates.length - 1], {
+            hours: unit!.studyHour,
+            minutes: unit!.studyMinute,
+        });
 
         const _class = await db.class.create({
             data: {

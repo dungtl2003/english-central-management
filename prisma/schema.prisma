@@ -134,7 +134,7 @@ model Tuition {
     discount Int @db.Integer
     paidAt DateTime @default(now())
 
-    @@unique([childId, parentId, classId, year, month])
+    @@unique([childId, classId, year, month])
 }
 
 model Unit {

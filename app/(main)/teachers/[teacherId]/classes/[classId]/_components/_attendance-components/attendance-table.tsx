@@ -100,6 +100,7 @@ const AttendanceTable2: React.FC<{
             onSuccess: () => {
                 toast({
                     title: "Success",
+                    variant: "success",
                     description: "Updated attendances",
                 });
 

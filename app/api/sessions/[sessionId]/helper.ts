@@ -51,15 +51,21 @@ export const validateStudyTime = async (
     studyHour: number,
     studyMinute: number
 ): Promise<void> => {
-    if (actualTime.getTime() < startTime.getTime()) {
+    const actualStartTime = new Date(actualTime);
+    const actualEndTime = add(actualStartTime, {
+        hours: studyHour,
+        minutes: studyMinute,
+    });
+
+    if (actualStartTime.getTime() < startTime.getTime()) {
         throw new Error(
-            `Study time (${actualTime.toUTCString()}) can not before class's start time (${startTime.toUTCString()})`
+            `Study start time (${actualStartTime.toUTCString()}) can not before class's start time (${startTime.toUTCString()})`
         );
     }
 
-    if (actualTime.getTime() > endTime.getTime()) {
+    if (actualEndTime.getTime() > endTime.getTime()) {
         throw new Error(
-            `Study time (${actualTime.toUTCString()}) can not after class's end time (${startTime.toUTCString()})`
+            `Study end time (${actualEndTime.toUTCString()}) can not after class's end time (${startTime.toUTCString()})`
         );
     }
 

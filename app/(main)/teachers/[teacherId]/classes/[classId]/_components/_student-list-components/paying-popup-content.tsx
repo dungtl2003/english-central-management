@@ -92,6 +92,7 @@ const PayingPopupContent: React.FC<{data: StudentInfoData}> = ({
             onSuccess: () => {
                 toast({
                     title: "Success",
+                    variant: "success",
                     description: "Payment completed",
                 });
 

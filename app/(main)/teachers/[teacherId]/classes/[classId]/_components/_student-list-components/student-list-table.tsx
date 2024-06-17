@@ -39,8 +39,11 @@ const formatData = (data: OutputType | undefined): StudentInfoData[] => {
             }
         }
 
-        const payments = student.student.totalPriceByMonthYearList.map(
-            (totalPriceByMonthYear) => {
+        const payments = student.student.totalPriceByMonthYearList
+            .sort((a, b) =>
+                a.year !== b.year ? a.year - b.year : a.month - b.month
+            )
+            .map((totalPriceByMonthYear) => {
                 return {
                     time: `${
                         monthNumberToLabelMap[totalPriceByMonthYear.month][
@@ -53,8 +56,7 @@ const formatData = (data: OutputType | undefined): StudentInfoData[] => {
                         ? PayingPopupStatus.PAID
                         : PayingPopupStatus.DEBT,
                 } as PayingPopupData;
-            }
-        );
+            });
 
         const parents = student.student.parents.map((p) => {
             const parent = p.parent;

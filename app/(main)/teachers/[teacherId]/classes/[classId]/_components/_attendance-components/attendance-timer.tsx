@@ -47,6 +47,7 @@ const AttendanceTimer: React.FC<{
             onSuccess: () => {
                 toast({
                     title: "Success",
+                    variant: "success",
                     description: "Updated schedule",
                 });
 

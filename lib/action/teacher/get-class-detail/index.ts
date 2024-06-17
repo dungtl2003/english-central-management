@@ -56,25 +56,25 @@ const updateData = (data: OutputType): void => {
                 totalPrice: Number(tuition.amount),
                 attendances: attendancesByMonthYear[key],
             } as TotalPriceByMonthYear);
+
+            delete attendancesByMonthYear[key];
         }
 
         let key: string;
         for (key in attendancesByMonthYear) {
-            if (!(key in student.student.totalPriceByMonthYearList)) {
-                const [month, year] = key.split("_");
-                student.student.totalPriceByMonthYearList.push({
-                    month: Number(month),
-                    year: Number(year),
-                    isPaid: false,
-                    totalPrice:
-                        Math.round(
-                            attendancesByMonthYear[key] *
-                                Number(data!.unit.pricePerSession) *
-                                100
-                        ) / 100,
-                    attendances: attendancesByMonthYear[key],
-                } as TotalPriceByMonthYear);
-            }
+            const [month, year] = key.split("_");
+            student.student.totalPriceByMonthYearList.push({
+                month: Number(month),
+                year: Number(year),
+                isPaid: false,
+                totalPrice:
+                    Math.round(
+                        attendancesByMonthYear[key] *
+                            Number(data!.unit.pricePerSession) *
+                            100
+                    ) / 100,
+                attendances: attendancesByMonthYear[key],
+            } as TotalPriceByMonthYear);
         }
     });
 };
