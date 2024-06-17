@@ -1,6 +1,6 @@
 import {z} from "zod";
 
-const PaymentSchema = z.object({
+export const PaymentSchema = z.object({
     year: z
         .number({
             required_error: "Year is required",
@@ -29,7 +29,7 @@ const PaymentSchema = z.object({
         .finite("Invalid amount"),
 });
 
-export const PostSchema = z.object({
+export const PayloadSchema = z.object({
     studentId: z
         .string({
             required_error: "Student ID is required",
@@ -63,4 +63,14 @@ export const PostSchema = z.object({
     payments: z.array(PaymentSchema),
 });
 
-export type Post = z.infer<typeof PostSchema>;
+export const RequestSchema = z
+    .object({
+        referTeacherId: z
+            .string({
+                required_error: "Teacher ID is required",
+                invalid_type_error: "Teacher ID must be a string",
+                description: "Refer ID of the teacher",
+            })
+            .min(1, "ID is too short"),
+    })
+    .merge(PayloadSchema);

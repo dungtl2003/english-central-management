@@ -4,7 +4,7 @@ import React from "react";
 import {ColumnDef} from "@tanstack/react-table";
 import {Button} from "@/components/ui/button";
 import {Checkbox} from "@/components/ui/checkbox";
-import {PayingPopupDictionary, PayingPopupData} from "./types";
+import {payingPopupDictionary, PayingPopupData} from "./types";
 
 function createColumns(key: string, title: string): ColumnDef<PayingPopupData> {
     return {
@@ -47,10 +47,10 @@ const PayingPopupColumns = ({
         enableSorting: false,
         enableHiding: false,
     });
-    for (const key in PayingPopupDictionary) {
+    for (const key in payingPopupDictionary) {
         if (key === "select") {
         }
-        columns.push(createColumns(key, PayingPopupDictionary[key]));
+        columns.push(createColumns(key, payingPopupDictionary[key]));
     }
 
     return columns;

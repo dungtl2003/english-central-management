@@ -13,7 +13,7 @@ import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import React, {ReactElement} from "react";
 import PayingPopup from "./paying-popup";
-import {StudentInfoData, StudentInfoArray} from "./types";
+import {StudentInfoData, studentInfoArray} from "./types";
 
 const ClassListPreview: React.FC<{data: StudentInfoData}> = ({
     data,
@@ -34,7 +34,7 @@ const ClassListPreview: React.FC<{data: StudentInfoData}> = ({
                             </SheetDescription>
                         </SheetHeader>
                         <div className="grid gap-4 py-4">
-                            {StudentInfoArray.map((obj) => {
+                            {studentInfoArray.map((obj) => {
                                 const key = obj.key as keyof StudentInfoData;
                                 return (
                                     <div

@@ -133,6 +133,8 @@ model Tuition {
     amount Decimal @db.Decimal(20, 2)
     discount Int @db.Integer
     paidAt DateTime @default(now())
+
+    @@unique([childId, parentId, classId, year, month])
 }
 
 model Unit {

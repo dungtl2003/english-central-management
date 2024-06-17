@@ -4,7 +4,7 @@ import React from "react";
 import {ColumnDef} from "@tanstack/react-table";
 import {Button} from "@/components/ui/button";
 import ClassListPreview from "./student-list-preview";
-import {StudentInfoData, StudentInfoDictionary} from "./types";
+import {StudentInfoData, studentInfoDictionary} from "./types";
 
 function createColumns(key: string, title: string): ColumnDef<StudentInfoData> {
     return {
@@ -14,8 +14,8 @@ function createColumns(key: string, title: string): ColumnDef<StudentInfoData> {
 }
 
 const ClassListTableColumns: ColumnDef<StudentInfoData>[] = [];
-for (const key in StudentInfoDictionary) {
-    ClassListTableColumns.push(createColumns(key, StudentInfoDictionary[key]));
+for (const key in studentInfoDictionary) {
+    ClassListTableColumns.push(createColumns(key, studentInfoDictionary[key]));
 }
 
 ClassListTableColumns.push({

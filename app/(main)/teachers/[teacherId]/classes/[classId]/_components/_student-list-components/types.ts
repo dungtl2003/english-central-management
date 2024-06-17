@@ -22,7 +22,7 @@ export type StudentInfoDef = {
     title: string;
 };
 
-export const StudentInfoArray: StudentInfoDef[] = [
+export const studentInfoArray: StudentInfoDef[] = [
     {key: "id", title: "ID"},
     {key: "fullName", title: "Full name"},
     {key: "gender", title: "Gender"},
@@ -33,7 +33,7 @@ export const StudentInfoArray: StudentInfoDef[] = [
     {key: "tuitionPaid", title: "Tuition fee"},
 ];
 
-export const StudentInfoDictionary: TableDictionary = {
+export const studentInfoDictionary: TableDictionary = {
     fullName: "Full name",
     gender: "Gender",
     birthday: "Birthday",
@@ -58,7 +58,7 @@ export type PayingPopupDef = {
 };
 
 export const sessisonTableArray: PayingPopupDef[] = [
-    {key: "time", title: "Time"}, // thời gian
+    {key: "time", title: "Time"}, // must be Month (short name), Year in order to get data
     {key: "attendances", title: "Attendances"}, // số buổi học
     {key: "monthlyFee", title: "Amount"}, // tiền học tháng đó
     {key: "status", title: "Status"}, // trạng thái đóng tiền tháng đó
@@ -68,7 +68,7 @@ export type TableDictionary = {
     [key: string]: string;
 };
 
-export const PayingPopupDictionary: TableDictionary = {
+export const payingPopupDictionary: TableDictionary = {
     select: "Select",
     time: "Time",
     attendances: "Attendances",

@@ -1,5 +1,8 @@
 import {NextRequest, NextResponse} from "next/server";
 import {authPayHandler} from "./helper";
+import {Post, PostSchema} from "./schema";
+import {db} from "@/lib/db";
+import {Prisma} from "@prisma/client";
 
 /**
  * Perform student's payments.
@@ -25,42 +28,38 @@ export async function POST(
         return NextResponse.json({error: error}, {status: 401});
     }
 
-    //const body: BasePatch = await req.json();
-    //const result = getPatchSchemaByRole(role).safeParse(body);
-    //if (result.error) {
-    //    console.log("Error: ", result.error.flatten());
-    //    return NextResponse.json({error: "Wrong body format"}, {status: 400});
-    //}
-    //
-    //try {
-    //    const teacher = await db.user.update({
-    //        where: {
-    //            referId: teacherId,
-    //        },
-    //        data: {
-    //            firstName: body.firstName,
-    //            lastName: body.lastName,
-    //            phoneNumber: body.phoneNumber,
-    //            identifyCard: body.identifyCard,
-    //            imageUrl: body.imageUrl,
-    //            teacher: {
-    //                update: {
-    //                    baseSalary: body.baseSalary,
-    //                },
-    //            },
-    //        },
-    //        include: {
-    //            teacher: true,
-    //        },
-    //    });
-    //
-    //    return NextResponse.json(teacher, {status: 200});
-    //} catch (error) {
-    //    console.log("Error: ", (<Error>error).message);
-    //    return NextResponse.json(
-    //        {error: "Failed to get teacher"},
-    //        {status: 500}
-    //    );
-    //}
-    return NextResponse.json("ok", {status: 200});
+    const body: Post = await req.json();
+    const result = PostSchema.safeParse(body);
+    if (result.error) {
+        console.log("Error: ", result.error.flatten());
+        return NextResponse.json({error: "Wrong body format"}, {status: 400});
+    }
+
+    const data: Prisma.TuitionCreateManyInput[] = [];
+    result.data.payments.forEach((payment) => {
+        data.push({
+            childId: result.data.studentId,
+            parentId: result.data.parentId,
+            classId: result.data.classId,
+            amount: payment.amount,
+            year: payment.year,
+            month: payment.month,
+            discount: result.data.discount,
+        });
+    });
+
+    try {
+        const tuitions = await db.tuition.createMany({
+            data: data,
+        });
+
+        return NextResponse.json(tuitions, {status: 200});
+    } catch (error) {
+        const msg = (<Error>error).message;
+        console.error("Error: ", msg);
+        return NextResponse.json(
+            {error: "Payment process failed"},
+            {status: 500}
+        );
+    }
 }

@@ -81,6 +81,19 @@ interface MonthNumberToLabelMap {
     };
 }
 
+export function findMonthByName(name: string, short: boolean): number | null {
+    for (const key in monthNumberToLabelMap) {
+        if (
+            (short && monthNumberToLabelMap[Number(key)].short === name) ||
+            monthNumberToLabelMap[Number(key)].long === name
+        ) {
+            return Number(key);
+        }
+    }
+
+    return null;
+}
+
 const nameList = [
     "Time",
     "Past",

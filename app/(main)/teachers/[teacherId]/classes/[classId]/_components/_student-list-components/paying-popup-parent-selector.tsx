@@ -10,13 +10,14 @@ import {
 import {ReactElement} from "react";
 import {StudentInfoData} from "./types";
 
-const PayingPopupParentSelector: React.FC<{data: StudentInfoData}> = ({
-    data,
-}): ReactElement => {
+const PayingPopupParentSelector: React.FC<{
+    data: StudentInfoData;
+    onParentSelect: (parentId: string) => void;
+}> = ({data, onParentSelect}): ReactElement => {
     return (
         <div className="mb-3.5">
             <Label className="pl-1 text-left">Parent</Label>
-            <Select>
+            <Select onValueChange={onParentSelect}>
                 <SelectTrigger>
                     <SelectValue placeholder="Choose your parent" />
                 </SelectTrigger>

@@ -1,4 +1,10 @@
-import React, {ReactElement, useCallback, useEffect} from "react";
+import React, {
+    ReactElement,
+    useCallback,
+    useEffect,
+    useMemo,
+    useState,
+} from "react";
 import {
     PaginationState,
     getCoreRowModel,
@@ -12,7 +18,7 @@ import {
 import {Button} from "@/components/ui/button";
 import {
     PayingPopupData,
-    PayingPopupDictionary,
+    payingPopupDictionary,
     PayingPopupStatus,
     StudentInfoData,
 } from "./types";
@@ -23,6 +29,16 @@ import PayingPopupTotalAmountNoDiscount from "./paying-popup-total-amount-no-dis
 import PayingPopupDiscount from "./paying-popup-discount";
 import PayingPopupTotalAmountDiscount from "./paying-popup-total-amount-discount";
 import PayingPopupButtonPay from "./paying-popup-button-pay";
+import {UseActionOptions, useAction} from "@/hooks/use-action";
+import {handler} from "@/lib/action/teacher/update-student-payments";
+import {
+    InputType,
+    OutputType,
+    Payment,
+} from "@/lib/action/teacher/update-student-payments/types";
+import {useParams} from "next/navigation";
+import {findMonthByName} from "@/lib/utils";
+import {useToast} from "@/components/ui/use-toast";
 
 function createNormalColumns(
     key: string,
@@ -65,6 +81,32 @@ function createSelectColumns(
 const PayingPopupContent: React.FC<{data: StudentInfoData}> = ({
     data,
 }): ReactElement => {
+    const {toast} = useToast();
+    const params = useParams();
+    const memoHandler = useCallback(handler, []);
+    const [selectedParentId, setSelectedParentId] = useState<string | null>(
+        null
+    );
+    const memoEvent: UseActionOptions<OutputType> = useMemo(() => {
+        return {
+            onSuccess: () => {
+                toast({
+                    title: "Success",
+                    description: "Payment completed",
+                });
+
+                window.location.reload();
+            },
+            onError: (error) => {
+                toast({
+                    title: "Error processing payments",
+                    variant: "destructive",
+                    description: error,
+                });
+            },
+        };
+    }, [toast]);
+    const {execute, isLoading} = useAction(memoHandler, memoEvent);
     const [rowSelection, setRowSelection] = React.useState({});
     const [pagination, setPagination] = React.useState<PaginationState>({
         pageIndex: 0,
@@ -73,7 +115,7 @@ const PayingPopupContent: React.FC<{data: StudentInfoData}> = ({
     const [totalAmountNoDiscount, setTotalAmountNoDiscount] = React.useState(0);
     const [totalAmountWithDiscount, setTotalAmountWithDiscount] =
         React.useState(0);
-    const disabled = totalAmountNoDiscount === 0;
+    const disabled = totalAmountNoDiscount === 0 || !selectedParentId;
 
     const handleSelectAllChange = (isChecked: boolean) => {
         const newSelection: boolean[] = [];
@@ -88,11 +130,11 @@ const PayingPopupContent: React.FC<{data: StudentInfoData}> = ({
     };
 
     const columns: ColumnDef<PayingPopupData>[] = [];
-    for (const key in PayingPopupDictionary) {
+    for (const key in payingPopupDictionary) {
         if (key === "select") {
             columns.push(createSelectColumns(key, handleSelectAllChange));
         } else {
-            columns.push(createNormalColumns(key, PayingPopupDictionary[key]));
+            columns.push(createNormalColumns(key, payingPopupDictionary[key]));
         }
     }
 
@@ -135,7 +177,29 @@ const PayingPopupContent: React.FC<{data: StudentInfoData}> = ({
         setTotalAmountWithDiscount(totalWithDiscount);
     }, [table, data.discount]);
 
-    function handlePayment() {}
+    function handlePayment() {
+        const payments: Payment[] = table
+            .getSelectedRowModel()
+            .rows.map((row) => {
+                const [month, year] = row.original.time.split(",");
+                return {
+                    year: Number(year.trim()),
+                    month: findMonthByName(month.trim(), true),
+                    amount: Number(row.original.monthlyFee),
+                } as Payment;
+            });
+
+        const payload = {
+            referTeacherId: String(params.teacherId),
+            studentId: data.id,
+            classId: String(params.classId),
+            parentId: selectedParentId!,
+            discount: Number(data.discount),
+            payments: payments,
+        } as InputType;
+
+        execute(payload);
+    }
 
     useEffect(() => {
         calculateTotals();
@@ -146,7 +210,12 @@ const PayingPopupContent: React.FC<{data: StudentInfoData}> = ({
             <div className="grid grid-cols-2 gap-x-4">
                 <PayingPopupTable table={table} />
                 <div className="min-h-[300px]">
-                    <PayingPopupParentSelector data={data} />
+                    <PayingPopupParentSelector
+                        data={data}
+                        onParentSelect={(parentId) =>
+                            setSelectedParentId(parentId)
+                        }
+                    />
                     <PayingPopupTotalAmountNoDiscount
                         totalAmountNoDiscount={totalAmountNoDiscount}
                     />
@@ -158,6 +227,7 @@ const PayingPopupContent: React.FC<{data: StudentInfoData}> = ({
                     </div>
                     <PayingPopupButtonPay
                         disabled={disabled}
+                        isLoading={isLoading}
                         onClick={handlePayment}
                     />
                 </div>
