@@ -17,7 +17,8 @@ export async function GET(req: NextRequest) {
 
         const role: UserRole | null = getClerkRole();
         const clerkUserId = auth().userId;
-        if (!role || role === UserRole.ADMIN) {
+
+        if (!role || role !== UserRole.ADMIN) {
             throw new Error("No right permission");
         }
 

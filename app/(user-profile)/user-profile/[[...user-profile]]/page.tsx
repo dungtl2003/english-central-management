@@ -7,7 +7,6 @@ import {IoArrowBackCircle} from "react-icons/io5";
 import * as theme from "@clerk/themes";
 import {PersonalInforPage} from "./personal-infor-page";
 import {handler} from "@/lib/action/get-user-id";
-import {usePathname, useSearchParams} from "next/navigation";
 
 const UserProfilePage = (): ReactElement => {
     const [userId, setUserId] = useState("");
@@ -17,16 +16,6 @@ const UserProfilePage = (): ReactElement => {
         };
         fetchData();
     }, []);
-
-    const pathname = usePathname();
-    const searchParams = useSearchParams();
-
-    useEffect(() => {
-        const url = `${pathname}?${searchParams}`;
-        console.log(url);
-        // You can now use the current URL
-        // ...
-    }, [pathname, searchParams]);
 
     return (
         <div className="flex justify-center">
@@ -55,3 +44,23 @@ const UserProfilePage = (): ReactElement => {
 };
 
 export default UserProfilePage;
+
+// const TabClassList: React.FC<{
+
+// }> = ({data}): ReactElement => {
+//     return (
+//         <TabsContent value="studentList">
+//             <ClassListTable data={data} />
+//         </TabsContent>
+//     );
+// };
+
+/**{(user:User) => (
+        <>
+          <Avatar src={user.profileImageUrl} alt={user.fullName} />
+          <Spacer y={1} />
+          <Text as="h2">{user.fullName}</Text>
+          <Spacer y={0.5} />
+          <Text>Email: {user.email}</Text>
+        </>
+      ) as React.ReactNode} */

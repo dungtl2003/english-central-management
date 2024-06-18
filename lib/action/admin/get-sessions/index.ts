@@ -19,7 +19,7 @@ export const handler = async (): Promise<ReturnType> => {
         console.log("Received: ", body);
 
         if (response.status !== 200) {
-            return {error: body};
+            return {error: body}; //TODO: fix later - body not string
         }
 
         const data = body as OutputType;

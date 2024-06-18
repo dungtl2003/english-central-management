@@ -16,7 +16,7 @@ import {
     BirthdaySchema,
 } from "./validateSchema";
 import {
-    BirthDayFeild,
+    BirthdayFeild,
     CreateDateFeild,
     GenderFeild,
     IdentityCardFeild,
@@ -64,7 +64,7 @@ export const PersonalInforPage: React.FC<{
     };
     //const [birthday, setBirthday] = useState<Date|undefined>(userData.unsafeMetaData.birthday);// birthday is date
     const birthday = userData.unsafeMetaData.birthday
-        ? new Date(userData.unsafeMetaData.birthday as string)
+        ? new Date(userData.unsafeMetaData.birthday)
         : undefined; //birthday is string
 
     const form = useForm<FormSchema>({
@@ -91,8 +91,6 @@ export const PersonalInforPage: React.FC<{
         user?.update({
             unsafeMetadata: updateData,
         });
-        console.log(data);
-
         toast({
             title: "You submitted the following values:",
             description: (
@@ -115,7 +113,7 @@ export const PersonalInforPage: React.FC<{
                     {GenderFeild(form, userData.unsafeMetaData.gender)}
                 </div>
                 <div className="grid grid-cols-3 gap-x-2">
-                    {BirthDayFeild(form, birthday)}
+                    {BirthdayFeild(form, birthday)}
                     {CreateDateFeild(form, userData.clerkData.createDate)}
                     {UpdateDateFeild(form, userData.clerkData.updateDate)}
                 </div>

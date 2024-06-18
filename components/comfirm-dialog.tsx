@@ -9,18 +9,21 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import {Button} from "./ui/button";
+import {Button, ButtonProps} from "./ui/button";
 
-interface ConfirmDialogProps {
+interface ConfirmDialogProps extends ButtonProps {
     title: string;
     customClass?: string;
     onConfirm?: () => void;
+    confirmText?: string;
 }
 
 const ConfirmDialog = ({
     title,
     customClass,
     onConfirm,
+    confirmText,
+    ...props
 }: ConfirmDialogProps): ReactElement => {
     return (
         <AlertDialog>
@@ -28,6 +31,7 @@ const ConfirmDialog = ({
                 <Button
                     className={customClass ? customClass : ""}
                     type="submit"
+                    {...props}
                 >
                     {title}
                 </Button>
@@ -46,7 +50,7 @@ const ConfirmDialog = ({
                         onClick={onConfirm ? onConfirm : undefined}
                         className="min-w-[160px] text-md justify-self-center"
                     >
-                        Save
+                        {confirmText || "Save"}
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>

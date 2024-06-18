@@ -1,3 +1,4 @@
+import {isValid, parse} from "date-fns";
 import {z} from "zod";
 
 export const PhoneNumberSchema = z
@@ -21,6 +22,20 @@ export const IdentityCardSchema = z
         message: "Identity card must be 12 characters",
     });
 
-export const BirthdaySchema = z.date().refine((value) => value < new Date(), {
-    message: "Birthday must be in the past",
-});
+export const BirthdaySchema = z.union([
+    z.date().refine((value) => value <= new Date(), {
+        message: "Birthday must be in the past",
+    }),
+    z
+        .string()
+        .transform((str) => {
+            const parsedDate = parse(str, "dd/MM/yyyy", new Date());
+            return parsedDate;
+        })
+        .refine((value) => isValid(value), {
+            message: "Invalid date format (dd/MM/yyyy)",
+        })
+        .refine((value) => value <= new Date(), {
+            message: "Birthday must be in the past",
+        }),
+]);

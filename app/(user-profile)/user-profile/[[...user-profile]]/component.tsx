@@ -1,6 +1,5 @@
 import {Calendar as CalendarIcon} from "lucide-react";
 import {UseFormReturn} from "react-hook-form";
-import {Button} from "@/components/ui/button";
 import {
     FormControl,
     FormField,
@@ -9,7 +8,7 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
-import {cn, formatDate} from "@/lib/utils";
+import {formatDate} from "@/lib/utils";
 import {Calendar} from "@/components/ui/calendar";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {
@@ -20,6 +19,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import {Gender} from "@prisma/client";
+import {format, isValid, parse} from "date-fns";
 
 export const UserIdFeild = (form: UseFormReturn, userId: string) => {
     return (
@@ -143,53 +143,88 @@ export const GenderFeild = (
     );
 };
 
-export const BirthDayFeild = (
+export const BirthdayFeild = (
     form: UseFormReturn,
     birthday: Date | undefined
 ) => {
-    // const [date, setDate] = useState(birthday);
-
     return (
-        <FormField
-            control={form.control}
-            name="birthday"
-            render={({field}) => (
-                <FormItem>
-                    <FormLabel className="text-md">Birthday</FormLabel>
-                    <FormControl>
-                        <Popover>
-                            <PopoverTrigger asChild>
-                                <Button
-                                    variant={"outline"}
-                                    className={cn(
-                                        "w-full justify-start text-left font-normal",
-                                        !birthday && "text-muted-foreground"
-                                    )}
-                                >
-                                    <CalendarIcon className="mr-2 h-4 w-4" />
-                                    {field.value || birthday ? (
-                                        formatDate(
-                                            field.value || (birthday as Date)
-                                        )
-                                    ) : (
-                                        <span>Pick your birthday</span>
-                                    )}
-                                </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0">
-                                <Calendar
-                                    mode="single"
-                                    selected={field.value || birthday}
-                                    onSelect={field.onChange}
-                                    initialFocus
-                                />
-                            </PopoverContent>
-                        </Popover>
-                    </FormControl>
-                    <FormMessage />
-                </FormItem>
-            )}
-        />
+        <div className="grid grid-cols-1 gap-x-2">
+            <FormField
+                control={form.control}
+                name="birthday"
+                render={({field}) => (
+                    <FormItem>
+                        <FormLabel className="flex flex-row items-center text-md">
+                            Birthday{" "}
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    <span className="pl-2">
+                                        <CalendarIcon className="mr-2 h-4 w-4 hover:cursor-pointer" />
+                                    </span>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto p-0">
+                                    <Calendar
+                                        defaultMonth={birthday}
+                                        month={
+                                            field.value instanceof Date
+                                                ? field.value
+                                                : isValid(
+                                                        parse(
+                                                            field.value || "",
+                                                            "dd/MM/yyyy",
+                                                            new Date()
+                                                        )
+                                                    )
+                                                  ? parse(
+                                                        field.value,
+                                                        "dd/MM/yyyy",
+                                                        new Date()
+                                                    )
+                                                  : birthday
+                                        }
+                                        mode="single"
+                                        selected={
+                                            field.value instanceof Date
+                                                ? field.value
+                                                : isValid(
+                                                        parse(
+                                                            field.value || "",
+                                                            "dd/MM/yyyy",
+                                                            new Date()
+                                                        )
+                                                    )
+                                                  ? parse(
+                                                        field.value,
+                                                        "dd/MM/yyyy",
+                                                        new Date()
+                                                    )
+                                                  : birthday
+                                        }
+                                        onSelect={field.onChange}
+                                    />
+                                </PopoverContent>
+                            </Popover>
+                        </FormLabel>
+                        <Input
+                            type="text"
+                            placeholder="dd/MM/yyyy"
+                            defaultValue={
+                                birthday
+                                    ? format(birthday as Date, "dd/MM/yyyy")
+                                    : ""
+                            }
+                            value={
+                                field.value instanceof Date
+                                    ? format(field.value, "dd/MM/yyyy")
+                                    : field.value
+                            }
+                            onChange={field.onChange}
+                        />
+                        <FormMessage />
+                    </FormItem>
+                )}
+            />
+        </div>
     );
 };
 

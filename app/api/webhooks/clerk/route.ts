@@ -18,8 +18,10 @@ interface Payload {
             id: string;
             email_address: string;
         }[];
+        created_at: Date;
+        updated_at: Date;
         unsafe_metadata: {
-            birthday: string;
+            birthday: Date;
             gender: Gender;
             identityCard: string;
             phoneNumber: string;
@@ -123,9 +125,11 @@ const upsertUserHandler = async (payload: Payload): Promise<NextResponse> => {
         phoneNumber: data.unsafe_metadata.phoneNumber,
         identifyCard: data.unsafe_metadata.identityCard,
         gender: data.unsafe_metadata.gender,
+        //createdAt:new Date(data.created_at),
+        updatedAt: new Date(data.updated_at),
         //birthday:unsafe?.birthday,
         birthday: data.unsafe_metadata.birthday
-            ? new Date(data.unsafe_metadata.birthday as string)
+            ? new Date(data.unsafe_metadata.birthday)
             : undefined,
     } as User;
 
