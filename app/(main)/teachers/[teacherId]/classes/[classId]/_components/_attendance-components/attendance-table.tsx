@@ -1,12 +1,7 @@
 import {Table} from "@/components/ui/table";
 import {Textarea} from "@/components/ui/textarea";
 import React, {ReactElement, useCallback, useMemo, useState} from "react";
-import {
-    ColumnDef,
-    getCoreRowModel,
-    getPaginationRowModel,
-    useReactTable,
-} from "@tanstack/react-table";
+import {ColumnDef, getCoreRowModel, useReactTable} from "@tanstack/react-table";
 import {Button} from "@/components/ui/button";
 import {
     attendanceTableDictionary,
@@ -136,7 +131,6 @@ const AttendanceTable2: React.FC<{
         data: formattedData,
         columns,
         getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
         state: {},
     });
 
