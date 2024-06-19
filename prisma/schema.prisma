@@ -25,6 +25,7 @@ enum TeacherStatus {
     AVAILABLE
     TEACHING
     DELETED
+    REJECTED
 }
 
 enum AttendanceStatus {

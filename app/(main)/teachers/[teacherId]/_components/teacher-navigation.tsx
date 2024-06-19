@@ -67,22 +67,6 @@ const TeacherNavigation: React.FC<{data: OutputType | undefined}> = ({
                                     Manage classes
                                 </NavigationMenuLink>
                             </Link>
-
-                            <Link
-                                className="mr-auto flex gap-x-2"
-                                href="/profile"
-                                legacyBehavior
-                                passHref
-                            >
-                                <NavigationMenuLink
-                                    className={
-                                        navigationMenuTriggerStyle() +
-                                        " rounded-md border border-slate-200 dark:border-slate-800"
-                                    }
-                                >
-                                    Manage profile
-                                </NavigationMenuLink>
-                            </Link>
                         </NavigationMenuItem>
                         <NavigationMenuItem className="ml-auto flex items-center gap-x-4">
                             <Link href="#" legacyBehavior passHref>
@@ -96,10 +80,6 @@ const TeacherNavigation: React.FC<{data: OutputType | undefined}> = ({
                                 </NavigationMenuLink>
                             </Link>
                             <ThemeToggle />
-                            {/* <div>
-                                    <a href="/sign-in">Sign in</a> /{" "}
-                                    <a href="/sign-up">Sign up</a>
-                                </div> */}
                             <UserButton />
                         </NavigationMenuItem>
                     </NavigationMenuList>
