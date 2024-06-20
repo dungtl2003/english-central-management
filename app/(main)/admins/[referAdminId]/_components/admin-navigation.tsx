@@ -10,11 +10,22 @@ import {
     NavigationMenuList,
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {Button} from "@/components/ui/button";
+import {useUser} from "@clerk/nextjs";
 
 const AdminNavigation = () => {
+    const {user} = useUser();
+    const currentURL = `/admins/${user?.id}`;
+
     return (
         <div>
-            <NavigationMenu className="fixed w-full h-16 p-4 border-b shadow-sm flex items-center">
+            <NavigationMenu className="bg-white dark:bg-black fixed w-full h-16 p-4 border-b shadow-sm flex items-center">
                 <div className="w-full">
                     <NavigationMenuList>
                         <NavigationMenuItem className="mr-auto flex items-center gap-x-4">
@@ -28,7 +39,7 @@ const AdminNavigation = () => {
                                 <NavigationMenuLink
                                     className={
                                         navigationMenuTriggerStyle() +
-                                        " rounded-md border border-slate-200 dark:border-slate-800"
+                                        "rounded-md border border-slate-200 dark:border-slate-800"
                                     }
                                 >
                                     <svg
@@ -47,50 +58,67 @@ const AdminNavigation = () => {
                                     </svg>
                                 </NavigationMenuLink>
                             </Link>
-
                             <Link
-                                className="mr-auto flex gap-x-2"
-                                href="/teachers/1"
+                                className="mr-auto flex gap-x-2 "
+                                href="#"
                                 legacyBehavior
                                 passHref
                             >
                                 <NavigationMenuLink
                                     className={
                                         navigationMenuTriggerStyle() +
-                                        " rounded-md border border-slate-200 dark:border-slate-800"
+                                        "rounded-md border border-slate-200 dark:border-slate-800"
                                     }
                                 >
-                                    Manage classes
+                                    Dashboard
                                 </NavigationMenuLink>
                             </Link>
-
                             <Link
                                 className="mr-auto flex gap-x-2"
-                                href="/profile"
+                                href={currentURL + "/calendar"}
                                 legacyBehavior
                                 passHref
                             >
                                 <NavigationMenuLink
                                     className={
                                         navigationMenuTriggerStyle() +
-                                        " rounded-md border border-slate-200 dark:border-slate-800"
+                                        "rounded-md border border-slate-200 dark:border-slate-800"
                                     }
                                 >
-                                    Manage profile
+                                    Calendar
                                 </NavigationMenuLink>
                             </Link>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="outline">
+                                        Manage data
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    <Link href={currentURL + "/teachers"}>
+                                        <DropdownMenuItem>
+                                            Manage teachers
+                                        </DropdownMenuItem>
+                                    </Link>
+                                    <Link href="/teachers/1/classes/1">
+                                        <DropdownMenuItem>
+                                            Manage classes
+                                        </DropdownMenuItem>
+                                    </Link>
+                                    <Link href="#">
+                                        <DropdownMenuItem>
+                                            Manage parents
+                                        </DropdownMenuItem>
+                                    </Link>
+                                    <Link href="#">
+                                        <DropdownMenuItem>
+                                            Manage students
+                                        </DropdownMenuItem>
+                                    </Link>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </NavigationMenuItem>
                         <NavigationMenuItem className="ml-auto flex items-center gap-x-4">
-                            <Link href="#" legacyBehavior passHref>
-                                <NavigationMenuLink
-                                    className={
-                                        navigationMenuTriggerStyle() +
-                                        " rounded-md border border-slate-200 dark:border-slate-800"
-                                    }
-                                >
-                                    {"Salary: $150 / month"}
-                                </NavigationMenuLink>
-                            </Link>
                             <ThemeToggle />
                             {/* <div>
                                 <a href="/sign-in">Sign in</a> /{" "}

@@ -13,7 +13,7 @@ export interface PublicMetadata extends UserPublicMetadata {
 
 export interface UnsafeMetadata extends UserUnsafeMetadata {
     phoneNumber?: string;
-    identifyCard?: string;
+    identityCard?: string;
     birthday?: Date;
     gender?: Gender;
 }

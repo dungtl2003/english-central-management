@@ -18,7 +18,7 @@ const TeacherNavigation: React.FC<{data: OutputType | undefined}> = ({
 }): ReactElement => {
     return (
         <div>
-            <NavigationMenu className="fixed w-full h-16 p-4 border-b shadow-sm flex items-center">
+            <NavigationMenu className="bg-white dark:bg-black fixed w-full h-16 p-4 border-b shadow-sm flex items-center">
                 <div className="w-full">
                     <NavigationMenuList>
                         <NavigationMenuItem className="mr-auto flex items-center gap-x-4">

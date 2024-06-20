@@ -64,22 +64,29 @@ const ClassDetailPage: React.FC<{
                     </div>
                 </div>
                 <Tabs defaultValue="overview" className="mt-[15px] w-full">
-                    <TabsList>
-                        {isLoading && <SkeletonClassDetailTabList />}
-                        {!isLoading && (
-                            <>
-                                <TabsTrigger value="overview">
-                                    Overview
-                                </TabsTrigger>
-                                <TabsTrigger value="studentList">
-                                    Student list
-                                </TabsTrigger>
-                                <TabsTrigger value="attendanceHistory">
-                                    Attendance
-                                </TabsTrigger>
-                            </>
-                        )}
-                    </TabsList>
+                    {isLoading && <SkeletonClassDetailTabList />}
+                    {!isLoading && (
+                        <TabsList className="text-sm inline-flex items-center justify-center dark:data-[state=active]:bg-slate-950 dark:data-[state=active]:text-slate-50 data-[state=active]:bg-white data-[state=active]:text-slate-950">
+                            <TabsTrigger
+                                value="overview"
+                                className="text-sm inline-flex items-center justify-center dark:data-[state=active]:bg-slate-950 dark:data-[state=active]:text-slate-50 data-[state=active]:bg-white data-[state=active]:text-slate-950"
+                            >
+                                Overview
+                            </TabsTrigger>
+                            <TabsTrigger
+                                value="studentList"
+                                className="text-sm inline-flex items-center justify-center dark:data-[state=active]:bg-slate-950 dark:data-[state=active]:text-slate-50 data-[state=active]:bg-white data-[state=active]:text-slate-950"
+                            >
+                                Student list
+                            </TabsTrigger>
+                            <TabsTrigger
+                                value="attendanceHistory"
+                                className="text-sm inline-flex items-center justify-center dark:data-[state=active]:bg-slate-950 dark:data-[state=active]:text-slate-50 data-[state=active]:bg-white data-[state=active]:text-slate-950"
+                            >
+                                Attendance
+                            </TabsTrigger>
+                        </TabsList>
+                    )}
                     <TabOverview data={data} isLoading={isLoading} />
                     <TabClassList data={data} />
                     <TabAttendanceHistory data={data} />

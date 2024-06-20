@@ -1,6 +1,5 @@
 import {Card} from "@/components/ui/card";
 import {Skeleton} from "@/components/ui/skeleton";
-import {ReactElement} from "react";
 
 export function SkeletonTableContent() {
     return (
@@ -79,10 +78,10 @@ export function SkeletonClassBasicInformation() {
     );
 }
 
-export function SkeletonClassDetailTabList(): ReactElement {
+export function SkeletonClassDetailTabList() {
     return (
         <div className="w-[273px]">
-            <Skeleton className="w-full h-full" />
+            <Skeleton className="w-full h-10" />
         </div>
     );
 }

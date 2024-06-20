@@ -52,7 +52,6 @@ const formatData = (fetchedData: OutputType): ClassInfo[] | undefined => {
     return displayData;
 };
 
-// Get columns model
 const columns: ColumnDef<ClassInfo>[] = TeacherTableColumns;
 
 const fallbackDisplayData: ClassInfo[] = [];

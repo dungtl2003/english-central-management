@@ -9,14 +9,15 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import {Button} from "./ui/button";
 import {Loader2} from "lucide-react";
+import {Button, ButtonProps} from "./ui/button";
 
-interface ConfirmDialogProps {
+interface ConfirmDialogProps extends ButtonProps {
     title: string;
     customClass?: string;
     onConfirm?: () => void;
     isLoading?: boolean;
+    confirmText?: string;
 }
 
 const ConfirmDialog = ({
@@ -24,6 +25,8 @@ const ConfirmDialog = ({
     customClass,
     onConfirm,
     isLoading,
+    confirmText,
+    ...props
 }: ConfirmDialogProps): ReactElement => {
     return (
         <AlertDialog>
@@ -33,6 +36,7 @@ const ConfirmDialog = ({
                         className={customClass ? customClass : ""}
                         type="submit"
                         disabled={isLoading}
+                        {...props}
                     >
                         {isLoading && (
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -43,6 +47,7 @@ const ConfirmDialog = ({
                     <Button
                         className={customClass ? customClass : ""}
                         type="submit"
+                        {...props}
                     >
                         {title}
                     </Button>
@@ -62,7 +67,7 @@ const ConfirmDialog = ({
                         onClick={onConfirm ? onConfirm : undefined}
                         className="min-w-[160px] text-md justify-self-center"
                     >
-                        Save
+                        {confirmText || "Save"}
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>

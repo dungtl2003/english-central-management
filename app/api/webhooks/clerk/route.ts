@@ -1,10 +1,11 @@
+"use server";
+
 import {NextRequest, NextResponse} from "next/server";
 import {headers} from "next/headers";
 import {Webhook} from "svix";
-import {WebhookEvent, auth} from "@clerk/nextjs/server";
+import {WebhookEvent} from "@clerk/nextjs/server";
 import {db} from "@/lib/db";
-import {UnsafeMetadata, UserJwtSessionClaims} from "@/constaints";
-import {User} from "@prisma/client";
+import {Gender, User} from "@prisma/client";
 
 interface Payload {
     data: {
@@ -17,6 +18,14 @@ interface Payload {
             id: string;
             email_address: string;
         }[];
+        created_at: Date;
+        updated_at: Date;
+        unsafe_metadata: {
+            birthday: Date;
+            gender: Gender;
+            identityCard: string;
+            phoneNumber: string;
+        };
     };
 }
 
@@ -106,18 +115,21 @@ const upsertUserHandler = async (payload: Payload): Promise<NextResponse> => {
         );
     }
 
-    const jwt: UserJwtSessionClaims | null = auth().sessionClaims;
-    const unsafe: UnsafeMetadata | undefined = jwt?.metadata?.unsafe;
     const userData = {
         referId: data.id,
         firstName: data.first_name,
         lastName: data.last_name,
         email: emails[0].email_address,
         imageUrl: data.profile_image_url,
-        phoneNumber: unsafe?.phoneNumber,
-        identifyCard: unsafe?.identifyCard,
-        gender: unsafe?.gender,
-        birthday: unsafe?.birthday,
+        phoneNumber: data.unsafe_metadata.phoneNumber,
+        identifyCard: data.unsafe_metadata.identityCard,
+        gender: data.unsafe_metadata.gender,
+        //createdAt:new Date(data.created_at),
+        updatedAt: new Date(data.updated_at),
+        //birthday:unsafe?.birthday,
+        birthday: data.unsafe_metadata.birthday
+            ? new Date(data.unsafe_metadata.birthday)
+            : undefined,
     } as User;
 
     try {
