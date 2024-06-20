@@ -55,6 +55,13 @@ const getStatusColor = (status: string): ReactElement => {
                     Deleted
                 </span>
             );
+        case "REJECTED":
+            return (
+                <span className="ml-[5px] dark:text-red-500 text-red-600">
+                    {" "}
+                    REJECTED
+                </span>
+            );
     }
     return <span>Error</span>;
 };

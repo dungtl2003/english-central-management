@@ -134,6 +134,8 @@ model Tuition {
     amount Decimal @db.Decimal(20, 2)
     discount Int @db.Integer
     paidAt DateTime @default(now())
+
+    @@unique([childId, classId, year, month])
 }
 
 model Unit {
@@ -207,7 +209,7 @@ model Session {
     class Class @relation(fields: [classId], references: [id], onDelete: Cascade)
     classId String @db.Uuid
     estimatedStartTime DateTime
-    actualStartTime DateTime
+    actualStartTime DateTime?
     attendedTime DateTime?
 
     attendances Attendance[]
@@ -222,7 +224,7 @@ model Attendance {
     sessionId String @db.Uuid
     student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
     studentId String @db.Uuid
-    status AttendanceStatus
+    status AttendanceStatus?
     description String?
 
     createdAt DateTime @default(now())

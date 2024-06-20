@@ -62,10 +62,11 @@ const SalaryDetailTab = ({
     );
     const [isUpdating, setIsUpdating] = useState(false);
 
-    const seniority = acceptDate
+    const seniority: number = acceptDate
         ? new Date().getFullYear() -
           parse(acceptDate as string, "dd/MM/yyyy", new Date()).getFullYear()
         : 0;
+
     const handleEditClick = () => {
         const input: string = baseSalaryRef.current;
         if (isEditing) {
@@ -73,9 +74,7 @@ const SalaryDetailTab = ({
                 setIsUpdating(true);
                 setBaseSalary(input);
                 setMonthlySalary(
-                    seniority
-                        ? (Number(input) * (1 + seniority / 10)).toString()
-                        : "0"
+                    (Number(input) * (1 + seniority / 10)).toString()
                 );
                 execute({
                     teacherId: teacherId,

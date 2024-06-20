@@ -150,8 +150,21 @@ export async function PATCH(
             },
         });
 
+        const clerkTeacherID = await db.user
+            .findFirst({
+                where: {
+                    teacher: {
+                        id: teacherId,
+                    },
+                },
+                include: {
+                    teacher: true,
+                },
+            })
+            .then((v) => v?.referId);
+
         if (body.status === "DELETED" || body.status === "REJECTED") {
-            await clerkClient.users.deleteUser(teacherId);
+            await clerkClient.users.deleteUser(clerkTeacherID as string);
         }
 
         return NextResponse.json(teacher, {status: 200});

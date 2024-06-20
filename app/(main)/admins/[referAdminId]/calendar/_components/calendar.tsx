@@ -43,12 +43,16 @@ const formatData = (data: OutputType | undefined): SessionCalendarData[] => {
             avatar: element.class.teacher.user.imageUrl
                 ? (element.class.teacher.user.imageUrl as string)
                 : defaultImageUrl,
-            startDateTime: element.actualStartTime.toString(),
-            endDateTime: add(element.actualStartTime, {
-                hours: element.class.unit.studyHour,
-                minutes: element.class.unit.studyMinute,
-                seconds: element.class.unit.studySecond,
-            }).toISOString(),
+            startDateTime: element.actualStartTime
+                ? element.actualStartTime.toString()
+                : "",
+            endDateTime: element.actualStartTime
+                ? add(element.actualStartTime, {
+                      hours: element.class.unit.studyHour,
+                      minutes: element.class.unit.studyMinute,
+                      seconds: element.class.unit.studySecond,
+                  }).toISOString()
+                : "",
         };
         sessions.push(session);
     });
@@ -73,10 +77,12 @@ export default function Calendar() {
             },
             onSuccess: (data: OutputType) => {
                 setSessions(formatData(data));
-                console.log(
-                    "data after format: ------------",
-                    formatData(data)
-                );
+                console.log(formatData(data));
+                toast({
+                    title: "success",
+                    variant: "default",
+                    description: "Get calendar succeed",
+                });
 
                 setIsLoading(false);
             },

@@ -37,6 +37,11 @@ const GetButtonBasedOnStatus = (
                         "Update status this teacher successful: ",
                         data
                     );
+                    toast({
+                        title: "success",
+                        variant: "default",
+                        description: `Update status this teacher successful`,
+                    });
                 },
             };
         }, []);
@@ -90,7 +95,7 @@ const GetButtonBasedOnStatus = (
         });
     };
 
-    // => nếu chưa được duyệt thì sẽ là nút Approve và Reject
+    //=> nếu chưa được duyệt thì sẽ là nút Approve và Reject
     if (currentStatus === "PENDING") {
         return (
             <>
@@ -111,11 +116,7 @@ const GetButtonBasedOnStatus = (
             </>
         );
     }
-    if (
-        currentStatus === "DELETED" ||
-        currentStatus === "REJECTED" ||
-        currentStatus === "TEACHING"
-    ) {
+    if (currentStatus === "TEACHING") {
         return (
             <Button
                 className="min-w-[85px] max-w-[85px]"
@@ -127,15 +128,23 @@ const GetButtonBasedOnStatus = (
         );
     }
 
-    return (
-        <ConfirmDialog
-            title="Delete"
-            className="min-w-[85px] max-w-[85px]"
-            variant="destructive"
-            onConfirm={handleDeleteClick}
-            confirmText="Yes"
-        />
-    );
+    if (currentStatus === "DELETED" || currentStatus === "REJECTED") {
+        return <></>;
+    }
+
+    if (currentStatus === "AVAILABLE") {
+        return (
+            <ConfirmDialog
+                title="Delete"
+                className="min-w-[85px] max-w-[85px]"
+                variant="destructive"
+                onConfirm={handleDeleteClick}
+                confirmText="Yes"
+            />
+        );
+    }
+
+    return <> Do not have role </>;
 };
 
 const TeacherDetailTabslist = ({

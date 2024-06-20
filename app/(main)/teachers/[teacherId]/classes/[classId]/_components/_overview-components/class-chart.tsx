@@ -7,9 +7,9 @@ import {
 } from "@unovis/react";
 import {GroupedBar} from "@unovis/ts";
 import {OutputType} from "@/lib/action/teacher/get-class-detail/types";
-import {formatDate} from "@/lib/utils";
+// import {formatDate} from "@/lib/utils";
 import {ClassChartData} from "./types";
-import {Time} from "@/lib/time";
+// import {Time} from "@/lib/time";
 
 const x = (d: ClassChartData) => d.x;
 const y = [(d: ClassChartData) => d.presents];
@@ -19,31 +19,32 @@ const formatData = (rawData: OutputType | undefined): ClassChartData[] => {
     const records: ClassChartData[] = [];
     if (!rawData) return records;
 
-    let index: number = 1;
-    rawData.sessions
-        .filter((session) => session.actualStartTime)
-        .sort(
-            (session1, session2) =>
-                new Date(session2.actualStartTime).getTime() -
-                new Date(session1.actualStartTime).getTime()
-        )
-        .slice(0, 5)
-        .reverse()
-        .forEach((session) => {
-            const presents = session.attendances.filter(
-                (attendance) => attendance.status === "PRESENT"
-            ).length;
-            const absents = session.attendances.filter(
-                (attendance) => attendance.status === "ABSENT"
-            ).length;
+    // let index: number = 1;
+    // rawData.sessions
+    //     .filter((session) => session.actualStartTime)
+    //     .sort(
+    //         (/* session1, session2 */) =>
 
-            records.push({
-                dateTime: `${formatDate(new Date(session.actualStartTime))}\n${Time.from(new Date(session.actualStartTime)).toString()}`,
-                x: index++,
-                presents: presents,
-                absents: absents,
-            });
-        });
+    //             new Date(/* session2.actualStartTime */).getTime() -
+    //             new Date(/* session1.actualStartTime */).getTime()
+    //     )
+    //     .slice(0, 5)
+    //     .reverse()
+    //     .forEach((session) => {
+    //         const presents = session.attendances.filter(
+    //             (attendance) => attendance.status === "PRESENT"
+    //         ).length;
+    //         const absents = session.attendances.filter(
+    //             (attendance) => attendance.status === "ABSENT"
+    //         ).length;
+
+    //         records.push({
+    //             dateTime: `${formatDate(new Date(session.actualStartTime))}\n${Time.from(new Date(session.actualStartTime)).toString()}`,
+    //             x: index++,
+    //             presents: presents,
+    //             absents: absents,
+    //         });
+    //     });
 
     return records;
 };
