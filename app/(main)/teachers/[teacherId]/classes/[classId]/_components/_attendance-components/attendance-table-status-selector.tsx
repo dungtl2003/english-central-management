@@ -15,11 +15,11 @@ const AttendanceTableStatusSelector: React.FC<{
 }> = ({initialValue, onChange}): ReactElement => {
     return (
         <Select
-            defaultValue={initialValue.status || undefined}
+            defaultValue={initialValue.status || "PRESENT"}
             onValueChange={(value) => onChange(value as AttendanceStatus)}
         >
             <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select status" />
+                <SelectValue />
             </SelectTrigger>
             <SelectContent>
                 <SelectItem value="PRESENT">Present</SelectItem>

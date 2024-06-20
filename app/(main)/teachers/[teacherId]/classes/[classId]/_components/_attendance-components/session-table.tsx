@@ -61,7 +61,7 @@ const formatData = (data: OutputType | undefined): SessionTableModel[] => {
                     email: a.student.user.email,
                     attendanceStatus: a.status,
                     note: a.description,
-                    status: a.status,
+                    status: a.status || "PRESENT",
                     description: a.description,
                 } as AttendanceTableModel);
             });
