@@ -22,13 +22,11 @@ import {OutputType} from "@/lib/action/teacher/get-classes/types";
 import {toast} from "@/components/ui/use-toast";
 import {useAuth} from "@clerk/nextjs";
 import {concatName} from "@/lib/utils";
-import {Button} from "@/components/ui/button";
 import {
     SkeletonTableContent,
     SkeletonTableFilter,
     SkeletonTablePagination,
 } from "./skeleton-teacher";
-import {bypass} from "@/lib/create-temp-data/teacher";
 import {format} from "date-fns";
 
 const formatData = (fetchedData: OutputType): ClassInfo[] | undefined => {
@@ -113,7 +111,6 @@ export function TeacherTable() {
     return (
         <>
             <div className="w-11/12 pt-[120px]">
-                <Button onClick={() => bypass(userId!)}>bypass</Button>
                 {isLoading ? (
                     <SkeletonTableFilter />
                 ) : (

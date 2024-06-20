@@ -16,8 +16,8 @@ const PaymentSchema = z.object({
             invalid_type_error: "Month must be a number",
             description: "Month of the payment",
         })
-        .min(1, "Invalid month")
-        .max(9999, "Invalid month")
+        .min(0, "Invalid month")
+        .max(11, "Invalid month")
         .int("Month must be an integer"),
     amount: z
         .number({
