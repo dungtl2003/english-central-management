@@ -1,20 +1,19 @@
-import {InputType, ReturnType} from "./types";
+import {ErrorResponsePayload} from "@/constaints";
+import {InputType, OutputType, ReturnType} from "./types";
+import {AdminPatchResponsePayload} from "@/app/api/v2/users/teachers/[teacherId]/types";
 
 export async function handler(data: InputType): Promise<ReturnType> {
     console.log("Timestamp: ", new Date().toLocaleString());
     const domain = process.env.NEXT_PUBLIC_DOMAIN;
     const protocol = process.env.NEXT_PUBLIC_PROTOCOL;
     const teacherId = data.teacherId;
-    const referAdminId = data.referAdminId;
 
-    const url = `${protocol}://${domain}/api/admins/${referAdminId}/teachers/${teacherId}`;
+    const url = `${protocol}://${domain}/api/v2/users/teachers/${teacherId}`;
 
     const bodyData = {
         baseSalary: data.baseSalary,
-        monthlyPayments: data.monthlyPayments,
         status: data.status,
         acceptedAt: data.acceptedAt,
-        deletedAt: data.deletedAt,
     };
 
     try {
@@ -24,13 +23,11 @@ export async function handler(data: InputType): Promise<ReturnType> {
         });
 
         const body = await res.json();
-        console.log("Received: ", body);
-
         if (res.status !== 200) {
-            return {error: body}; //TODO: fix later - body not string
+            return {error: (<ErrorResponsePayload>body).error};
         }
 
-        return {data: body};
+        return {data: (<AdminPatchResponsePayload>body) as OutputType};
     } catch (error) {
         return {error: (<Error>error).message};
     }

@@ -21,7 +21,7 @@ const TeachersLayout: React.FC<{
     useEffect(() => {
         if (!isLoaded) return;
 
-        execute({teacherId: params.teacherId});
+        execute({referTeacherId: params.teacherId});
     }, [isLoaded, params.teacherId, execute]);
 
     useEffect(() => {

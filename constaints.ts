@@ -1,5 +1,9 @@
 import {Gender} from "@prisma/client";
 
+export interface ErrorResponsePayload {
+    error: string;
+}
+
 export interface UserJwtSessionClaims extends CustomJwtSessionClaims {
     metadata?: {
         public?: PublicMetadata;

@@ -76,7 +76,7 @@ const TeacherNavigation: React.FC<{data: OutputType | undefined}> = ({
                                         " rounded-md border border-slate-200 dark:border-slate-800"
                                     }
                                 >
-                                    {`Salary: $${data ? data?.teacher.baseSalary : 0} / month`}
+                                    {`Salary: $${data ? data?.baseSalary : 0} / month`}
                                 </NavigationMenuLink>
                             </Link>
                             <ThemeToggle />

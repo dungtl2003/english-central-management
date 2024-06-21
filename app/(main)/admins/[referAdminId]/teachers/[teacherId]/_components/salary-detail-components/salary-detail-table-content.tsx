@@ -10,11 +10,10 @@ import {
 } from "@/components/ui/table";
 import {Button} from "@/components/ui/button";
 import {UseActionOptions, useAction} from "@/hooks/use-action";
-import {InputType, OutputType} from "@/lib/action/admin/update-teacher/types";
 import {toast} from "@/components/ui/use-toast";
-import {handler} from "@/lib/action/admin/update-teacher";
 import {TeacherStatus} from "@prisma/client";
-import {useUser} from "@clerk/nextjs";
+import {handler} from "@/lib/action/admin/pay-teacher";
+import {InputType, OutputType} from "@/lib/action/admin/pay-teacher/types";
 
 const SalaryDetailTableContent = ({
     setIsUpdating,
@@ -29,7 +28,6 @@ const SalaryDetailTableContent = ({
     selectedTotal: number;
     teacherId: string;
 }): ReactElement => {
-    const {user} = useUser();
     const [haveSelection, setHaveSelection] = useState(false);
     const numberRowsSelected = table.getSelectedRowModel().rows.length;
     useEffect(() => {
@@ -45,22 +43,23 @@ const SalaryDetailTableContent = ({
     const eventPay: UseActionOptions<OutputType> = useMemo(() => {
         return {
             onError: (error: string) => {
-                console.log("Error: ", error);
+                console.error("Error: ", error);
                 toast({
                     title: "error",
                     variant: "destructive",
                     description: "Payment process failed",
                 });
             },
-            onSuccess: (data: OutputType) => {
+            onSuccess: () => {
                 toast({
                     title: "success",
                     description: "Payment process succeed",
                 });
-                console.log("Payment process succeed: ", data);
+                setIsUpdating(false);
+                window.location.reload();
             },
         };
-    }, []);
+    }, [setIsUpdating]);
     const {execute} = useAction<InputType, OutputType>(handler, eventPay);
 
     const handlePay = () => {
@@ -71,16 +70,11 @@ const SalaryDetailTableContent = ({
                 salary: Number(row.original.amount),
             });
         });
-        console.log(dataPayment);
 
         setIsUpdating(true);
         execute({
             teacherId: teacherId,
-            referAdminId: user?.id as string,
             monthlyPayments: dataPayment,
-        }).then(() => {
-            setIsUpdating(false);
-            window.location.reload();
         });
     };
 

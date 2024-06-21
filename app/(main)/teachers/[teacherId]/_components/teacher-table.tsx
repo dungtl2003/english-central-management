@@ -104,7 +104,7 @@ export function TeacherTable() {
 
     useEffect(() => {
         if (!isLoaded) return;
-        execute({teacherId: userId!});
+        execute({referTeacherId: userId!});
     }, [isLoaded, userId, execute]);
 
     return (

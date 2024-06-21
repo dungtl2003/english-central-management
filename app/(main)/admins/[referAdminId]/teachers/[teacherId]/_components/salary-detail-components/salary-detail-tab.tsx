@@ -13,7 +13,6 @@ import {InputType, OutputType} from "@/lib/action/admin/update-teacher/types";
 import {toast} from "@/components/ui/use-toast";
 import {parse} from "date-fns";
 import {LoadingUpdate} from "../loading-update-data";
-import {useUser} from "@clerk/nextjs";
 
 const SalaryDetailTab = ({
     teacherId,
@@ -34,7 +33,6 @@ const SalaryDetailTab = ({
     monthlySalary: string;
     setMonthlySalary: (v: string) => void;
 }): ReactElement => {
-    const {user} = useUser();
     const [isEditing, setIsEditing] = useState(false);
 
     const eventUpdateBaseSalary: UseActionOptions<OutputType> = useMemo(() => {
@@ -47,12 +45,12 @@ const SalaryDetailTab = ({
                     description: "Update base salary failed",
                 });
             },
-            onSuccess: (data: OutputType) => {
+            onSuccess: () => {
                 toast({
                     title: "success",
+                    variant: "success",
                     description: "Update base salary succeed",
                 });
-                console.log("Update base salary successful: ", data);
             },
         };
     }, []);
@@ -78,7 +76,6 @@ const SalaryDetailTab = ({
                 );
                 execute({
                     teacherId: teacherId,
-                    referAdminId: user?.id as string,
                     baseSalary: Number(input),
                 }).then(() => {
                     setIsUpdating(false);

@@ -11,16 +11,8 @@ import {
 } from "@/lib/action/admin/get-teacher-detail/types";
 import {toast} from "@/components/ui/use-toast";
 
-const TeacherDetailPage = ({
-    params,
-}: {
-    params: {
-        teacherId: string;
-        referAdminId: string;
-    };
-}) => {
+const TeacherDetailPage = ({params}: {params: {teacherId: string}}) => {
     const teacherId = params.teacherId;
-    const referAdminId = params.referAdminId;
 
     const [isLoading, setIsLoading] = useState(true);
     const [teacherDetail, setTeacherDetail] = useState<OutputType>();
@@ -36,10 +28,11 @@ const TeacherDetailPage = ({
                 });
             },
             onSuccess: (data: OutputType) => {
+                setIsLoading(false);
                 setTeacherDetail(data);
             },
         };
-    }, []);
+    }, [setIsLoading]);
 
     const {execute} = useAction<InputType, OutputType>(
         fetchTeacherDetail,
@@ -47,10 +40,8 @@ const TeacherDetailPage = ({
     );
 
     useEffect(() => {
-        execute({teacherId: teacherId, referAdminId: referAdminId}).then(() =>
-            setIsLoading(false)
-        );
-    }, [teacherId, execute, setIsLoading, referAdminId]);
+        execute({teacherId: teacherId});
+    }, [teacherId, execute]);
 
     return (
         <div className="flex justify-center">

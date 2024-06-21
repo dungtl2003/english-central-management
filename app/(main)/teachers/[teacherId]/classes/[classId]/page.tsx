@@ -41,9 +41,7 @@ const ClassDetailPage: React.FC<{
 
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
-        execute({teacherId: params.teacherId, classId: params.classId}).then(
-            () => setIsLoading(false)
-        );
+        execute({classId: params.classId}).then(() => setIsLoading(false));
     }, [execute, params.teacherId, params.classId]);
 
     return (

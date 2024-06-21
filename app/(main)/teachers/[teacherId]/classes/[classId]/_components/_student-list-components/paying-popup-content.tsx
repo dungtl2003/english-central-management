@@ -191,7 +191,6 @@ const PayingPopupContent: React.FC<{data: StudentInfoData}> = ({
             });
 
         const payload = {
-            referTeacherId: String(params.teacherId),
             studentId: data.id,
             classId: String(params.classId),
             parentId: selectedParentId!,

@@ -4,95 +4,98 @@ import {TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {Button} from "@/components/ui/button";
 import {
     InputType,
-    OutputType as OutputTypeUpdateTeacher,
+    OutputType as UpdateOutputType,
 } from "@/lib/action/admin/update-teacher/types";
 import {UseActionOptions, useAction} from "@/hooks/use-action";
 import {toast} from "@/components/ui/use-toast";
-import {handler} from "@/lib/action/admin/update-teacher";
+import {handler as updateHandler} from "@/lib/action/admin/update-teacher";
 import ConfirmDialog from "@/components/comfirm-dialog";
 import {TeacherStatus} from "@prisma/client";
-import {useUser} from "@clerk/nextjs";
+import {handler as deleteHandler} from "@/lib/action/admin/delete-teacher";
+import {OutputType as DeleteOutputType} from "@/lib/action/admin/delete-teacher/types";
 
 // Đoạn này mô tả ý tưởng về việc nếu chưa được duyệt thì sẽ hiển thị nút nào
 // const status: string = "pending"; // => trạng thái của giáo viên
 const GetButtonBasedOnStatus = (
     currentStatus: TeacherStatus,
     teacherId: string,
-    referAdminId: string,
     setIsStatusUpdating: (v: boolean) => void
 ): ReactElement => {
-    const eventUpdateTeacher: UseActionOptions<OutputTypeUpdateTeacher> =
-        useMemo(() => {
-            return {
-                onError: (error: string) => {
-                    console.log("Error: ", error);
-                    toast({
-                        title: "error",
-                        variant: "destructive",
-                        description: `FAIL to update status this teacher`,
-                    });
-                },
-                onSuccess: (data: OutputTypeUpdateTeacher) => {
-                    console.log(
-                        "Update status this teacher successful: ",
-                        data
-                    );
-                    toast({
-                        title: "success",
-                        variant: "default",
-                        description: `Update status this teacher successful`,
-                    });
-                },
-            };
-        }, []);
+    const deleteEvent: UseActionOptions<DeleteOutputType> = useMemo(() => {
+        return {
+            onError: (error: string) => {
+                console.error("Error: ", error);
+                toast({
+                    title: "error",
+                    variant: "destructive",
+                    description: `Fail to delete/reject this teacher`,
+                });
+            },
+            onSuccess: () => {
+                toast({
+                    title: "success",
+                    variant: "success",
+                    description: `Delete/reject teacher successful`,
+                });
+                setIsStatusUpdating(false);
+                window.location.reload();
+            },
+        };
+    }, [setIsStatusUpdating]);
+    const updateEvent: UseActionOptions<UpdateOutputType> = useMemo(() => {
+        return {
+            onError: (error: string) => {
+                console.error("Error: ", error);
+                toast({
+                    title: "error",
+                    variant: "destructive",
+                    description: `Fail to update status this teacher`,
+                });
+            },
+            onSuccess: () => {
+                toast({
+                    title: "success",
+                    variant: "success",
+                    description: `Update status this teacher successful`,
+                });
+                setIsStatusUpdating(false);
+                window.location.reload();
+            },
+        };
+    }, [setIsStatusUpdating]);
 
-    const {execute} = useAction(handler, eventUpdateTeacher);
+    const {execute: execUpdate} = useAction(updateHandler, updateEvent);
+    const {execute: execDelete} = useAction(deleteHandler, deleteEvent);
 
     const dataActionApprove: InputType = {
         teacherId: teacherId,
-        referAdminId: referAdminId,
         status: "AVAILABLE",
         acceptedAt: new Date(),
     };
 
     const dataActionReject: InputType = {
         teacherId: teacherId,
-        referAdminId: referAdminId,
         status: "REJECTED",
-        deletedAt: new Date(),
     };
 
     const dataActionDelete: InputType = {
         teacherId: teacherId,
-        referAdminId: referAdminId,
         status: "DELETED",
-        deletedAt: new Date(),
     };
 
     const handleApproveClick = () => {
         setIsStatusUpdating(true);
-        execute(dataActionApprove).then(() => {
-            setIsStatusUpdating(false);
-            window.location.reload();
-        });
+        execUpdate(dataActionApprove);
     };
 
     const handleRejectClick = () => {
-        console.log("This is reject button");
         setIsStatusUpdating(true);
-        execute(dataActionReject).then(() => {
-            setIsStatusUpdating(false);
-            window.location.reload();
-        });
+        execDelete(dataActionReject);
     };
 
     const handleDeleteClick = () => {
-        console.log("This is delete button");
         setIsStatusUpdating(true);
-        execute(dataActionDelete).then(() => {
-            setIsStatusUpdating(false);
-            window.location.reload();
-        });
+        execDelete(dataActionDelete);
     };
 
     //=> nếu chưa được duyệt thì sẽ là nút Approve và Reject
@@ -156,7 +159,6 @@ const TeacherDetailTabslist = ({
     teacherId: string;
     setIsStatusUpdating: (v: boolean) => void;
 }): ReactElement => {
-    const {user} = useUser();
     return (
         <div className="col-span-1 pl-2 grid grid-cols-10">
             <TabsList className="col-span-9 grid grid-rows-11">
@@ -189,7 +191,6 @@ const TeacherDetailTabslist = ({
                     {GetButtonBasedOnStatus(
                         currentStatus as TeacherStatus,
                         teacherId,
-                        user?.id as string,
                         setIsStatusUpdating
                     )}
                 </div>

@@ -1,8 +1,6 @@
-import {ActionState} from "@/lib/create-safe-action";
-
-// type OutputType = {userId:string}
-// type InputType = {clerkId:string}
-type ReturnType = ActionState<void, string>;
+import {GetResponsePayload} from "@/app/api/v2/users/types";
+import {ErrorResponsePayload} from "@/constaints";
+import {ReturnType} from "./types";
 
 export const handler = async (): Promise<ReturnType> => {
     console.log("Timestamp: ", new Date().toLocaleString());
@@ -10,23 +8,19 @@ export const handler = async (): Promise<ReturnType> => {
     const domain = process.env.NEXT_PUBLIC_DOMAIN;
     const protocol = process.env.NEXT_PUBLIC_PROTOCOL;
 
-    const url = `${protocol}://${domain}/api/user`;
-
-    console.log(`Sending GET request to ${url}`);
-
     try {
+        const url = `${protocol}://${domain}/api/v2/users`;
+        console.log(`Sending GET request to ${url}`);
         const response = await fetch(url, {
             method: "GET",
         });
 
         const body = await response.json();
-        console.log("Received: ", body);
-
         if (response.status !== 200) {
-            return {error: body};
+            return {error: (<ErrorResponsePayload>body).error};
         }
 
-        return {data: body as string};
+        return {data: (<GetResponsePayload>body) as string};
     } catch (error) {
         return {error: (<Error>error).message};
     }

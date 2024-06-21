@@ -20,11 +20,10 @@ import TeacherListFilter from "./teacher-list-filter";
 import TeacherListPagination from "./teacher-list-pagination";
 import TeacherListContent from "./teacher-list-content";
 import {Status} from "./teacher-list-rows-filter";
-import {handle} from "@/lib/action/admin/get-teachers";
+import {handler} from "@/lib/action/admin/get-teachers";
 import {OutputType} from "@/lib/action/admin/get-teachers/types";
 import {format} from "date-fns";
 import {UseActionOptions, useAction} from "@/hooks/use-action";
-import {toast} from "@/components/ui/use-toast";
 import {
     SkeletonTeacherListContent,
     SkeletonTeacherListFilter,
@@ -36,6 +35,7 @@ import {Button} from "@/components/ui/button";
 import {FaArrowUpRightFromSquare} from "react-icons/fa6";
 import Link from "next/link";
 import {useUser} from "@clerk/nextjs";
+import {useRouter} from "next/navigation";
 
 function createColumns(key: string, title: string): ColumnDef<TeacherListData> {
     return {
@@ -115,6 +115,7 @@ function getMonthlySalary(baseSalary: number, acceptedAt: Date): number {
 
 const TeacherListTable = (): ReactElement => {
     const {user} = useUser();
+    const router = useRouter();
     const currentUrl = `/admins/${user?.id}/teachers`;
 
     const columns: ColumnDef<TeacherListData>[] =
@@ -123,24 +124,19 @@ const TeacherListTable = (): ReactElement => {
     const [teachers, setTeachers] = useState<TeacherListData[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const fetchData = useCallback(handle, []);
+    const fetchData = useCallback(handler, []);
     const event: UseActionOptions<OutputType> = useMemo(() => {
         return {
             onError: (error: string) => {
                 console.log("Error: ", error);
-                toast({
-                    title: "error",
-                    variant: "destructive",
-                    description: "Get teachers failed",
-                });
-                setIsLoading(false);
+                router.push("/404");
             },
             onSuccess: (data: OutputType) => {
                 setTeachers(formatData(data));
                 setIsLoading(false);
             },
         };
-    }, []);
+    }, [router]);
     const {execute} = useAction<void, OutputType>(fetchData, event);
     useEffect(() => {
         execute();

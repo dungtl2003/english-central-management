@@ -1,5 +1,6 @@
-import {ErrorType} from "../../generic";
+import {PostResponsePayload} from "@/app/api/v2/tuitions/types";
 import {InputType, OutputType, Payload, ReturnType} from "./types";
+import {ErrorResponsePayload} from "@/constaints";
 
 export const handler = async (data: InputType): Promise<ReturnType> => {
     console.log("Timestamp: ", new Date().toLocaleString());
@@ -7,32 +8,29 @@ export const handler = async (data: InputType): Promise<ReturnType> => {
     const domain = process.env.NEXT_PUBLIC_DOMAIN;
     const protocol = process.env.NEXT_PUBLIC_PROTOCOL;
 
-    const url = `${protocol}://${domain}/api/teachers/${data.referTeacherId}/classes/${data.classId}/students/${data.studentId}/pay`;
-
-    console.log(`Sending POST request to ${url}`);
-
-    const payload = {
-        studentId: data.studentId,
-        classId: data.classId,
-        parentId: data.parentId,
-        discount: data.discount,
-        payments: data.payments,
-    } as Payload;
-
     try {
+        const url = `${protocol}://${domain}/api/v2/tuitions`;
+        console.log(`Sending POST request to ${url}`);
+
+        const payload = {
+            studentId: data.studentId,
+            classId: data.classId,
+            parentId: data.parentId,
+            discount: data.discount,
+            payments: data.payments,
+        } as Payload;
+
         const response = await fetch(url, {
             method: "POST",
             body: JSON.stringify(payload),
         });
 
         const body = await response.json();
-        console.log("Received: ", body);
-
         if (response.status !== 200) {
-            return {error: (<ErrorType>body).error};
+            return {error: (<ErrorResponsePayload>body).error};
         }
 
-        return {data: body as OutputType};
+        return {data: (<PostResponsePayload>body) as OutputType};
     } catch (error) {
         return {error: (<Error>error).message};
     }

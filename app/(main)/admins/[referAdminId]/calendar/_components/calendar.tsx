@@ -80,7 +80,7 @@ export default function Calendar() {
                 console.log(formatData(data));
                 toast({
                     title: "success",
-                    variant: "default",
+                    variant: "success",
                     description: "Get calendar succeed",
                 });
 

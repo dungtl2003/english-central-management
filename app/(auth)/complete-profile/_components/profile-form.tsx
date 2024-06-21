@@ -51,6 +51,7 @@ export function ProfileForm() {
         onSuccess: (): void => {
             toast({
                 title: "Success",
+                variant: "success",
                 description: "Completed sign up",
             });
         },

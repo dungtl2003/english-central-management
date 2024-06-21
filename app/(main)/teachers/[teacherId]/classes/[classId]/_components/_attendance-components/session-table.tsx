@@ -90,7 +90,13 @@ const formatData = (data: OutputType | undefined): SessionTableModel[] => {
                 students: [],
                 studyHour: data.unit.studyHour,
                 studyMinute: data.unit.studyMinute,
-                attendances: attendances,
+                attendances: attendances.sort((s1, s2) =>
+                    s1.fullName === s2.fullName
+                        ? 0
+                        : s1.fullName < s2.fullName
+                          ? -1
+                          : 1
+                ),
             });
         });
 

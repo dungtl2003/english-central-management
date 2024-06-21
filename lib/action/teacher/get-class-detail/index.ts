@@ -1,4 +1,4 @@
-import {ErrorType} from "../../generic";
+import {ErrorResponsePayload} from "@/constaints";
 import {
     InputType,
     OutputType,
@@ -9,6 +9,32 @@ import {
 interface AttendancesByMonthYear {
     [monthYear: string]: number;
 }
+
+export const handler = async (data: InputType): Promise<ReturnType> => {
+    console.log("Timestamp: ", new Date().toLocaleString());
+
+    const domain = process.env.NEXT_PUBLIC_DOMAIN;
+    const protocol = process.env.NEXT_PUBLIC_PROTOCOL;
+    const classId = data.classId;
+
+    try {
+        const getClassUrl = `${protocol}://${domain}/api/v2/classes/${classId}`;
+        const getClassResponse = await fetch(getClassUrl, {
+            method: "GET",
+        });
+
+        const getClassPayload = await getClassResponse.json();
+        if (getClassResponse.status !== 200) {
+            throw new Error((<ErrorResponsePayload>getClassPayload).error);
+        }
+
+        const data = getClassPayload as OutputType;
+        updateData(data);
+        return {data: data};
+    } catch (error) {
+        return {error: (<Error>error).message};
+    }
+};
 
 const updateData = (data: OutputType): void => {
     data!.students.forEach((student) => {
@@ -77,37 +103,4 @@ const updateData = (data: OutputType): void => {
             } as TotalPriceByMonthYear);
         }
     });
-};
-
-export const handler = async (data: InputType): Promise<ReturnType> => {
-    console.log("Timestamp: ", new Date().toLocaleString());
-
-    const domain = process.env.NEXT_PUBLIC_DOMAIN;
-    const protocol = process.env.NEXT_PUBLIC_PROTOCOL;
-    const teacherId = data.teacherId;
-    const classId = data.classId;
-
-    const url = `${protocol}://${domain}/api/teachers/${teacherId}/classes/${classId}`;
-
-    console.log(`Sending GET request to ${url}`);
-
-    try {
-        const response = await fetch(url, {
-            method: "GET",
-        });
-
-        const body = await response.json();
-        console.log("Received: ", body);
-
-        if (response.status !== 200) {
-            return {error: (<ErrorType>body).error};
-        }
-
-        const data = body as OutputType;
-        updateData(data);
-        console.log(data);
-        return {data: data};
-    } catch (error) {
-        return {error: (<Error>error).message};
-    }
 };

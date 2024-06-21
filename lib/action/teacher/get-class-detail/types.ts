@@ -3,6 +3,7 @@ import {RequestSchema} from "./schema";
 import {ActionState} from "@/lib/create-safe-action";
 import {
     Attendance,
+    ChildrenParents,
     Class,
     Parent,
     Session,
@@ -37,11 +38,11 @@ export type OutputType =
               student: Student & {
                   user: User;
                   tuitions: Tuition[];
-                  parents: {
+                  parents: ({
                       parent: Parent & {
                           user: User;
                       };
-                  }[];
+                  } & ChildrenParents)[];
                   attendances: (Attendance & {
                       session: Session;
                   })[];

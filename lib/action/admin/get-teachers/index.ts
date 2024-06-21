@@ -1,12 +1,14 @@
+import {AdminGetResponsePayload} from "@/app/api/v2/users/teachers/types";
 import {OutputType, ReturnType} from "./types";
+import {ErrorResponsePayload} from "@/constaints";
 
-export async function handle(): Promise<ReturnType> {
+export async function handler(): Promise<ReturnType> {
     console.log("Timestamp: ", new Date().toLocaleString());
 
     const domain = process.env.NEXT_PUBLIC_DOMAIN;
     const protocol = process.env.NEXT_PUBLIC_PROTOCOL;
 
-    const url = `${protocol}://${domain}/api/teachers`;
+    const url = `${protocol}://${domain}/api/v2/users/teachers`;
 
     console.log(`Sending GET request to ${url}`);
 
@@ -16,15 +18,16 @@ export async function handle(): Promise<ReturnType> {
         });
 
         const body = await response.json();
-        console.log("Received:", body);
 
         if (response.status !== 200) {
-            return {error: body}; //TODO: fix later - body not string
+            return {error: (<ErrorResponsePayload>body).error};
         }
 
-        const data = body as OutputType;
+        const data = (<AdminGetResponsePayload>body) as OutputType;
         return {data: data};
     } catch (error) {
-        return {error: (<Error>error).message};
+        const msg = (<Error>error).message;
+        console.error("Error:", msg);
+        return {error: msg};
     }
 }

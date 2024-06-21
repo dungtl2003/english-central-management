@@ -63,14 +63,4 @@ export const PayloadSchema = z.object({
     payments: z.array(PaymentSchema),
 });
 
-export const RequestSchema = z
-    .object({
-        referTeacherId: z
-            .string({
-                required_error: "Teacher ID is required",
-                invalid_type_error: "Teacher ID must be a string",
-                description: "Refer ID of the teacher",
-            })
-            .min(1, "ID is too short"),
-    })
-    .merge(PayloadSchema);
+export const RequestSchema = PayloadSchema;
