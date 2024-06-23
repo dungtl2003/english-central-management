@@ -74,7 +74,7 @@ const StudentListTable = (): ReactElement => {
     });
 
     return (
-        <div className="w-[80%] pt-[120px]">
+        <div className="w-[80%] pt-[100px]">
             <StudentListFilter
                 table={table}
                 selectedStatus={selectedStatus}

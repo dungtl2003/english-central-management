@@ -43,7 +43,7 @@ const tickFormat = (tick: number | Date) => {
 
 const ClassChart = (): ReactElement => {
     return (
-        <div className="w-full p-0 m-0 max-h-[320px] text-black">
+        <div className="w-full p-0 pt-5 px-2 m-0 max-h-[320px] text-black">
             <VisXYContainer data={data}>
                 <VisAxis
                     gridLine={false}

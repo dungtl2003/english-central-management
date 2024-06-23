@@ -12,7 +12,7 @@ const ClassBasicInfomation = (): ReactElement => {
                     <CardHeader className="text-2xl font-semibold">
                         Class information
                     </CardHeader>
-                    <CardContent className="">
+                    <CardContent className="px-4">
                         <div className="pb-3 grid grid-cols-4 items-center gap-x-3">
                             <Label htmlFor="className" className="text-left">
                                 Class name
