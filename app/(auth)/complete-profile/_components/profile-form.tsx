@@ -15,13 +15,14 @@ import {
 import {RoleSelector} from "@/app/(auth)/complete-profile/_components/select-role";
 
 import {Loader2} from "lucide-react";
-import {useAction} from "@/hooks/use-action";
+import {UseActionOptions, useAction} from "@/hooks/use-action";
 import {handler} from "@/lib/action/add-user-role";
-import {useRouter} from "next/navigation";
 import {useToast} from "@/components/ui/use-toast";
 import {useUser} from "@clerk/nextjs";
-import {useEffect, useMemo} from "react";
+import {useCallback, useEffect, useMemo, useState} from "react";
 import {PublicMetadata} from "@/constaints";
+import {OutputType} from "@/lib/action/add-user-role/types";
+import {useRouter} from "next/navigation";
 
 const FormSchema = z.object({
     role: z.string().min(1, {
@@ -33,54 +34,53 @@ type FormData = z.infer<typeof FormSchema>;
 
 export function ProfileForm() {
     const {user, isSignedIn, isLoaded} = useUser();
-    const metadata = useMemo(
-        () => user?.publicMetadata as PublicMetadata,
-        [user]
-    );
     const router = useRouter();
+    const [disabled, setDisabled] = useState<boolean>(false);
     const {toast} = useToast();
-    const {execute, isLoading, data} = useAction(handler, {
-        onError: (error: string): void => {
-            console.log("Error: ", error);
-            toast({
-                title: "Uh oh!",
-                variant: "destructive",
-                description: "Something went wrong, please try again later",
-            });
-        },
-        onSuccess: (): void => {
-            toast({
-                title: "Success",
-                variant: "success",
-                description: "Completed sign up",
-            });
-        },
-    });
+
+    const memoEvent = useMemo(() => {
+        return {
+            onError: (error: string): void => {
+                console.error("Error: ", error);
+                toast({
+                    title: "Uh oh!",
+                    variant: "destructive",
+                    description: "Something went wrong, please try again later",
+                });
+            },
+            onSuccess: (): void => {
+                toast({
+                    title: "Success",
+                    variant: "success",
+                    description: "Completed sign up",
+                });
+                setDisabled(true);
+                window.location.href = "/";
+            },
+        } as UseActionOptions<OutputType>;
+    }, [toast]);
+    const memoHandler = useCallback(handler, []);
+    const role = (user?.publicMetadata as PublicMetadata)?.role;
+    const {execute, isLoading} = useAction(memoHandler, memoEvent);
     const form = useForm<FormData>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
             role: "",
         },
     });
-
-    useEffect(() => {
-        async function redirect() {
-            if (data) {
-                await user!.reload();
-                router.push("/");
-            }
-        }
-
-        redirect();
-    }, [data, router, user]);
+    const title = disabled
+        ? "Redirecting"
+        : isLoading
+          ? "Please wait"
+          : "Continue";
 
     useEffect(() => {
         if (!isLoaded) return;
 
-        if (!isSignedIn || metadata.role) {
+        if (!isSignedIn || role) {
             router.push("/");
         }
-    }, [isLoaded, isSignedIn, router, metadata]);
+    }, [isLoaded, isSignedIn, router, role]);
 
     function onSubmit(values: FormData) {
         execute({
@@ -117,14 +117,11 @@ export function ProfileForm() {
                         />
                     </div>
                     <div className="flex justify-center">
-                        <Button
-                            type="submit"
-                            disabled={isLoading || data !== undefined}
-                        >
-                            {isLoading && (
+                        <Button type="submit" disabled={isLoading || disabled}>
+                            {(isLoading || disabled) && (
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                             )}
-                            {isLoading ? "Please wait" : "Continue"}
+                            {title}
                         </Button>
                     </div>
                 </form>

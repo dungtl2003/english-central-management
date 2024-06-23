@@ -61,7 +61,7 @@ export function TeacherTable() {
     const event: UseActionOptions<OutputType> = useMemo(() => {
         return {
             onError: (error: string) => {
-                console.log("Error: ", error);
+                console.error("Error: ", error);
                 toast({
                     title: "error",
                     variant: "destructive",
@@ -75,7 +75,7 @@ export function TeacherTable() {
             },
         };
     }, []);
-    const {isLoaded, userId} = useAuth();
+    const {isLoaded, userId, isSignedIn} = useAuth();
     const {execute} = useAction(fetchClassesHandler, event);
     const [isLoading, setIsLoading] = useState(true);
     const [displayData, setDisplayData] = useState<ClassInfo[] | undefined>(
@@ -103,9 +103,9 @@ export function TeacherTable() {
     });
 
     useEffect(() => {
-        if (!isLoaded) return;
-        execute({referTeacherId: userId!});
-    }, [isLoaded, userId, execute]);
+        if (!isLoaded || !isSignedIn || !userId) return;
+        execute({referTeacherId: userId});
+    }, [isLoaded, userId, execute, isSignedIn]);
 
     return (
         <>

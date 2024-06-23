@@ -1,5 +1,5 @@
 import {UserRole} from "@prisma/client";
-import {Body, InputType, ReturnType} from "./types";
+import {Body, InputType, OutputType, ReturnType} from "./types";
 import {ErrorResponsePayload} from "@/constaints";
 
 export const handler = async (data: InputType): Promise<ReturnType> => {
@@ -30,7 +30,7 @@ export const handler = async (data: InputType): Promise<ReturnType> => {
             return {error: (<ErrorResponsePayload>body).error};
         }
 
-        return {data: JSON.stringify(body)};
+        return {data: body as OutputType};
     } catch (error) {
         return {error: (<Error>error).message};
     }

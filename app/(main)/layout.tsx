@@ -8,10 +8,10 @@ import {ReactElement, useEffect, useMemo} from "react";
 const MainLayout: React.FC<{children: React.ReactNode}> = ({
     children,
 }): ReactElement => {
-    const router = useRouter();
     const {isSignedIn, user, isLoaded} = useUser();
-    const metadata = useMemo(
-        () => user?.publicMetadata as PublicMetadata,
+    const router = useRouter();
+    const role = useMemo(
+        () => (user?.publicMetadata as PublicMetadata)?.role,
         [user]
     );
 
@@ -19,13 +19,14 @@ const MainLayout: React.FC<{children: React.ReactNode}> = ({
         if (!isLoaded) return;
 
         if (!isSignedIn) {
-            router.push("/404");
+            router.push("/sign-in");
+            return;
         }
 
-        if (!metadata || !metadata.role) {
+        if (!role) {
             router.push("/complete-profile");
         }
-    }, [isLoaded, isSignedIn, metadata, router]);
+    }, [isLoaded, isSignedIn, router, role]);
 
     return (
         <>

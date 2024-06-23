@@ -1,37 +1,45 @@
 "use client";
 
-import {ReactElement, useCallback, useEffect} from "react";
+import {ReactElement, useCallback, useEffect, useMemo} from "react";
 import TeacherNavigation from "./_components/teacher-navigation";
 import {useAuth} from "@clerk/nextjs";
-import {useRouter} from "next/navigation";
-import {useAction} from "@/hooks/use-action";
+import {UseActionOptions, useAction} from "@/hooks/use-action";
 import {handler} from "@/lib/action/teacher/get-teacher-detail";
-
-const event = {};
+import {OutputType} from "@/lib/action/teacher/get-teacher-detail/types";
+import {useRouter} from "next/navigation";
 
 const TeachersLayout: React.FC<{
     children: React.ReactNode;
     params: {teacherId: string};
 }> = ({children, params}): ReactElement => {
-    const {userId, isLoaded} = useAuth();
+    const {userId: referUserId, isLoaded, isSignedIn} = useAuth();
     const router = useRouter();
+    const referTeacherId = params.teacherId;
+    const memoEvent = useMemo(() => {
+        return {} as UseActionOptions<OutputType>;
+    }, []);
     const fetchTeacherHandler = useCallback(handler, []);
-    const {data, execute} = useAction(fetchTeacherHandler, event);
+    const {data, execute} = useAction(fetchTeacherHandler, memoEvent);
 
     useEffect(() => {
-        if (!isLoaded) return;
+        if (
+            !isLoaded ||
+            !isSignedIn ||
+            !referUserId ||
+            referUserId !== referTeacherId
+        )
+            return;
 
-        execute({referTeacherId: params.teacherId});
-    }, [isLoaded, params.teacherId, execute]);
+        execute({referTeacherId: referTeacherId});
+    }, [isLoaded, referTeacherId, execute, referUserId, isSignedIn]);
 
     useEffect(() => {
-        if (!isLoaded) return;
+        if (!isLoaded || !referUserId) return;
 
-        const teacherId = params.teacherId;
-        if (teacherId !== userId) {
+        if (referUserId !== referTeacherId) {
             router.push("/404");
         }
-    }, [isLoaded, params.teacherId, userId, router]);
+    }, [isLoaded, referTeacherId, referUserId, router]);
 
     return (
         <>

@@ -35,7 +35,6 @@ import {Button} from "@/components/ui/button";
 import {FaArrowUpRightFromSquare} from "react-icons/fa6";
 import Link from "next/link";
 import {useUser} from "@clerk/nextjs";
-import {useRouter} from "next/navigation";
 
 function createColumns(key: string, title: string): ColumnDef<TeacherListData> {
     return {
@@ -115,7 +114,6 @@ function getMonthlySalary(baseSalary: number, acceptedAt: Date): number {
 
 const TeacherListTable = (): ReactElement => {
     const {user} = useUser();
-    const router = useRouter();
     const currentUrl = `/admins/${user?.id}/teachers`;
 
     const columns: ColumnDef<TeacherListData>[] =
@@ -128,15 +126,14 @@ const TeacherListTable = (): ReactElement => {
     const event: UseActionOptions<OutputType> = useMemo(() => {
         return {
             onError: (error: string) => {
-                console.log("Error: ", error);
-                router.push("/404");
+                console.error("Error: ", error);
             },
             onSuccess: (data: OutputType) => {
                 setTeachers(formatData(data));
                 setIsLoading(false);
             },
         };
-    }, [router]);
+    }, []);
     const {execute} = useAction<void, OutputType>(fetchData, event);
     useEffect(() => {
         execute();
