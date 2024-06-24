@@ -19,27 +19,26 @@ import {format, parse} from "date-fns";
 import {TeacherStatus} from "@prisma/client";
 
 const formatData = (
-    salaryDetailDatas: SalaryDetailData[] | undefined,
+    salaryDetailData: SalaryDetailData[] | undefined,
     acceptDate: Date | undefined,
-    baseSalary: string,
     monthlySalary: string
 ): SalaryDetailTableData[] => {
-    if (!salaryDetailDatas || !acceptDate) return [];
+    if (!salaryDetailData || !acceptDate) return [];
 
-    const salaryDetailTableDatas: SalaryDetailTableData[] = [];
+    const salaryDetailTableData: SalaryDetailTableData[] = [];
 
     let lastMonth: number = 0;
     let lastYear: number = 0;
 
     //If have payments
-    if (salaryDetailDatas.length !== 0) {
-        salaryDetailDatas.sort((a, b) => {
+    if (salaryDetailData.length !== 0) {
+        salaryDetailData.sort((a, b) => {
             return a.year === b.year
                 ? Number(a.month) - Number(b.month)
                 : Number(a.year) - Number(b.year);
         });
-        salaryDetailDatas.forEach((e) => {
-            const salaryDetailTableData: SalaryDetailTableData = {
+        salaryDetailData.forEach((e) => {
+            const d: SalaryDetailTableData = {
                 monthlyPaymentId: e.monhthlyPaymentId,
                 amount: e.salary,
                 month: (Number(e.month) + 1).toString(),
@@ -51,13 +50,13 @@ const formatData = (
                 ),
                 status: "PAID" as SalaryDetailStatus,
             };
-            salaryDetailTableDatas.push(salaryDetailTableData);
+            salaryDetailTableData.push(d);
         });
         lastMonth = Number(
-            salaryDetailTableDatas[salaryDetailTableDatas.length - 1].month
+            salaryDetailTableData[salaryDetailTableData.length - 1].month
         );
         lastYear = Number(
-            salaryDetailTableDatas[salaryDetailTableDatas.length - 1].year
+            salaryDetailTableData[salaryDetailTableData.length - 1].year
         );
     }
 
@@ -85,7 +84,7 @@ const formatData = (
 
         if (lastYear >= yearCurrent && lastMonth >= monthCurrent) break;
 
-        const salaryDetailTableData: SalaryDetailTableData = {
+        const d: SalaryDetailTableData = {
             monthlyPaymentId: undefined,
             amount: monthlySalary,
             month: lastMonth.toString(),
@@ -97,18 +96,18 @@ const formatData = (
                     : lastMonth + "/" + lastYear,
             status: "DEBT" as SalaryDetailStatus,
         };
-        salaryDetailTableDatas.push(salaryDetailTableData);
+        salaryDetailTableData.push(d);
     }
-    salaryDetailTableDatas.reverse();
+    salaryDetailTableData.reverse();
 
-    return salaryDetailTableDatas;
+    return salaryDetailTableData;
 };
 
 const SalaryDetailTable = ({
     setIsUpdating,
     teacherId,
     teacherStatus,
-    salaryDetailDatas,
+    salaryDetailData,
     baseSalary,
     monthlySalary,
     acceptDate,
@@ -116,18 +115,17 @@ const SalaryDetailTable = ({
     setIsUpdating: (v: boolean) => void;
     teacherId: string;
     teacherStatus: TeacherStatus;
-    salaryDetailDatas: SalaryDetailData[] | undefined;
+    salaryDetailData: SalaryDetailData[] | undefined;
     baseSalary: string;
     monthlySalary: string;
     acceptDate: string;
 }): ReactElement => {
     const [data, setData] = useState(
         formatData(
-            salaryDetailDatas,
+            salaryDetailData,
             acceptDate
                 ? parse(acceptDate, "dd/MM/yyyy", new Date())
                 : undefined,
-            baseSalary,
             monthlySalary
         )
     );
@@ -135,15 +133,14 @@ const SalaryDetailTable = ({
     useEffect(() => {
         setData(
             formatData(
-                salaryDetailDatas,
+                salaryDetailData,
                 acceptDate
                     ? parse(acceptDate, "dd/MM/yyyy", new Date())
                     : undefined,
-                baseSalary,
                 monthlySalary
             )
         );
-    }, [salaryDetailDatas, acceptDate, baseSalary, monthlySalary]);
+    }, [salaryDetailData, acceptDate, baseSalary, monthlySalary]);
 
     const [rowSelection, setRowSelection] = React.useState({});
     const [pagination, setPagination] = React.useState<PaginationState>({

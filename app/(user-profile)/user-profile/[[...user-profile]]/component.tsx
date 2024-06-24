@@ -44,7 +44,12 @@ export const UserIdField = (form: UseFormReturn, userId: string) => {
                 <FormItem>
                     <FormLabel className="text-md">User ID</FormLabel>
                     <FormControl>
-                        <Input value={userId} type="text" readOnly />
+                        <Input
+                            className="border-slate-800 bg-slate-950 ring-offset-slate-950 placeholder:text-slate-400 focus-visible:ring-slate-300"
+                            value={userId}
+                            type="text"
+                            readOnly
+                        />
                     </FormControl>
                     <FormMessage />
                 </FormItem>
@@ -67,6 +72,7 @@ export const PhoneNumberField = (
                     <FormControl>
                         <Input
                             {...form.register("phoneNumber")}
+                            className="border-slate-800 bg-slate-950 ring-offset-slate-950 placeholder:text-slate-400 focus-visible:ring-slate-300"
                             defaultValue={phoneNumber}
                             type="text"
                             onKeyDown={(e) => {
@@ -99,6 +105,7 @@ export const IdentityCardField = (
                         <>
                             <Input
                                 {...form.register("identityCard")}
+                                className="border-slate-800 bg-slate-950 ring-offset-slate-950 placeholder:text-slate-400 focus-visible:ring-slate-300"
                                 defaultValue={identityCard}
                                 type="text"
                             />
@@ -120,7 +127,12 @@ export const RoleField = (form: UseFormReturn, role: string | undefined) => {
                 <FormItem>
                     <FormLabel className="text-md">Role</FormLabel>
                     <FormControl>
-                        <Input defaultValue={role} type="text" readOnly />
+                        <Input
+                            className="border-slate-800 bg-slate-950 ring-offset-slate-950 placeholder:text-slate-400 focus-visible:ring-slate-300"
+                            defaultValue={role}
+                            type="text"
+                            readOnly
+                        />
                     </FormControl>
                     <FormMessage />
                 </FormItem>
@@ -145,11 +157,11 @@ export const GenderField = (
                         defaultValue={field.value || gender}
                     >
                         <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger className="border-slate-800 bg-slate-950 ring-offset-slate-950 placeholder:text-slate-400 focus:ring-slate-300">
                                 <SelectValue placeholder="Choose gender" />
                             </SelectTrigger>
                         </FormControl>
-                        <SelectContent>
+                        <SelectContent className="border-slate-800 bg-slate-950 text-slate-50">
                             <SelectItem value="MALE">Male</SelectItem>
                             <SelectItem value="FEMALE">Female</SelectItem>
                             <SelectItem value="OTHERS">Others</SelectItem>
@@ -182,7 +194,7 @@ export const BirthdayField = (
                                         <CalendarIcon className="mr-2 h-4 w-4 hover:cursor-pointer" />
                                     </span>
                                 </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0">
+                                <PopoverContent className="w-auto p-0 border-slate-800 bg-slate-950 text-slate-50">
                                     <Calendar
                                         defaultMonth={birthday}
                                         month={
@@ -226,6 +238,7 @@ export const BirthdayField = (
                             </Popover>
                         </FormLabel>
                         <Input
+                            className="border-slate-800 bg-slate-950 ring-offset-slate-950 placeholder:text-slate-400 focus-visible:ring-slate-300"
                             type="text"
                             placeholder="dd/MM/yyyy"
                             defaultValue={
@@ -271,6 +284,7 @@ export const CreateDateField = (
                     <FormLabel className="text-md">Create date</FormLabel>
                     <FormControl>
                         <Input
+                            className="border-slate-800 bg-slate-950 ring-offset-slate-950 placeholder:text-slate-400 focus-visible:ring-slate-300"
                             defaultValue={
                                 createDate
                                     ? format(new Date(createDate), "dd/MM/yyyy")
@@ -300,6 +314,7 @@ export const UpdateDateField = (
                     <FormLabel className="text-md">Update date</FormLabel>
                     <FormControl>
                         <Input
+                            className="border-slate-800 bg-slate-950 ring-offset-slate-950 placeholder:text-slate-400 focus-visible:ring-slate-300"
                             defaultValue={
                                 updateDate
                                     ? format(new Date(updateDate), "dd/MM/yyyy")

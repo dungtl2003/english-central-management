@@ -13,10 +13,11 @@ import {InputType, OutputType} from "@/lib/action/admin/update-teacher/types";
 import {toast} from "@/components/ui/use-toast";
 import {parse} from "date-fns";
 import {LoadingUpdate} from "../loading-update-data";
+import {roundUp} from "@/lib/utils";
 
 const SalaryDetailTab = ({
     teacherId,
-    salaryDetailDatas,
+    salaryDetailData,
     teacherStatus,
     acceptDate,
     baseSalary,
@@ -25,7 +26,7 @@ const SalaryDetailTab = ({
     setMonthlySalary,
 }: {
     teacherId: string;
-    salaryDetailDatas: SalaryDetailData[] | undefined;
+    salaryDetailData: SalaryDetailData[] | undefined;
     teacherStatus: TeacherStatus;
     acceptDate: string;
     baseSalary: string;
@@ -72,7 +73,7 @@ const SalaryDetailTab = ({
                 setIsUpdating(true);
                 setBaseSalary(input);
                 setMonthlySalary(
-                    (Number(input) * (1 + seniority / 10)).toString()
+                    roundUp(Number(input) * (1 + seniority / 10), 2).toString()
                 );
                 execute({
                     teacherId: teacherId,
@@ -168,7 +169,7 @@ const SalaryDetailTab = ({
                             teacherStatus={teacherStatus}
                             setIsUpdating={setIsUpdating}
                             teacherId={teacherId}
-                            salaryDetailDatas={salaryDetailDatas}
+                            salaryDetailData={salaryDetailData}
                             baseSalary={baseSalary}
                             monthlySalary={monthlySalary}
                             acceptDate={acceptDate}

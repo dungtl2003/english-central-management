@@ -5,6 +5,7 @@ import {
     ReturnType,
     TotalPriceByMonthYear,
 } from "./types";
+import {roundUp} from "@/lib/utils";
 
 interface AttendancesByMonthYear {
     [monthYear: string]: number;
@@ -93,12 +94,11 @@ const updateData = (data: OutputType): void => {
                 month: Number(month),
                 year: Number(year),
                 isPaid: false,
-                totalPrice:
-                    Math.round(
-                        attendancesByMonthYear[key] *
-                            Number(data!.unit.pricePerSession) *
-                            100
-                    ) / 100,
+                totalPrice: roundUp(
+                    attendancesByMonthYear[key] *
+                        Number(data!.unit.pricePerSession),
+                    2
+                ),
                 attendances: attendancesByMonthYear[key],
             } as TotalPriceByMonthYear);
         }

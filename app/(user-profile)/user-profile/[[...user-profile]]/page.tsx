@@ -5,7 +5,7 @@ import {ReactElement, useEffect, useState} from "react";
 import {IoInformationCircle} from "react-icons/io5";
 import {IoArrowBackCircle} from "react-icons/io5";
 import * as theme from "@clerk/themes";
-import {PersonalInforPage} from "./personal-infor-page";
+import {PersonalInfoPage} from "./personal-infor-page";
 import {handler} from "@/lib/action/get-user-id";
 
 const UserProfilePage = (): ReactElement => {
@@ -30,7 +30,7 @@ const UserProfilePage = (): ReactElement => {
                     labelIcon={<IoInformationCircle size={18} />}
                     url="/personal-information"
                 >
-                    <PersonalInforPage userId={userId} />
+                    <PersonalInfoPage userId={userId} />
                 </UserProfile.Page>
 
                 <UserProfile.Link

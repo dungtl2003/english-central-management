@@ -9,11 +9,12 @@ import TeacherDetailHeader from "./teacher-detail-header";
 import TeacherDetailTabslist from "./teacher-detail-tabs-list";
 import ClassListTab from "./class-list-components/class-list-tab";
 import SalaryDetailTab from "./salary-detail-components/salary-detail-tab";
-import {OutputType as OutoutTypeGetTeacherDetai} from "@/lib/action/admin/get-teacher-detail/types";
+import {OutputType as OutputTypeGetTeacherDetail} from "@/lib/action/admin/get-teacher-detail/types";
 import {ClassListData, SalaryDetailData, TeacherDetailData} from "../types";
 import {format} from "date-fns";
 import {TeacherStatus} from "@prisma/client";
 import {LoadingUpdate} from "./loading-update-data";
+import {roundUp} from "@/lib/utils";
 
 function getMonthlySalary(baseSalary: number, acceptedAt: Date): number {
     return (
@@ -69,35 +70,35 @@ const getStatusColor = (status: string): ReactElement => {
 // const teacherId: string = "0123456789123456789132456789";
 
 const formatData = (
-    teacherDetail: OutoutTypeGetTeacherDetai | undefined
+    teacherDetail: OutputTypeGetTeacherDetail | undefined
 ): TeacherDetailData | undefined => {
     if (!teacherDetail) return undefined;
 
-    const classListDatas: ClassListData[] = [];
-    const salaryDetailDatas: SalaryDetailData[] = [];
+    const classListData: ClassListData[] = [];
+    const salaryDetailData: SalaryDetailData[] = [];
 
     teacherDetail.classes.forEach((element) => {
-        const classListData: ClassListData = {
+        const d: ClassListData = {
             classId: element.id,
             grade: element.unit.grade.toString(),
             index: element.index.toString(),
             startTime: format(element.startTime, "dd/MM/yyyy"),
             endTime: format(element.endTime, "dd/MM/yyyy"),
             year: element.unit.year.toString(),
-            price: element.unit.pricePerSession.toString(),
+            price: roundUp(Number(element.unit.pricePerSession), 2).toString(),
         };
-        classListDatas.push(classListData);
+        classListData.push(d);
     });
 
     teacherDetail.monthlyPayments.forEach((element) => {
-        const salaryDetailData: SalaryDetailData = {
+        const d: SalaryDetailData = {
             monhthlyPaymentId: element.id,
             salary: element.salary.toString(),
             month: element.month.toString(),
             year: element.year.toString(),
             paidAt: format(element.paidAt, "dd/MM/yyyy"),
         };
-        salaryDetailDatas.push(salaryDetailData);
+        salaryDetailData.push(d);
     });
 
     const teacher: TeacherDetailData = {
@@ -112,11 +113,14 @@ const formatData = (
             phoneNumber: teacherDetail.user.phoneNumber || "___",
             identityCard: teacherDetail.user.identifyCard || "___",
             gender: teacherDetail.user.gender || "___",
-            baseSalary: teacherDetail.baseSalary.toString(),
+            baseSalary: roundUp(Number(teacherDetail.baseSalary), 2).toString(),
             monthlySalary: teacherDetail.acceptedAt
-                ? getMonthlySalary(
-                      Number(teacherDetail.baseSalary),
-                      teacherDetail.acceptedAt
+                ? roundUp(
+                      getMonthlySalary(
+                          Number(teacherDetail.baseSalary),
+                          teacherDetail.acceptedAt
+                      ),
+                      2
                   ).toString()
                 : "0",
             birthday: teacherDetail.user.birthday
@@ -127,8 +131,8 @@ const formatData = (
                 ? format(teacherDetail.acceptedAt, "dd/MM/yyyy")
                 : "___",
         },
-        salaryDetailDatas: salaryDetailDatas,
-        classListDatas: classListDatas,
+        salaryDetailData: salaryDetailData,
+        classListData: classListData,
     };
 
     return teacher;
@@ -137,7 +141,7 @@ const formatData = (
 const TeacherDetail = ({
     teacherDetail,
 }: {
-    teacherDetail: OutoutTypeGetTeacherDetai | undefined;
+    teacherDetail: OutputTypeGetTeacherDetail | undefined;
 }): ReactElement => {
     const teacher: TeacherDetailData | undefined = formatData(teacherDetail);
 
@@ -186,9 +190,7 @@ const TeacherDetail = ({
                                 />
                                 <SalaryDetailTab
                                     teacherId={teacher?.teacherId as string}
-                                    salaryDetailDatas={
-                                        teacher?.salaryDetailDatas
-                                    }
+                                    salaryDetailData={teacher?.salaryDetailData}
                                     teacherStatus={
                                         teacher?.status as TeacherStatus
                                     }
@@ -202,7 +204,7 @@ const TeacherDetail = ({
                                     setMonthlySalary={setMonthlySalary}
                                 />
                                 <ClassListTab
-                                    classListDatas={teacher?.classListDatas}
+                                    classListData={teacher?.classListData}
                                 />
                             </div>
                         </Tabs>

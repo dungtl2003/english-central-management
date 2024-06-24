@@ -36,6 +36,7 @@ import {FaArrowUpRightFromSquare} from "react-icons/fa6";
 import Link from "next/link";
 import {useUser} from "@clerk/nextjs";
 import {toast} from "@/components/ui/use-toast";
+import {roundUp} from "@/lib/utils";
 
 function createColumns(key: string, title: string): ColumnDef<TeacherListData> {
     return {
@@ -89,9 +90,12 @@ const formatData = (data: OutputType | undefined): TeacherListData[] => {
             teacherId: element.id,
             fullName: element.user.lastName + " " + element.user.firstName,
             salary: element.acceptedAt
-                ? getMonthlySalary(
-                      Number(element.baseSalary),
-                      element.acceptedAt
+                ? roundUp(
+                      getMonthlySalary(
+                          Number(element.baseSalary),
+                          element.acceptedAt
+                      ),
+                      2
                   ).toString()
                 : "0",
             startDate: element.acceptedAt

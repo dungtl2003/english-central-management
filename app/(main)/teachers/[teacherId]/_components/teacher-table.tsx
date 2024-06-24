@@ -21,7 +21,7 @@ import {handler} from "@/lib/action/teacher/get-classes";
 import {OutputType} from "@/lib/action/teacher/get-classes/types";
 import {toast} from "@/components/ui/use-toast";
 import {useAuth} from "@clerk/nextjs";
-import {concatName} from "@/lib/utils";
+import {concatName, roundUp} from "@/lib/utils";
 import {
     SkeletonTableContent,
     SkeletonTableFilter,
@@ -45,7 +45,7 @@ const formatData = (fetchedData: OutputType): ClassInfo[] | undefined => {
             year: String(data.unit.year),
             start: format(data.startTime, "dd/MM/yyyy"),
             end: format(data.endTime, "dd/MM/yyyy"),
-            price: "$" + Number(data.unit.pricePerSession),
+            price: "$" + roundUp(Number(data.unit.pricePerSession), 2),
         })
     );
 

@@ -3,8 +3,8 @@ export type TeacherDetailData = {
     status: string;
     imageUrl: string;
 } & {teacherInformationData: TeacherInformationData} & {
-    salaryDetailDatas: SalaryDetailData[];
-} & {classListDatas: ClassListData[]};
+    salaryDetailData: SalaryDetailData[];
+} & {classListData: ClassListData[]};
 
 export type TeacherInformationData = {
     firstName: string;

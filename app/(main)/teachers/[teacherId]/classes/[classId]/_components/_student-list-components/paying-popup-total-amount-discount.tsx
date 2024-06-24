@@ -1,5 +1,6 @@
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
+import {roundUp} from "@/lib/utils";
 import {ReactElement} from "react";
 
 const PayingPopupTotalAmountDiscount: React.FC<{
@@ -14,7 +15,7 @@ const PayingPopupTotalAmountDiscount: React.FC<{
                 id="totalWithDiscount"
                 type="text"
                 className="mt-1"
-                value={`$${Math.round(totalAmountWithDiscount * 100) / 100}`}
+                value={`$${roundUp(totalAmountWithDiscount, 2)}`}
                 readOnly
             />
         </div>

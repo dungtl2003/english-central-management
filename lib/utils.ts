@@ -17,12 +17,11 @@ export function delay(ms: number) {
  * Returns a random number between min (inclusive) and max (exclusive)
  */
 export function getRandomArbitrary(min: number, max: number, round: number) {
-    return (
-        Math.round(
-            (Math.random() * (max - min) + min + Number.EPSILON) *
-                Math.pow(10, round)
-        ) / Math.pow(10, round)
-    );
+    return roundUp(Math.random() * (max - min) + min + Number.EPSILON, round);
+}
+
+export function roundUp(n: number, round: number) {
+    return Math.round(n * Math.pow(10, round)) / Math.pow(10, round);
 }
 
 /**

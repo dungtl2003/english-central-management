@@ -2,6 +2,7 @@ import React, {ReactElement} from "react";
 import OverviewCardContent from "./overview-card-content";
 import {OutputType} from "@/lib/action/teacher/get-class-detail/types";
 import {OverviewCardData, OverviewTitle} from "./types";
+import {roundUp} from "@/lib/utils";
 
 const formatData = (data: OutputType | undefined): OverviewCardData => {
     return {
@@ -12,7 +13,9 @@ const formatData = (data: OutputType | undefined): OverviewCardData => {
               )
             : "",
         classGoal: data ? String(data.unit.maxSessions) : "",
-        pricePerSession: data ? `$${Number(data.unit.pricePerSession)}` : "",
+        pricePerSession: data
+            ? `$${roundUp(Number(data.unit.pricePerSession), 2)}`
+            : "",
     };
 };
 

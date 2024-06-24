@@ -69,12 +69,12 @@ const createColumns = (adminId: string): ColumnDef<ClasslistTableData>[] => {
 };
 
 const formatData = (
-    classListDatas: ClassListData[] | undefined
+    classListData: ClassListData[] | undefined
 ): ClasslistTableData[] => {
-    if (!classListDatas) return [];
-    const classListTableDatas: ClasslistTableData[] = [];
-    classListDatas.forEach((e) => {
-        const classListTableData: ClasslistTableData = {
+    if (!classListData) return [];
+    const classListTableData: ClasslistTableData[] = [];
+    classListData.forEach((e) => {
+        const d: ClasslistTableData = {
             classId: e.classId,
             grade: e.grade,
             index: e.index,
@@ -84,22 +84,22 @@ const formatData = (
             price: e.price,
             className: e.grade + "." + e.index,
         };
-        classListTableDatas.push(classListTableData);
+        classListTableData.push(d);
     });
-    return classListTableDatas;
+    return classListTableData;
 };
 
 const ClassListTab = ({
-    classListDatas,
+    classListData,
 }: {
-    classListDatas: ClassListData[] | undefined;
+    classListData: ClassListData[] | undefined;
 }): ReactElement => {
     const {adminId} = useParams();
     const columns: ColumnDef<ClasslistTableData>[] = createColumns(
         adminId as string
     );
 
-    const [data] = useState<ClasslistTableData[]>(formatData(classListDatas));
+    const [data] = useState<ClasslistTableData[]>(formatData(classListData));
     const [sorting, _setSorting] = React.useState<SortingState>([]);
     const [pagination, setPagination] = React.useState<PaginationState>({
         pageIndex: 0,

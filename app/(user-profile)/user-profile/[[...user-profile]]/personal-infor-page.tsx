@@ -1,13 +1,13 @@
 "use client";
 
 import {useUser} from "@clerk/nextjs";
-import {ReactElement} from "react";
+import {ReactElement, useCallback, useMemo} from "react";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useForm} from "react-hook-form";
 import {z} from "zod";
 import {Button} from "@/components/ui/button";
 import {Form} from "@/components/ui/form";
-import {toast} from "@/components/ui/use-toast";
+import {useToast} from "@/components/ui/use-toast";
 import {PublicMetadata, UnsafeMetadata} from "@/constaints";
 import {Gender} from "@prisma/client";
 import {
@@ -25,7 +25,10 @@ import {
     UpdateDateField,
     UserIdField,
 } from "./component";
-import {format} from "date-fns";
+import {UseActionOptions, useAction} from "@/hooks/use-action";
+import {handler} from "@/lib/action/update-profile";
+import {OutputType} from "@/lib/action/update-profile/types";
+import {Loader2} from "lucide-react";
 
 const FormSchema = z
     .object({
@@ -42,10 +45,32 @@ const FormSchema = z
 
 export type FormSchema = z.infer<typeof FormSchema>;
 
-export const PersonalInforPage: React.FC<{
+export const PersonalInfoPage: React.FC<{
     userId: string;
 }> = ({userId}): ReactElement => {
     const {user} = useUser();
+    const {toast} = useToast();
+    const memoHandler = useCallback(handler, []);
+    const memoEvent = useMemo(() => {
+        return {
+            onError(error) {
+                console.error("Error: ", error);
+                toast({
+                    title: "Error",
+                    variant: "destructive",
+                    description: "Failed to update profile",
+                });
+            },
+            onSuccess() {
+                toast({
+                    title: "Success",
+                    variant: "success",
+                    description: "Updated profile successfully",
+                });
+            },
+        } as UseActionOptions<OutputType>;
+    }, [toast]);
+    const {execute, isLoading} = useAction(memoHandler, memoEvent);
 
     const userData = {
         clerkData: {
@@ -83,31 +108,27 @@ export const PersonalInforPage: React.FC<{
     });
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
+        if (!user) {
+            toast({
+                title: "Error",
+                variant: "destructive",
+                description: "Something went wrong, please try again later",
+            });
+            return;
+        }
+
         const updateData = {
             phoneNumber: data.phoneNumber,
             identityCard: data.identityCard,
             birthday: data.birthday,
             gender: data.gender,
         };
-        user?.update({
+        execute({
+            referUserId: user.id,
             unsafeMetadata: updateData,
         });
-        toast({
-            title: "You updated the following values:",
-            description: (
-                <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                    <code className="text-white">
-                        {/* {JSON.stringify(data, null, 2)} */}
-                        Phone number: {data.phoneNumber} <br />
-                        Identity card: {data.identityCard} <br />
-                        Gender: {data.gender} <br />
-                        Birthday:{" "}
-                        {format(new Date(data.birthday as Date), "dd/MM/yyyy")}
-                    </code>
-                </pre>
-            ),
-        });
     }
+
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
@@ -125,12 +146,20 @@ export const PersonalInforPage: React.FC<{
                 </div>
                 <div className="grid grid-cols-2 gap-x-2">
                     <div className="flex w-full justify-center">
-                        <Button className="min-w-[50%]" type="submit">
-                            Update
+                        <Button
+                            disabled={isLoading}
+                            className="min-w-[50%] bg-slate-50 text-slate-900 hover:bg-slate-50/90"
+                            type="submit"
+                        >
+                            {isLoading && (
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            )}
+                            {isLoading ? "Please wait..." : "Update"}
                         </Button>
                     </div>
                     <div className="flex w-full justify-center">
                         <Button
+                            disabled={isLoading}
                             className="min-w-[50%]"
                             variant="destructive"
                             type="reset"
