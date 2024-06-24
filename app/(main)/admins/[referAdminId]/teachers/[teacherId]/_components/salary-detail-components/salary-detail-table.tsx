@@ -17,6 +17,7 @@ import {SalaryDetailStatus, SalaryDetailTableData} from "./types";
 import {SalaryDetailData} from "../../types";
 import {format, parse} from "date-fns";
 import {TeacherStatus} from "@prisma/client";
+import {roundUp} from "@/lib/utils";
 
 const formatData = (
     salaryDetailData: SalaryDetailData[] | undefined,
@@ -192,9 +193,13 @@ const SalaryDetailTable = ({
     // Đoạn này có cảnh báo gì đó nhớ check xem có ảnh hưởng ko
     const rowsSelected = table.getSelectedRowModel().rows;
     const selectedTotal = React.useMemo(() => {
-        return table
-            .getSelectedRowModel()
-            .rows.reduce((sum, row) => sum + Number(row.original.amount), 0);
+        return roundUp(
+            rowsSelected.reduce(
+                (sum, row) => sum + Number(row.original.amount),
+                0
+            ),
+            2
+        );
     }, [rowsSelected]);
 
     return (

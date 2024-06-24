@@ -136,7 +136,7 @@ const SalaryDetailTableContent = ({
                         Total
                     </TableCell>
                     <TableCell className="text-green-500">
-                        ${selectedTotal.toFixed(2)}
+                        ${selectedTotal}
                     </TableCell>
                     <TableCell>
                         <Button
