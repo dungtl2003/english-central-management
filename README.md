@@ -4,12 +4,13 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 # Table of content
 
-[prerequisites](#prerequisites)<br>
-[setup](#setup)<br>
-[getting started](#getting-started)<br>
-[run test (comming soon)](#run-test)<br>
-[learn more](#learn-more)<br>
-[deployment (comming soon)](#deploy-on-vercel)<br>
+[prerequisites](#-prerequisites)<br>
+[setup](#-setup)<br>
+[getting started](#-getting-started)<br>
+[run test (comming soon)](#-run-test)<br>
+[database schema](#-database-schema)<br>
+[learn more](#-learn-more)<br>
+[deployment (comming soon)](#-deploy-on-vercel)<br>
 
 ## ⇁ Prerequisites
 
@@ -26,7 +27,7 @@ install packages:
 npm install
 ```
 
-you need to have `.env` file in root project, in the file you need `key=value` each line. See list of required environment variables [here](#list-of-available-environment-variables):<br>
+you need to have `.env` file in root project, in the file you need `key=value` each line. See list of required environment variables [here](#-list-of-available-environment-variables):<br>
 
 sign in your clerk account, create a new app, then in `Configure`, choose `Sessions > Customize session token > Edit` clerk's session token, add:
 
@@ -127,6 +128,10 @@ We suggest that you begin by typing:
 ```bash
 npx playwright test
 ```
+
+## ⇁ Database schema
+
+![Schema](./public/db-schema.png)
 
 ## ⇁ Learn more
 
