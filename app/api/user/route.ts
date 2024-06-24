@@ -34,7 +34,7 @@ export async function GET(req: NextRequest) {
             await db.admin
                 .findFirst({
                     where: {
-                        userId: user?.id,
+                        id: user?.id,
                     },
                 })
                 .then((value) => (userId = value?.id));
@@ -42,7 +42,7 @@ export async function GET(req: NextRequest) {
             await db.teacher
                 .findFirst({
                     where: {
-                        userId: user?.id,
+                        id: user?.id,
                     },
                 })
                 .then((value) => (userId = value?.id));
@@ -50,7 +50,7 @@ export async function GET(req: NextRequest) {
             await db.student
                 .findFirst({
                     where: {
-                        userId: user?.id,
+                        id: user?.id,
                     },
                 })
                 .then((value) => (userId = value?.id));
@@ -58,7 +58,7 @@ export async function GET(req: NextRequest) {
             await db.parent
                 .findFirst({
                     where: {
-                        userId: user?.id,
+                        id: user?.id,
                     },
                 })
                 .then((value) => (userId = value?.id));

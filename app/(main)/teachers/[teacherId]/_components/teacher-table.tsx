@@ -28,6 +28,8 @@ import {
     SkeletonTablePagination,
 } from "./skeleton-teacher";
 import {format} from "date-fns";
+import {Button} from "@/components/ui/button";
+import {bypass} from "@/lib/create-temp-data/teacher";
 
 const formatData = (fetchedData: OutputType): ClassInfo[] | undefined => {
     if (!fetchedData) return undefined;
@@ -115,6 +117,7 @@ export function TeacherTable() {
     return (
         <>
             <div className="w-11/12 pt-[120px]">
+                <Button onClick={() => bypass(userId!)}>bypass</Button>
                 {isLoading ? (
                     <SkeletonTableFilter />
                 ) : (
