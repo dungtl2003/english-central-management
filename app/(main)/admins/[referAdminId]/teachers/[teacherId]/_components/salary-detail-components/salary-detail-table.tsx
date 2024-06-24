@@ -193,11 +193,12 @@ const SalaryDetailTable = ({
     });
 
     // Đoạn này có cảnh báo gì đó nhớ check xem có ảnh hưởng ko
+    const rowsSelected = table.getSelectedRowModel().rows;
     const selectedTotal = React.useMemo(() => {
         return table
             .getSelectedRowModel()
-            .rows.reduce((sum, row) => sum + parseInt(row.original.amount), 0);
-    }, [table]);
+            .rows.reduce((sum, row) => sum + Number(row.original.amount), 0);
+    }, [rowsSelected]);
 
     return (
         <>

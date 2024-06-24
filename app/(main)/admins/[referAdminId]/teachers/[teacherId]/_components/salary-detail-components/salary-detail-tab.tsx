@@ -100,6 +100,7 @@ const SalaryDetailTab = ({
         "Shift",
         "Control",
         "Alt",
+        ".",
     ];
 
     return (
@@ -118,10 +119,7 @@ const SalaryDetailTab = ({
                                 defaultValue={baseSalaryRef.current}
                                 disabled={!isEditing}
                                 onChange={(e) => {
-                                    const input = e.target.value;
-                                    if (/^[0-9]*$/.test(input)) {
-                                        baseSalaryRef.current = input;
-                                    }
+                                    baseSalaryRef.current = e.target.value;
                                 }}
                                 onKeyDown={(e) => {
                                     if (/^[^0-9]*$/.test(e.key)) {
