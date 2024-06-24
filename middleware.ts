@@ -11,6 +11,7 @@ const isAdminProtectedRoute = createRouteMatcher(["/admins(.*)"]);
 const isTeacherProtectedRoute = createRouteMatcher(["/teachers(.*)"]);
 const isStudentProtectedRoute = createRouteMatcher(["/students(.*)"]);
 const isParentProtectedRoute = createRouteMatcher(["/parents(.*)"]);
+const isUserProfileRoute = createRouteMatcher(["/user-profile(.*)"]);
 
 const isProtectedRoute = (req: NextRequest): boolean => {
     return (
@@ -18,7 +19,8 @@ const isProtectedRoute = (req: NextRequest): boolean => {
         isAdminProtectedRoute(req) ||
         isTeacherProtectedRoute(req) ||
         isStudentProtectedRoute(req) ||
-        isParentProtectedRoute(req)
+        isParentProtectedRoute(req) ||
+        isUserProfileRoute(req)
     );
 };
 
