@@ -63,9 +63,8 @@ model User {
 }
 
 model Teacher {
-    id String @id @db.Uuid @default(uuid())
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId String @db.Uuid @unique
+    id String @id @db.Uuid
+    user User @relation(fields: [id], references: [id], onDelete: Cascade)
     status TeacherStatus @default(PENDING)
     baseSalary Decimal @db.Decimal(20, 2) @default(0)
     acceptedAt DateTime?
@@ -85,24 +84,21 @@ model MonthlyPayment {
 }
 
 model Admin {
-    id String @id @db.Uuid @default(uuid())
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId String @db.Uuid @unique
+    id String @id @db.Uuid
+    user User @relation(fields: [id], references: [id], onDelete: Cascade)
 }
 
 model Parent {
-    id String @id @db.Uuid @default(uuid())
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId String @db.Uuid @unique
+    id String @id @db.Uuid
+    user User @relation(fields: [id], references: [id], onDelete: Cascade)
 
     children ChildrenParents[]
     tuitions Tuition[]
 }
 
 model Student {
-    id String @id @db.Uuid @default(uuid())
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId String @db.Uuid @unique
+    id String @id @db.Uuid
+    user User @relation(fields: [id], references: [id], onDelete: Cascade)
     discount Int @db.Integer @default(0)
 
     parents ChildrenParents[]
