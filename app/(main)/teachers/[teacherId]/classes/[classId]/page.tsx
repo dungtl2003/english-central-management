@@ -1,34 +1,97 @@
 "use client";
 
-import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
-import React, {ReactElement} from "react";
-import ClassDetailHeader from "./_components/class-header";
+import React, {
+    ReactElement,
+    useCallback,
+    useEffect,
+    useMemo,
+    useState,
+} from "react";
+import {UseActionOptions, useAction} from "@/hooks/use-action";
+import {handler} from "@/lib/action/teacher/get-class-detail";
+import {OutputType} from "@/lib/action/teacher/get-class-detail/types";
+import {toast} from "@/components/ui/use-toast";
+import {Tabs, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import TabOverview from "./_components/tab-overview";
+import TabAttendanceHistory from "./_components/tab-attendance";
+import {format} from "date-fns";
+import {Calendar as CalendarIcon} from "lucide-react";
+import {cn} from "@/lib/utils";
+import {Button} from "@/components/ui/button";
+import {SkeletonClassDetailTabList} from "../../_components/skeleton-teacher";
+import TabClassList from "./_components/tab-student-list";
 
-const page = (): ReactElement => {
+const ClassDetailPage: React.FC<{
+    params: {teacherId: string; classId: string};
+}> = ({params}): ReactElement => {
+    const getDetailHandler = useCallback(handler, []);
+    const event: UseActionOptions<OutputType> = useMemo(() => {
+        return {
+            onError: (error: string) => {
+                console.log("Error: ", error);
+                toast({
+                    title: "error",
+                    variant: "destructive",
+                    description: "Get class's detail failed",
+                });
+            },
+        };
+    }, []);
+    const {data, execute} = useAction(getDetailHandler, event);
+
+    const [isLoading, setIsLoading] = useState(true);
+    useEffect(() => {
+        execute({classId: params.classId}).then(() => setIsLoading(false));
+    }, [execute, params.teacherId, params.classId]);
+
     return (
         <div className="flex justify-center">
-            <div className="w-[80%] pt-[100px]">
-                <ClassDetailHeader />
+            <div className="w-[80%] pt-[80px]">
+                <div className="flex flex-row items-center">
+                    <span className="text-4xl font-semibold">Class Detail</span>
+                    <div className="flex flex-row items-center ml-auto gap-x-2">
+                        <Button
+                            variant={"outline"}
+                            className={cn(
+                                "w-[200px] justify-start text-left font-normal"
+                            )}
+                        >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {format(new Date(), "PPP")}
+                        </Button>
+                    </div>
+                </div>
                 <Tabs defaultValue="overview" className="mt-[15px] w-full">
-                    <TabsList>
-                        <TabsTrigger value="overview">Overview</TabsTrigger>
-                        <TabsTrigger value="classList">Class list</TabsTrigger>
-                        <TabsTrigger value="classAttendance">
-                            Attendance
-                        </TabsTrigger>
-                    </TabsList>
-                    <TabOverview />
-                    <TabsContent value="classList">
-                        This is class detail list
-                    </TabsContent>
-                    <TabsContent value="classAttendance">
-                        This is class attendance
-                    </TabsContent>
+                    {isLoading && <SkeletonClassDetailTabList />}
+                    {!isLoading && (
+                        <TabsList className="text-sm inline-flex items-center justify-center dark:data-[state=active]:bg-slate-950 dark:data-[state=active]:text-slate-50 data-[state=active]:bg-white data-[state=active]:text-slate-950">
+                            <TabsTrigger
+                                value="overview"
+                                className="text-sm inline-flex items-center justify-center dark:data-[state=active]:bg-slate-950 dark:data-[state=active]:text-slate-50 data-[state=active]:bg-white data-[state=active]:text-slate-950"
+                            >
+                                Overview
+                            </TabsTrigger>
+                            <TabsTrigger
+                                value="studentList"
+                                className="text-sm inline-flex items-center justify-center dark:data-[state=active]:bg-slate-950 dark:data-[state=active]:text-slate-50 data-[state=active]:bg-white data-[state=active]:text-slate-950"
+                            >
+                                Student list
+                            </TabsTrigger>
+                            <TabsTrigger
+                                value="attendanceHistory"
+                                className="text-sm inline-flex items-center justify-center dark:data-[state=active]:bg-slate-950 dark:data-[state=active]:text-slate-50 data-[state=active]:bg-white data-[state=active]:text-slate-950"
+                            >
+                                Attendance
+                            </TabsTrigger>
+                        </TabsList>
+                    )}
+                    <TabOverview data={data} isLoading={isLoading} />
+                    <TabClassList data={data} />
+                    <TabAttendanceHistory data={data} />
                 </Tabs>
             </div>
         </div>
     );
 };
 
-export default page;
+export default ClassDetailPage;

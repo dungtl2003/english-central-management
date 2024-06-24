@@ -1,9 +1,8 @@
 import {NextRequest, NextResponse} from "next/server";
 import {db} from "@/lib/db";
-import {authHandler, getClerkRole} from "@/lib/helper";
-import {auth, clerkClient} from "@clerk/nextjs/server";
+import {auth} from "@clerk/nextjs/server";
 import {Post, PostSchema} from "./schema";
-import {UserRole} from "@prisma/client";
+import {addTeacher, authGetHandler} from "./helper";
 
 /**
  * Get teachers.
@@ -15,23 +14,17 @@ export async function GET(req: NextRequest) {
     console.log("GET ", req.nextUrl.pathname);
 
     try {
-        await authHandler();
+        await authGetHandler();
     } catch (error) {
-        console.log("Error: ", (<Error>error).message);
+        console.error("Error: ", (<Error>error).message);
         return NextResponse.json({error: error}, {status: 401});
-    }
-
-    const role: UserRole | null = getClerkRole();
-    if (!role || role !== UserRole.ADMIN) {
-        return NextResponse.json({error: "No right permission"}, {status: 401});
     }
 
     try {
         const teachers = await db.teacher.findMany({include: {user: true}});
-        console.log("Got teachers: ", teachers);
         return NextResponse.json(teachers, {status: 200});
     } catch (error) {
-        console.log("Error: ", error);
+        console.error("Error: ", error);
         return NextResponse.json(
             {error: "Failed to get teachers"},
             {status: 500}
@@ -55,7 +48,7 @@ export async function POST(req: NextRequest) {
     const body: Post = await req.json();
     const validBody = PostSchema.safeParse(body);
     if (validBody.error) {
-        console.log("Error: ", validBody.error.flatten());
+        console.error("Error: ", validBody.error.flatten());
         return NextResponse.json({error: "Wrong body format"}, {status: 400});
     }
 
@@ -67,32 +60,10 @@ export async function POST(req: NextRequest) {
     }
 
     try {
-        const teacher = await db.user.update({
-            where: {
-                referId: clerkUserId,
-            },
-            data: {
-                role: "TEACHER",
-                teacher: {
-                    create: {},
-                },
-            },
-            include: {
-                teacher: true,
-            },
-        });
-
-        const clerkUser = await clerkClient.users.updateUser(clerkUserId, {
-            publicMetadata: {
-                role: "TEACHER",
-            },
-        });
-
-        console.log("Created teacher: ", teacher);
-        console.log("Updated clerk user: ", clerkUser);
+        const [teacher] = await addTeacher(clerkUserId);
         return NextResponse.json(teacher, {status: 200});
     } catch (error) {
-        console.log("Error: ", (<Error>error).message);
+        console.error("Error: ", (<Error>error).message);
         return NextResponse.json(
             {error: "Failed to create teacher"},
             {status: 500}

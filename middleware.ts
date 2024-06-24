@@ -11,6 +11,7 @@ const isAdminProtectedRoute = createRouteMatcher(["/admins(.*)"]);
 const isTeacherProtectedRoute = createRouteMatcher(["/teachers(.*)"]);
 const isStudentProtectedRoute = createRouteMatcher(["/students(.*)"]);
 const isParentProtectedRoute = createRouteMatcher(["/parents(.*)"]);
+const isUserProfileRoute = createRouteMatcher(["/user-profile(.*)"]);
 
 const isProtectedRoute = (req: NextRequest): boolean => {
     return (
@@ -18,7 +19,8 @@ const isProtectedRoute = (req: NextRequest): boolean => {
         isAdminProtectedRoute(req) ||
         isTeacherProtectedRoute(req) ||
         isStudentProtectedRoute(req) ||
-        isParentProtectedRoute(req)
+        isParentProtectedRoute(req) ||
+        isUserProfileRoute(req)
     );
 };
 
@@ -58,13 +60,15 @@ const skipHomePage = (
 
 export default clerkMiddleware(
     (auth, req) => {
-        console.log("Redirect to ", req.nextUrl.pathname);
-        const userId: string | null = auth().userId;
+        console.log("Request ", req.nextUrl.pathname);
+
+        const referUserId: string | null = auth().userId;
         const jwt: UserJwtSessionClaims | null = auth().sessionClaims;
-        const role: UserRole | null = (jwt?.metadata?.role as UserRole) ?? null;
+        const role: UserRole | null =
+            (jwt?.metadata?.public?.role as UserRole) ?? null;
 
         //the user isn't authenticated
-        if (!userId && isProtectedRoute(req)) {
+        if (!referUserId && isProtectedRoute(req)) {
             return auth().redirectToSignIn({returnBackUrl: req.url});
         }
 
@@ -74,7 +78,7 @@ export default clerkMiddleware(
         }
 
         //the user is authorized and in home page
-        if (userId && req.nextUrl.pathname === homePage) {
+        if (referUserId && req.nextUrl.pathname === homePage) {
             if (!role) {
                 return NextResponse.redirect(
                     new URL(completeProfilePage, req.url)
@@ -86,7 +90,7 @@ export default clerkMiddleware(
         //public route or the user is authorized
         return NextResponse.next();
     },
-    {debug: true}
+    {debug: false}
 );
 
 export const config = {

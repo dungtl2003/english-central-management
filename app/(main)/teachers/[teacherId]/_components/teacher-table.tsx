@@ -1,6 +1,6 @@
 "Use client";
 
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
 import {ClassInfo} from "./class-info";
 import TeacherTableColumns from "./teacher-table-columns";
 import TablePagination from "./table-pagination";
@@ -16,76 +16,73 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import {useAction} from "@/hooks/use-action";
+import {UseActionOptions, useAction} from "@/hooks/use-action";
 import {handler} from "@/lib/action/teacher/get-classes";
 import {OutputType} from "@/lib/action/teacher/get-classes/types";
 import {toast} from "@/components/ui/use-toast";
 import {useAuth} from "@clerk/nextjs";
-import {formatDate} from "@/lib/utils";
+import {concatName, roundUp} from "@/lib/utils";
+import {
+    SkeletonTableContent,
+    SkeletonTableFilter,
+    SkeletonTablePagination,
+} from "./skeleton-teacher";
+import {format} from "date-fns";
 
-//TODO: for temp testing, will remove later
-// const addTempClasses = async (teacherId: string): Promise<void> => {
-//     const domain = process.env.NEXT_PUBLIC_DOMAIN;
-//     const protocol = process.env.NEXT_PUBLIC_PROTOCOL;
-//
-//     const url = `${protocol}://${domain}/api/.personal/add-classes-for-teacher`;
-//     const tempBody = {
-//         teacherId: teacherId,
-//         classes: 57,
-//     };
-//
-//     const response = await fetch(url, {
-//         method: "POST",
-//         body: JSON.stringify(tempBody),
-//     });
-//
-//     console.log(response);
-// };
 const formatData = (fetchedData: OutputType): ClassInfo[] | undefined => {
     if (!fetchedData) return undefined;
 
     const displayData: ClassInfo[] = [];
     fetchedData.forEach((data) =>
         displayData.push({
+            classId: data.id,
             className: `${data.unit.grade}.${data.index}`,
-            teacher: `${data.teacher.user.lastName} ${data.teacher.user.firstName}`,
+            teacher: concatName(
+                data.teacher.user.lastName,
+                data.teacher.user.firstName,
+                true
+            ),
             year: String(data.unit.year),
-            start: formatDate(new Date(data.startTime)),
-            end: formatDate(new Date(data.endTime)),
-            price:
-                String(
-                    Math.round(
-                        Number(data.unit.price_per_session) *
-                            data.unit.max_sessions *
-                            100
-                    ) / 100
-                ) + "$",
+            start: format(data.startTime, "dd/MM/yyyy"),
+            end: format(data.endTime, "dd/MM/yyyy"),
+            price: "$" + roundUp(Number(data.unit.pricePerSession), 2),
         })
     );
 
     return displayData;
 };
 
-// Get columns model
 const columns: ColumnDef<ClassInfo>[] = TeacherTableColumns;
 
 const fallbackDisplayData: ClassInfo[] = [];
 
 export function TeacherTable() {
-    const {isLoaded, userId} = useAuth();
-    const {execute} = useAction(handler, {
-        onError: (error: string) => {
-            console.log("Error: ", error);
-            toast({
-                title: "error",
-                variant: "destructive",
-                description: "Cannot get classes",
-            });
-        },
-        onSuccess: (data: OutputType) => {
-            setDisplayData(formatData(data));
-        },
-    });
+    const fetchClassesHandler = useCallback(handler, []);
+    const event: UseActionOptions<OutputType> = useMemo(() => {
+        return {
+            onError: (error: string) => {
+                console.error("Error: ", error);
+                toast({
+                    title: "error",
+                    variant: "destructive",
+                    description: "Get classes failed",
+                });
+                setIsLoading(false);
+            },
+            onSuccess: (data: OutputType) => {
+                toast({
+                    title: "Success",
+                    variant: "success",
+                    description: "Get classes succeed",
+                });
+                setDisplayData(formatData(data));
+                setIsLoading(false);
+            },
+        };
+    }, []);
+    const {isLoaded, userId, isSignedIn} = useAuth();
+    const {execute} = useAction(fetchClassesHandler, event);
+    const [isLoading, setIsLoading] = useState(true);
     const [displayData, setDisplayData] = useState<ClassInfo[] | undefined>(
         undefined
     );
@@ -111,15 +108,28 @@ export function TeacherTable() {
     });
 
     useEffect(() => {
-        if (!isLoaded) return;
-        execute({teacherId: userId!});
-    }, [isLoaded]);
+        if (!isLoaded || !isSignedIn || !userId) return;
+        execute({referTeacherId: userId});
+    }, [isLoaded, userId, execute, isSignedIn]);
+
     return (
         <>
             <div className="w-11/12 pt-[120px]">
-                <TableFilter table={table} />
-                <TableContent table={table} columns={columns} />
-                <TablePagination table={table} />
+                {isLoading ? (
+                    <SkeletonTableFilter />
+                ) : (
+                    <TableFilter table={table} />
+                )}
+                {isLoading ? (
+                    <SkeletonTableContent />
+                ) : (
+                    <TableContent table={table} columns={columns} />
+                )}
+                {isLoading ? (
+                    <SkeletonTablePagination />
+                ) : (
+                    <TablePagination table={table} />
+                )}
             </div>
         </>
     );

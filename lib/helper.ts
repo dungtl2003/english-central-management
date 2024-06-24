@@ -1,33 +1,47 @@
-import {Json, UserJwtSessionClaims, UserRole} from "@/constaints";
+import {
+    ErrorResponsePayload,
+    Json,
+    UserJwtSessionClaims,
+    UserRole,
+} from "@/constaints";
 import {auth} from "@clerk/nextjs/server";
-import {db} from "./db";
+import {ApiError} from "next/dist/server/api-utils";
+import {NextResponse} from "next/server";
 
-export async function authHandler(): Promise<void> {
-    const clerkUserId = auth().userId;
-    if (!clerkUserId) {
-        throw new Error("No signed in user");
-    }
+export function buildErrorNextResponse(
+    error: unknown,
+    enableLogging: boolean = true
+): NextResponse<ErrorResponsePayload> {
+    let msg;
 
-    const jwt: UserJwtSessionClaims | null = auth().sessionClaims;
-    const role: string | null = jwt?.metadata?.role ?? null;
+    if (error instanceof ApiError) {
+        msg = error.message;
 
-    const user = await db.user.findFirst({
-        where: {
-            referId: clerkUserId,
-            role: role as UserRole,
-        },
-    });
+        if (enableLogging) console.error("Error: ", msg);
+        return NextResponse.json<ErrorResponsePayload>(
+            {error: msg},
+            {status: error.statusCode}
+        );
+    } else if (error instanceof Error) {
+        msg = error.message;
 
-    if (!user) {
-        throw new Error(
-            `Cannot find account with id ${clerkUserId} in database`
+        if (enableLogging) console.error("Error: ", msg);
+        return NextResponse.json<ErrorResponsePayload>(
+            {error: msg},
+            {status: 500}
+        );
+    } else {
+        if (enableLogging) console.error("Error: ", "Unsupported error type");
+        return NextResponse.json<ErrorResponsePayload>(
+            {error: "Server error"},
+            {status: 500}
         );
     }
 }
 
 export function getClerkRole(): UserRole | null {
     const jwt: UserJwtSessionClaims | null = auth().sessionClaims;
-    return (jwt?.metadata?.role as UserRole) ?? null;
+    return (jwt?.metadata?.public?.role as UserRole) ?? null;
 }
 
 export function convertQueryParamsToJsonObject(

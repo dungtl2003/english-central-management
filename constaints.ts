@@ -1,13 +1,25 @@
+import {Gender} from "@prisma/client";
+
+export interface ErrorResponsePayload {
+    error: string;
+}
+
 export interface UserJwtSessionClaims extends CustomJwtSessionClaims {
     metadata?: {
-        role?: string;
+        public?: PublicMetadata;
+        unsafe?: UnsafeMetadata;
     };
-    firstName?: string;
-    lastName?: string;
 }
 
 export interface PublicMetadata extends UserPublicMetadata {
     role?: string;
+}
+
+export interface UnsafeMetadata extends UserUnsafeMetadata {
+    phoneNumber?: string;
+    identityCard?: string;
+    birthday?: Date;
+    gender?: Gender;
 }
 
 export type Json = {

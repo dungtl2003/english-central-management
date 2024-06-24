@@ -1,8 +1,11 @@
+"use server";
+
 import {NextRequest, NextResponse} from "next/server";
 import {headers} from "next/headers";
 import {Webhook} from "svix";
 import {WebhookEvent} from "@clerk/nextjs/server";
 import {db} from "@/lib/db";
+import {Gender, User} from "@prisma/client";
 
 interface Payload {
     data: {
@@ -15,15 +18,23 @@ interface Payload {
             id: string;
             email_address: string;
         }[];
+        created_at: Date;
+        updated_at: Date;
+        unsafe_metadata: {
+            birthday: Date;
+            gender: Gender;
+            identityCard: string;
+            phoneNumber: string;
+        };
     };
 }
 
 enum EventTypes {
     DELETE = "user.deleted",
     CREATE = "user.created",
+    UPDATE = "user.updated",
 }
 
-//TODO: something went wrong with delete user account
 export async function POST(req: NextRequest) {
     console.log("Timestamp: ", new Date().toLocaleString());
     console.log("POST ", req.url);
@@ -65,7 +76,7 @@ export async function POST(req: NextRequest) {
             "svix-signature": svix_signature,
         }) as WebhookEvent;
     } catch (err) {
-        console.error("Error verifying webhook:", err);
+        console.error("Error verifying webhook:", (<Error>err).message);
         return new NextResponse("Error occured", {
             status: 400,
         });
@@ -78,7 +89,8 @@ export async function POST(req: NextRequest) {
 
     switch (eventType) {
         case EventTypes.CREATE:
-            return await createUserHandler(payload);
+        case EventTypes.UPDATE:
+            return await upsertUserHandler(payload);
         case EventTypes.DELETE:
             return await deleteUserHandler(payload);
         default:
@@ -89,7 +101,7 @@ export async function POST(req: NextRequest) {
     }
 }
 
-const createUserHandler = async (payload: Payload): Promise<NextResponse> => {
+const upsertUserHandler = async (payload: Payload): Promise<NextResponse> => {
     const data = payload.data;
     const primaryEmailId = data.primary_email_address_id;
     const emails = (data.email_addresses || []).filter(
@@ -109,18 +121,28 @@ const createUserHandler = async (payload: Payload): Promise<NextResponse> => {
         lastName: data.last_name,
         email: emails[0].email_address,
         imageUrl: data.profile_image_url,
-    };
+        phoneNumber: data.unsafe_metadata.phoneNumber,
+        identifyCard: data.unsafe_metadata.identityCard,
+        gender: data.unsafe_metadata.gender,
+        updatedAt: new Date(data.updated_at),
+        birthday: data.unsafe_metadata.birthday
+            ? new Date(data.unsafe_metadata.birthday)
+            : undefined,
+    } as User;
 
     try {
-        const user = await db.user.upsert({
+        await db.user.upsert({
             where: {
                 referId: data.id,
             },
             create: userData,
-            update: userData,
+            update: {
+                ...userData,
+                updatedAt: new Date(),
+            } as User,
         });
-        console.log("Upserted user: ", user);
-        return NextResponse.json("", {status: 200});
+
+        return NextResponse.json("ok", {status: 200});
     } catch (error) {
         console.log("Error: ", (<Error>error).message);
         return NextResponse.json(
@@ -133,13 +155,35 @@ const createUserHandler = async (payload: Payload): Promise<NextResponse> => {
 const deleteUserHandler = async (payload: Payload): Promise<NextResponse> => {
     const data = payload.data;
     try {
-        const user = await db.user.delete({
+        const user = await db.user.findFirst({
             where: {
                 referId: data.id,
             },
+            include: {
+                teacher: true,
+            },
         });
-        console.log("Deleted user: ", user);
-        return new NextResponse("", {status: 200});
+
+        if (
+            user?.teacher?.status != "REJECTED" &&
+            user?.teacher?.status != "DELETED"
+        ) {
+            await db.user.update({
+                where: {
+                    referId: data.id,
+                },
+                data: {
+                    deletedAt: new Date(),
+                    teacher: {
+                        update: {
+                            status: "DELETED",
+                        },
+                    },
+                },
+            });
+        }
+
+        return new NextResponse("ok", {status: 200});
     } catch (error) {
         console.log("Error: ", (<Error>error).message);
         return NextResponse.json(

@@ -14,6 +14,7 @@ import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {ReactElement} from "react";
 import Link from "next/link";
+import {usePathname} from "next/navigation";
 
 type TablePreviewSheetProps = {
     data: ClassInfo;
@@ -22,6 +23,9 @@ type TablePreviewSheetProps = {
 const TablePreviewSheet: React.FC<TablePreviewSheetProps> = ({
     data,
 }): ReactElement => {
+    const currentUrl = usePathname();
+    const redirectUrl = `${currentUrl}/classes/${data.classId}`;
+
     return (
         <>
             <div className="flex flex-row gap-x-4">
@@ -55,7 +59,7 @@ const TablePreviewSheet: React.FC<TablePreviewSheetProps> = ({
                                             id={obj.key}
                                             value={data[key] || ""}
                                             className="col-span-3"
-                                            disabled
+                                            readOnly
                                         />
                                     </div>
                                 );
@@ -63,21 +67,21 @@ const TablePreviewSheet: React.FC<TablePreviewSheetProps> = ({
                         </div>
                         <SheetFooter>
                             <SheetClose asChild>
-                                <Button>View detail</Button>
+                                <Link
+                                    className="mr-auto flex gap-x-2"
+                                    href={redirectUrl}
+                                >
+                                    <Button variant="outline">
+                                        View detail
+                                    </Button>
+                                </Link>
                             </SheetClose>
                         </SheetFooter>
                     </SheetContent>
                 </Sheet>
-                <Button variant="outline">
-                    <Link
-                        className="mr-auto flex gap-x-2"
-                        href="/teachers/1/classes/1"
-                        legacyBehavior
-                        passHref
-                    >
-                        Detail
-                    </Link>
-                </Button>
+                <Link className="mr-auto flex gap-x-2" href={redirectUrl}>
+                    <Button variant="outline">Detail</Button>
+                </Link>
             </div>
         </>
     );

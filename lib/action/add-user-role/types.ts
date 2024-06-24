@@ -6,4 +6,5 @@ export interface Body {
     id: string;
 }
 export type InputType = z.infer<typeof RequestSchema>;
-export type ReturnType = ActionState<InputType, string>;
+export type OutputType = string;
+export type ReturnType = ActionState<InputType, OutputType>;

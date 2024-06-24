@@ -25,6 +25,7 @@ enum TeacherStatus {
     AVAILABLE
     TEACHING
     DELETED
+    REJECTED
 }
 
 enum AttendanceStatus {
@@ -47,7 +48,7 @@ model User {
     phoneNumber String? @db.Text
     identifyCard String? @db.Text
     imageUrl String? @db.Text
-    birthday DateTime? @db.Date
+    birthday DateTime?
     gender Gender?
     role UserRole?
 
@@ -62,9 +63,8 @@ model User {
 }
 
 model Teacher {
-    id String @id @db.Uuid @default(uuid())
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId String @db.Uuid @unique
+    id String @id @db.Uuid
+    user User @relation(fields: [id], references: [id], onDelete: Cascade)
     status TeacherStatus @default(PENDING)
     baseSalary Decimal @db.Decimal(20, 2) @default(0)
     acceptedAt DateTime?
@@ -84,25 +84,22 @@ model MonthlyPayment {
 }
 
 model Admin {
-    id String @id @db.Uuid @default(uuid())
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId String @db.Uuid @unique
+    id String @id @db.Uuid
+    user User @relation(fields: [id], references: [id], onDelete: Cascade)
 }
 
 model Parent {
-    id String @id @db.Uuid @default(uuid())
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId String @db.Uuid @unique
-    discount Int @db.Integer
+    id String @id @db.Uuid
+    user User @relation(fields: [id], references: [id], onDelete: Cascade)
 
     children ChildrenParents[]
     tuitions Tuition[]
 }
 
 model Student {
-    id String @id @db.Uuid @default(uuid())
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId String @db.Uuid @unique
+    id String @id @db.Uuid
+    user User @relation(fields: [id], references: [id], onDelete: Cascade)
+    discount Int @db.Integer @default(0)
 
     parents ChildrenParents[]
     tuitions Tuition[]
@@ -133,15 +130,20 @@ model Tuition {
     amount Decimal @db.Decimal(20, 2)
     discount Int @db.Integer
     paidAt DateTime @default(now())
+
+    @@unique([childId, classId, year, month])
 }
 
 model Unit {
     id String @id @db.Uuid @default(uuid())
     year Int @db.Integer
     grade Int @db.Integer
-    max_sessions Int @db.Integer
-    max_students Int @db.Integer
-    price_per_session Decimal @db.Decimal(20, 2) 
+    maxSessions Int @db.Integer
+    maxStudents Int @db.Integer
+    studyHour Int @db.Integer
+    studyMinute Int @db.Integer
+    studySecond Int @db.Integer
+    pricePerSession Decimal @db.Decimal(20, 2) 
 
     classes Class[]
 
@@ -160,8 +162,9 @@ model Class {
     index Int @db.Integer
     startTime DateTime
     endTime DateTime
+    timeZone String
 
-    attendances Attendance[]
+    sessions Session[]
     schedules Schedule[]
     students StudentsInClasses[]
     tuitions Tuition[]
@@ -176,9 +179,12 @@ model Schedule {
     class Class @relation(fields: [classId], references: [id], onDelete: Cascade)
     classId String @db.Uuid
     dayOfWeek Int @db.Integer
-    startTime DateTime @db.Time
-    endTime DateTime @db.Time
+    startHour Int @db.Integer
+    startMinute Int @db.Integer
+    startSecond Int @db.Integer
     location String?
+
+    createdAt DateTime @default(now())
 }
 
 model StudentsInClasses {
@@ -186,21 +192,37 @@ model StudentsInClasses {
     classId String @db.Uuid
     student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
     studentId String @db.Uuid
-    joinedAt DateTime @default(now())
+    registeredAt DateTime @default(now())
+    rejectedAt DateTime?
+    approvedAt DateTime?
     leftAt DateTime?
 
     @@id([classId, studentId])
 }
 
-model Attendance {
+model Session {
     id String @id @db.Uuid @default(uuid())
     class Class @relation(fields: [classId], references: [id], onDelete: Cascade)
     classId String @db.Uuid
+    estimatedStartTime DateTime
+    actualStartTime DateTime?
+    attendedTime DateTime?
+
+    attendances Attendance[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime?
+}
+
+model Attendance {
+    id String @id @db.Uuid @default(uuid())
+    session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+    sessionId String @db.Uuid
     student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
     studentId String @db.Uuid
-    status AttendanceStatus
+    status AttendanceStatus?
     description String?
-    attendanceDate DateTime @default(now())
 
+    createdAt DateTime @default(now())
     updatedAt DateTime?
 }

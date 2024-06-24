@@ -11,11 +11,14 @@ import {
     NavigationMenuList,
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import {OutputType} from "@/lib/action/teacher/get-teacher-detail/types";
 
-const TeacherNavigation = (): ReactElement => {
+const TeacherNavigation: React.FC<{data: OutputType | undefined}> = ({
+    data,
+}): ReactElement => {
     return (
         <div>
-            <NavigationMenu className="fixed w-full h-16 p-4 border-b shadow-sm flex items-center">
+            <NavigationMenu className="bg-white dark:bg-black fixed w-full h-16 p-4 border-b shadow-sm flex items-center">
                 <div className="w-full">
                     <NavigationMenuList>
                         <NavigationMenuItem className="mr-auto flex items-center gap-x-4">
@@ -51,7 +54,7 @@ const TeacherNavigation = (): ReactElement => {
 
                             <Link
                                 className="mr-auto flex gap-x-2"
-                                href="/teachers/1"
+                                href="/"
                                 legacyBehavior
                                 passHref
                             >
@@ -64,22 +67,6 @@ const TeacherNavigation = (): ReactElement => {
                                     Manage classes
                                 </NavigationMenuLink>
                             </Link>
-
-                            <Link
-                                className="mr-auto flex gap-x-2"
-                                href="#"
-                                legacyBehavior
-                                passHref
-                            >
-                                <NavigationMenuLink
-                                    className={
-                                        navigationMenuTriggerStyle() +
-                                        " rounded-md border border-slate-200 dark:border-slate-800"
-                                    }
-                                >
-                                    Manage profile
-                                </NavigationMenuLink>
-                            </Link>
                         </NavigationMenuItem>
                         <NavigationMenuItem className="ml-auto flex items-center gap-x-4">
                             <Link href="#" legacyBehavior passHref>
@@ -89,14 +76,10 @@ const TeacherNavigation = (): ReactElement => {
                                         " rounded-md border border-slate-200 dark:border-slate-800"
                                     }
                                 >
-                                    {"Salary: $150 / class"}
+                                    {`Salary: $${data ? data?.baseSalary : 0} / month`}
                                 </NavigationMenuLink>
                             </Link>
                             <ThemeToggle />
-                            {/* <div>
-                                    <a href="/sign-in">Sign in</a> /{" "}
-                                    <a href="/sign-up">Sign up</a>
-                                </div> */}
                             <UserButton />
                         </NavigationMenuItem>
                     </NavigationMenuList>
