@@ -70,6 +70,11 @@ export function TeacherTable() {
                 setIsLoading(false);
             },
             onSuccess: (data: OutputType) => {
+                toast({
+                    title: "Success",
+                    variant: "success",
+                    description: "Get classes succeed",
+                });
                 setDisplayData(formatData(data));
                 setIsLoading(false);
             },

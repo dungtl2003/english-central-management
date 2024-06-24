@@ -45,14 +45,18 @@ const formatData = (data: OutputType | undefined): SessionCalendarData[] => {
                 : defaultImageUrl,
             startDateTime: element.actualStartTime
                 ? element.actualStartTime.toString()
-                : "",
+                : element.estimatedStartTime.toString(),
             endDateTime: element.actualStartTime
                 ? add(element.actualStartTime, {
                       hours: element.class.unit.studyHour,
                       minutes: element.class.unit.studyMinute,
                       seconds: element.class.unit.studySecond,
                   }).toISOString()
-                : "",
+                : add(element.estimatedStartTime, {
+                      hours: element.class.unit.studyHour,
+                      minutes: element.class.unit.studyMinute,
+                      seconds: element.class.unit.studySecond,
+                  }).toISOString(),
         };
         sessions.push(session);
     });

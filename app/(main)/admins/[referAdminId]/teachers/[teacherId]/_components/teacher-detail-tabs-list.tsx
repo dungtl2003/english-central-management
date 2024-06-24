@@ -33,7 +33,7 @@ const GetButtonBasedOnStatus = (
             },
             onSuccess: () => {
                 toast({
-                    title: "success",
+                    title: "Success",
                     variant: "success",
                     description: `Delete/reject teacher successful`,
                 });
@@ -54,7 +54,7 @@ const GetButtonBasedOnStatus = (
             },
             onSuccess: () => {
                 toast({
-                    title: "success",
+                    title: "Success",
                     variant: "success",
                     description: `Update status this teacher successful`,
                 });

@@ -85,12 +85,6 @@ const SalaryDetailTab = ({
         setIsEditing(!isEditing);
     };
 
-    // const handleBlur = (value: string, setter: (value: string) => void) => {
-    //     if (!value.includes("$")) {
-    //         setter(`${value}$`);
-    //     }
-    // };
-
     const baseSalaryRef = useRef(baseSalary);
 
     const allowedKeys = [
@@ -135,7 +129,6 @@ const SalaryDetailTab = ({
                                         e.preventDefault();
                                     }
                                 }}
-                                //onBlur={() => handleBlur(baseSalary, setBaseSalary)}
                             />
                         </div>
                         <div className="grid w-full items-center gap-1.5">
@@ -147,10 +140,6 @@ const SalaryDetailTab = ({
                                 type="text"
                                 value={monthlySalary}
                                 disabled={true}
-                                //onChange={(e) => setMonthlySalary(e.target.value)}
-                                // onBlur={() =>
-                                //     handleBlur(monthlySalary, setMonthlySalary)
-                                // }
                             />
                         </div>
                         <div className="grid grid-rows-3">

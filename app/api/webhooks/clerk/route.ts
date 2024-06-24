@@ -124,9 +124,7 @@ const upsertUserHandler = async (payload: Payload): Promise<NextResponse> => {
         phoneNumber: data.unsafe_metadata.phoneNumber,
         identifyCard: data.unsafe_metadata.identityCard,
         gender: data.unsafe_metadata.gender,
-        //createdAt:new Date(data.created_at),
         updatedAt: new Date(data.updated_at),
-        //birthday:unsafe?.birthday,
         birthday: data.unsafe_metadata.birthday
             ? new Date(data.unsafe_metadata.birthday)
             : undefined,
@@ -157,11 +155,34 @@ const upsertUserHandler = async (payload: Payload): Promise<NextResponse> => {
 const deleteUserHandler = async (payload: Payload): Promise<NextResponse> => {
     const data = payload.data;
     try {
-        await db.user.delete({
+        const user = await db.user.findFirst({
             where: {
                 referId: data.id,
             },
+            include: {
+                teacher: true,
+            },
         });
+
+        if (
+            user?.teacher?.status != "REJECTED" &&
+            user?.teacher?.status != "DELETED"
+        ) {
+            await db.user.update({
+                where: {
+                    referId: data.id,
+                },
+                data: {
+                    deletedAt: new Date(),
+                    teacher: {
+                        update: {
+                            status: "DELETED",
+                        },
+                    },
+                },
+            });
+        }
+
         return new NextResponse("ok", {status: 200});
     } catch (error) {
         console.log("Error: ", (<Error>error).message);

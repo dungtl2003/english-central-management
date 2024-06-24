@@ -43,7 +43,7 @@ export const createDescriptionNoteColumn = (
         header: attendanceTableDictionary[key],
         cell: ({row}) => (
             <Textarea
-                value={row.original.description || undefined}
+                defaultValue={row.original.description || undefined}
                 placeholder="Note here."
                 className="resize-none"
                 spellCheck={false}

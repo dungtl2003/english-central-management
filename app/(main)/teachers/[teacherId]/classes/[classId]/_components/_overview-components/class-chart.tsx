@@ -41,7 +41,7 @@ const formatData = (rawData: OutputType | undefined): ClassChartData[] => {
 
             records.push({
                 dateTime: `${format(session.actualStartTime!, "dd/MM/yyyy")}\n${format(session.actualStartTime!, "HH:mm:ss")}`,
-                x: index++,
+                x: (index += 0.5),
                 presents: presents,
                 lates: lates,
                 absents: absents,

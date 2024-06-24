@@ -21,7 +21,7 @@ const CalendarTabRight = ({
                     <CardTitle>
                         Sessions on{" "}
                         <time dateTime={format(selectedDay, "yyyy-MM-dd")}>
-                            {format(selectedDay, "MM/dd/yyyy")}
+                            {format(selectedDay, "dd/MM/yyyy")}
                         </time>
                     </CardTitle>
                 </div>

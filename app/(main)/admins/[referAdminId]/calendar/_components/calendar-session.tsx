@@ -46,9 +46,9 @@ function CalendarSession({
             </HoverCardTrigger>
             <HoverCardContent className="w-100">
                 TeacherId: {session.teacherId} <br />
-                Full name: {session.teacher} <br />
-                Birthday: {session.birthday} <br />
-                Gender: {session.gender} <br />
+                Full name: {session.teacher || "___ ___"} <br />
+                Birthday: {session.birthday || "___/___/___"} <br />
+                Gender: {session.gender || "___"} <br />
                 Class: {session.className} - Year: {session.classYear} <br />
                 Start: {format(startDateTime, "h:mm a")} <br />
                 End: {format(endDateTime, "h:mm a")} <br />
@@ -56,16 +56,5 @@ function CalendarSession({
         </HoverCard>
     );
 }
-
-// id: string;
-//     teacherId:string;
-//     teacher: string;
-//     birthday:string;
-//     gender:string;
-//     className: string;
-//     classYear: string;
-//     avatar: string;
-//     startDateTime: string;
-//     endDateTime: string;
 
 export default CalendarSession;

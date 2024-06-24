@@ -44,23 +44,3 @@ const UserProfilePage = (): ReactElement => {
 };
 
 export default UserProfilePage;
-
-// const TabClassList: React.FC<{
-
-// }> = ({data}): ReactElement => {
-//     return (
-//         <TabsContent value="studentList">
-//             <ClassListTable data={data} />
-//         </TabsContent>
-//     );
-// };
-
-/**{(user:User) => (
-        <>
-          <Avatar src={user.profileImageUrl} alt={user.fullName} />
-          <Spacer y={1} />
-          <Text as="h2">{user.fullName}</Text>
-          <Spacer y={0.5} />
-          <Text>Email: {user.email}</Text>
-        </>
-      ) as React.ReactNode} */

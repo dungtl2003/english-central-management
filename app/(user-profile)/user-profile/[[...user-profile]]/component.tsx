@@ -20,7 +20,22 @@ import {
 import {Gender} from "@prisma/client";
 import {format, isValid, parse} from "date-fns";
 
-export const UserIdFeild = (form: UseFormReturn, userId: string) => {
+const allowedKeys = [
+    "Backspace",
+    "Delete",
+    "ArrowLeft",
+    "ArrowRight",
+    "ArrowUp",
+    "ArrowDown",
+    "Tab",
+    "Home",
+    "End",
+    "Shift",
+    "Control",
+    "Alt",
+];
+
+export const UserIdField = (form: UseFormReturn, userId: string) => {
     return (
         <FormField
             control={form.control}
@@ -38,7 +53,7 @@ export const UserIdFeild = (form: UseFormReturn, userId: string) => {
     );
 };
 
-export const PhoneNumberFeild = (
+export const PhoneNumberField = (
     form: UseFormReturn,
     phoneNumber: string | undefined
 ) => {
@@ -54,6 +69,12 @@ export const PhoneNumberFeild = (
                             {...form.register("phoneNumber")}
                             defaultValue={phoneNumber}
                             type="text"
+                            onKeyDown={(e) => {
+                                if (/^[^0-9]*$/.test(e.key)) {
+                                    if (allowedKeys.includes(e.key)) return;
+                                    e.preventDefault();
+                                }
+                            }}
                         />
                     </FormControl>
                     <FormMessage />
@@ -63,7 +84,7 @@ export const PhoneNumberFeild = (
     );
 };
 
-export const IdentityCardFeild = (
+export const IdentityCardField = (
     form: UseFormReturn,
     identityCard: string | undefined
 ) => {
@@ -90,7 +111,7 @@ export const IdentityCardFeild = (
     );
 };
 
-export const RoleFeild = (form: UseFormReturn, role: string | undefined) => {
+export const RoleField = (form: UseFormReturn, role: string | undefined) => {
     return (
         <FormField
             control={form.control}
@@ -108,7 +129,7 @@ export const RoleFeild = (form: UseFormReturn, role: string | undefined) => {
     );
 };
 
-export const GenderFeild = (
+export const GenderField = (
     form: UseFormReturn,
     gender: Gender | undefined
 ) => {
@@ -142,7 +163,7 @@ export const GenderFeild = (
     );
 };
 
-export const BirthdayFeild = (
+export const BirthdayField = (
     form: UseFormReturn,
     birthday: Date | undefined
 ) => {
@@ -218,6 +239,16 @@ export const BirthdayFeild = (
                                     : field.value
                             }
                             onChange={field.onChange}
+                            onKeyDown={(e) => {
+                                if (/^[^0-9]*$/.test(e.key)) {
+                                    if (
+                                        allowedKeys.includes(e.key) ||
+                                        e.key === "/"
+                                    )
+                                        return;
+                                    e.preventDefault();
+                                }
+                            }}
                         />
                         <FormMessage />
                     </FormItem>
@@ -227,7 +258,7 @@ export const BirthdayFeild = (
     );
 };
 
-export const CreateDateFeild = (
+export const CreateDateField = (
     form: UseFormReturn,
     createDate: Date | null | undefined
 ) => {
@@ -256,7 +287,7 @@ export const CreateDateFeild = (
     );
 };
 
-export const UpdateDateFeild = (
+export const UpdateDateField = (
     form: UseFormReturn,
     updateDate: Date | null | undefined
 ) => {

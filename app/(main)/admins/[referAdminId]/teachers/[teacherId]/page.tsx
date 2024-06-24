@@ -28,6 +28,11 @@ const TeacherDetailPage = ({params}: {params: {teacherId: string}}) => {
                 });
             },
             onSuccess: (data: OutputType) => {
+                toast({
+                    title: "Success",
+                    variant: "success",
+                    description: "Get teacher detail succeed",
+                });
                 setIsLoading(false);
                 setTeacherDetail(data);
             },

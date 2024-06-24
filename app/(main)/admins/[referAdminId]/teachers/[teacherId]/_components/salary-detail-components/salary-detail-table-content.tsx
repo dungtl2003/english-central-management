@@ -53,6 +53,7 @@ const SalaryDetailTableContent = ({
             onSuccess: () => {
                 toast({
                     title: "success",
+                    variant: "success",
                     description: "Payment process succeed",
                 });
                 setIsUpdating(false);
@@ -65,7 +66,7 @@ const SalaryDetailTableContent = ({
     const handlePay = () => {
         table.getSelectedRowModel().rows.forEach((row) => {
             dataPayment.push({
-                month: Number(row.original.month),
+                month: Number(row.original.month) - 1,
                 year: Number(row.original.year),
                 salary: Number(row.original.amount),
             });

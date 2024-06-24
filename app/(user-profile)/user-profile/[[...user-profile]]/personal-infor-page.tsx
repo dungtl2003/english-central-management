@@ -16,15 +16,16 @@ import {
     BirthdaySchema,
 } from "./validateSchema";
 import {
-    BirthdayFeild,
-    CreateDateFeild,
-    GenderFeild,
-    IdentityCardFeild,
-    PhoneNumberFeild,
-    RoleFeild,
-    UpdateDateFeild,
-    UserIdFeild,
+    BirthdayField,
+    CreateDateField,
+    GenderField,
+    IdentityCardField,
+    PhoneNumberField,
+    RoleField,
+    UpdateDateField,
+    UserIdField,
 } from "./component";
+import {format} from "date-fns";
 
 const FormSchema = z
     .object({
@@ -92,11 +93,16 @@ export const PersonalInforPage: React.FC<{
             unsafeMetadata: updateData,
         });
         toast({
-            title: "You submitted the following values:",
+            title: "You updated the following values:",
             description: (
                 <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
                     <code className="text-white">
-                        {JSON.stringify(data, null, 2)}
+                        {/* {JSON.stringify(data, null, 2)} */}
+                        Phone number: {data.phoneNumber} <br />
+                        Identity card: {data.identityCard} <br />
+                        Gender: {data.gender} <br />
+                        Birthday:{" "}
+                        {format(new Date(data.birthday as Date), "dd/MM/yyyy")}
                     </code>
                 </pre>
             ),
@@ -105,22 +111,22 @@ export const PersonalInforPage: React.FC<{
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
-                {UserIdFeild(form, userId)}
-                {PhoneNumberFeild(form, userData.unsafeMetaData.phoneNumber)}
-                {IdentityCardFeild(form, userData.unsafeMetaData.identityCard)}
+                {UserIdField(form, userId)}
+                {PhoneNumberField(form, userData.unsafeMetaData.phoneNumber)}
+                {IdentityCardField(form, userData.unsafeMetaData.identityCard)}
                 <div className="grid grid-cols-2 gap-x-2">
-                    {RoleFeild(form, userData.publicMetaData.role)}
-                    {GenderFeild(form, userData.unsafeMetaData.gender)}
+                    {RoleField(form, userData.publicMetaData.role)}
+                    {GenderField(form, userData.unsafeMetaData.gender)}
                 </div>
                 <div className="grid grid-cols-3 gap-x-2">
-                    {BirthdayFeild(form, birthday)}
-                    {CreateDateFeild(form, userData.clerkData.createDate)}
-                    {UpdateDateFeild(form, userData.clerkData.updateDate)}
+                    {BirthdayField(form, birthday)}
+                    {CreateDateField(form, userData.clerkData.createDate)}
+                    {UpdateDateField(form, userData.clerkData.updateDate)}
                 </div>
                 <div className="grid grid-cols-2 gap-x-2">
                     <div className="flex w-full justify-center">
                         <Button className="min-w-[50%]" type="submit">
-                            Submit
+                            Update
                         </Button>
                     </div>
                     <div className="flex w-full justify-center">

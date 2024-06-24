@@ -35,6 +35,7 @@ import {Button} from "@/components/ui/button";
 import {FaArrowUpRightFromSquare} from "react-icons/fa6";
 import Link from "next/link";
 import {useUser} from "@clerk/nextjs";
+import {toast} from "@/components/ui/use-toast";
 
 function createColumns(key: string, title: string): ColumnDef<TeacherListData> {
     return {
@@ -127,8 +128,18 @@ const TeacherListTable = (): ReactElement => {
         return {
             onError: (error: string) => {
                 console.error("Error: ", error);
+                toast({
+                    title: "error",
+                    variant: "destructive",
+                    description: "Get teachers failed",
+                });
             },
             onSuccess: (data: OutputType) => {
+                toast({
+                    title: "Success",
+                    variant: "success",
+                    description: "Get teachers succeed",
+                });
                 setTeachers(formatData(data));
                 setIsLoading(false);
             },

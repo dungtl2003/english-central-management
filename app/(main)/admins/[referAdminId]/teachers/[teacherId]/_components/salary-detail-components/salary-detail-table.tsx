@@ -34,30 +34,31 @@ const formatData = (
     //If have payments
     if (salaryDetailDatas.length !== 0) {
         salaryDetailDatas.sort((a, b) => {
-            if (a.year === b.year) return Number(a.month) - Number(b.month);
-            return Number(a.year) - Number(b.year);
+            return a.year === b.year
+                ? Number(a.month) - Number(b.month)
+                : Number(a.year) - Number(b.year);
         });
         salaryDetailDatas.forEach((e) => {
             const salaryDetailTableData: SalaryDetailTableData = {
                 monthlyPaymentId: e.monhthlyPaymentId,
                 amount: e.salary,
-                month: e.month,
+                month: (Number(e.month) + 1).toString(),
                 year: e.year,
                 paidAt: e.paidAt,
                 time: format(
-                    new Date(Number(e.year), Number(e.month) - 1, 1),
+                    new Date(Number(e.year), Number(e.month), 1),
                     "MM/yyyy"
                 ),
-                status: e.paidAt
-                    ? ("PAID" as SalaryDetailStatus)
-                    : ("DEBT" as SalaryDetailStatus),
+                status: "PAID" as SalaryDetailStatus,
             };
             salaryDetailTableDatas.push(salaryDetailTableData);
         });
         lastMonth = Number(
-            salaryDetailDatas[salaryDetailDatas.length - 1].month
+            salaryDetailTableDatas[salaryDetailTableDatas.length - 1].month
         );
-        lastYear = Number(salaryDetailDatas[salaryDetailDatas.length - 1].year);
+        lastYear = Number(
+            salaryDetailTableDatas[salaryDetailTableDatas.length - 1].year
+        );
     }
 
     if (lastMonth === 0) {
@@ -82,7 +83,7 @@ const formatData = (
             lastMonth++;
         }
 
-        if (lastYear === yearCurrent && lastMonth === monthCurrent) break;
+        if (lastYear >= yearCurrent && lastMonth >= monthCurrent) break;
 
         const salaryDetailTableData: SalaryDetailTableData = {
             monthlyPaymentId: undefined,

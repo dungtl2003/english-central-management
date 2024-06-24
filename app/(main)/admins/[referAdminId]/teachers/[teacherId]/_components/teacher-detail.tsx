@@ -59,7 +59,7 @@ const getStatusColor = (status: string): ReactElement => {
             return (
                 <span className="ml-[5px] dark:text-red-500 text-red-600">
                     {" "}
-                    REJECTED
+                    Rejected
                 </span>
             );
     }
