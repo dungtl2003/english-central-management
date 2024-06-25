@@ -195,6 +195,19 @@ export const BirthdayField = (
                                 </PopoverTrigger>
                                 <PopoverContent className="w-auto p-0 border-slate-800 bg-slate-950 text-slate-50">
                                     <Calendar
+                                        classNames={{
+                                            head_cell: "text-slate-400",
+                                            cell: "[&:has([aria-selected].day-outside)]:bg-slate-800/50 [&:has([aria-selected])]:bg-slate-800",
+                                            day_selected:
+                                                "bg-slate-50 text-slate-900 hover:bg-slate-50 hover:text-slate-900 focus:bg-slate-50 focus:text-slate-900",
+                                            day_today:
+                                                "bg-slate-800 text-slate-50",
+                                            day_outside:
+                                                "text-slate-400 aria-selected:bg-slate-800/50 aria-selected:text-slate-400",
+                                            day_disabled: "text-slate-400",
+                                            day_range_middle:
+                                                "aria-selected:bg-slate-800 aria-selected:text-slate-50",
+                                        }}
                                         defaultMonth={birthday}
                                         month={
                                             field.value instanceof Date
