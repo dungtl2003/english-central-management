@@ -164,7 +164,6 @@ export const GenderField = (
                         <SelectContent className="border-slate-800 bg-slate-950 text-slate-50">
                             <SelectItem value="MALE">Male</SelectItem>
                             <SelectItem value="FEMALE">Female</SelectItem>
-                            <SelectItem value="OTHERS">Others</SelectItem>
                         </SelectContent>
                     </Select>
                     <FormControl></FormControl>

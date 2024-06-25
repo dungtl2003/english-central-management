@@ -33,8 +33,8 @@ import {Loader2} from "lucide-react";
 const FormSchema = z
     .object({
         userId: z.string(),
-        phoneNumber: PhoneNumberSchema,
-        identityCard: IdentityCardSchema,
+        phoneNumber: PhoneNumberSchema.optional().or(z.literal("")),
+        identityCard: IdentityCardSchema.optional().or(z.literal("")),
         role: z.string(),
         gender: z.nativeEnum(Gender),
         birthday: BirthdaySchema,
