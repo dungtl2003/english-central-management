@@ -154,7 +154,8 @@ export const GenderField = (
                     <FormLabel className="text-md">Gender</FormLabel>
                     <Select
                         onValueChange={field.onChange}
-                        defaultValue={field.value || gender}
+                        defaultValue={gender}
+                        value={field.value}
                     >
                         <FormControl>
                             <SelectTrigger className="border-slate-800 bg-slate-950 ring-offset-slate-950 placeholder:text-slate-400 focus:ring-slate-300">

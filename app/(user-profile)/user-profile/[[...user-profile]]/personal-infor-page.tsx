@@ -1,7 +1,7 @@
 "use client";
 
 import {useUser} from "@clerk/nextjs";
-import {ReactElement, useCallback, useMemo} from "react";
+import {ReactElement, useCallback, useMemo, useRef} from "react";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useForm} from "react-hook-form";
 import {z} from "zod";
@@ -108,6 +108,10 @@ export const PersonalInfoPage: React.FC<{
     });
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
+        phoneNumberRef.current = data.phoneNumber;
+        identityCardRef.current = data.identityCard;
+        genderRef.current = data.gender;
+        birthdayRef.current = data.birthday;
         if (!user) {
             toast({
                 title: "Error",
@@ -129,6 +133,23 @@ export const PersonalInfoPage: React.FC<{
         });
     }
 
+    const phoneNumberRef = useRef<string | undefined>(
+        userData.unsafeMetaData.phoneNumber
+    );
+    const identityCardRef = useRef<string | undefined>(
+        userData.unsafeMetaData.identityCard
+    );
+    const genderRef = useRef<Gender | undefined>(
+        userData.unsafeMetaData.gender
+    );
+    const birthdayRef = useRef<Date | undefined>(birthday);
+
+    const onCancel = () => {
+        form.setValue("phoneNumber", phoneNumberRef.current);
+        form.setValue("identityCard", identityCardRef.current);
+        form.setValue("birthday", birthdayRef.current);
+        form.setValue("gender", genderRef.current);
+    };
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
@@ -162,7 +183,8 @@ export const PersonalInfoPage: React.FC<{
                             disabled={isLoading}
                             className="min-w-[50%]"
                             variant="destructive"
-                            type="reset"
+                            type="button"
+                            onClick={onCancel}
                         >
                             Cancel
                         </Button>
