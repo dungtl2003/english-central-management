@@ -260,9 +260,11 @@ export const BirthdayField = (
                                     : ""
                             }
                             value={
-                                field.value instanceof Date
-                                    ? format(field.value, "dd/MM/yyyy")
-                                    : field.value
+                                field.value
+                                    ? field.value instanceof Date
+                                        ? format(field.value, "dd/MM/yyyy")
+                                        : field.value
+                                    : ""
                             }
                             onChange={field.onChange}
                             onKeyDown={(e) => {
