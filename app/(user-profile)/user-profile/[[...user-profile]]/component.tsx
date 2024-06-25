@@ -165,7 +165,6 @@ export const GenderField = (
                         <SelectContent className="border-slate-800 bg-slate-950 text-slate-50">
                             <SelectItem value="MALE">Male</SelectItem>
                             <SelectItem value="FEMALE">Female</SelectItem>
-                            <SelectItem value="OTHERS">Others</SelectItem>
                         </SelectContent>
                     </Select>
                     <FormControl></FormControl>
@@ -197,8 +196,7 @@ export const BirthdayField = (
                                 </PopoverTrigger>
                                 <PopoverContent className="w-auto p-0 border-slate-800 bg-slate-950 text-slate-50">
                                     <Calendar
-                                        defaultMonth={birthday}
-                                        month={
+                                        defaultMonth={
                                             field.value instanceof Date
                                                 ? field.value
                                                 : isValid(
@@ -242,17 +240,19 @@ export const BirthdayField = (
                             className="border-slate-800 bg-slate-950 ring-offset-slate-950 placeholder:text-slate-400 focus-visible:ring-slate-300"
                             type="text"
                             placeholder="dd/MM/yyyy"
-                            defaultValue={
-                                birthday
-                                    ? format(birthday as Date, "dd/MM/yyyy")
-                                    : ""
-                            }
+                            // defaultValue={
+                            //     birthday
+                            //         ? format(birthday as Date, "dd/MM/yyyy")
+                            //         : ""
+                            // }
                             value={
                                 field.value
                                     ? field.value instanceof Date
                                         ? format(field.value, "dd/MM/yyyy")
                                         : field.value
-                                    : ""
+                                    : birthday
+                                      ? format(birthday as Date, "dd/MM/yyyy")
+                                      : ""
                             }
                             onChange={field.onChange}
                             onKeyDown={(e) => {
