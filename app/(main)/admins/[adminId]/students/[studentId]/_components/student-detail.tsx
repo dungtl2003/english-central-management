@@ -9,58 +9,43 @@ import StudentDetailTabslist from "./student-detail-tabs-list";
 import StudentInformationTab from "./student-information-components/student-information-tab";
 import StudentClassListTab from "./class-list-components/class-list-tab";
 import DesiredClassTab from "./desired-class-components/desired-class-tab";
-// import InformationTab from "./teacher-information-components/teacher-information-tab";
-// import ClassListTab from "./class-list-components/class-list-tab";
-// import SalaryDetailTab from "./salary-detail-components/salary-detail-tab";
 
 // Đoạn này mô tả ý tưởng về việc nếu chưa được duyệt thì sẽ hiển thị nút nào
-const status: string = "pending"; // => trạng thái của học sinh
+const status: string = "active"; // => trạng thái của học sinh
 const getButtonBasedOnStatus = (currentStatus: string): ReactElement => {
-    // => nếu chưa được duyệt thì sẽ là nút Approve và Reject
-    if (currentStatus == "pending") {
+    if (currentStatus === "active") {
         return (
             <>
-                <Button className="min-w-[85px] max-w-[85px]" variant="success">
-                    Approve
-                </Button>
                 <Button
                     className="min-w-[85px] max-w-[85px]"
                     variant="destructive"
                 >
-                    Reject
+                    Delete
                 </Button>
             </>
         );
     }
-    // => nếu đã được duyệt thì sẽ là nút Delete để xóa
     return (
-        <Button className="min-w-[85px] max-w-[85px]" variant="destructive">
-            Delete
+        <Button className="min-w-[85px]" variant="default">
+            Back to list
         </Button>
     );
 };
 // Đoạn này mô tả ý tưởng về việc hiển thị status như thế nào
 const getStatusColor = (status: string): ReactElement => {
     switch (status) {
-        case "teaching":
+        case "active":
             return (
                 <span className="ml-[5px] dark:text-green-400 text-green-600">
                     {" "}
-                    Teaching
+                    Active
                 </span>
             );
-        case "pending":
-            return (
-                <span className="ml-[5px] dark:text-yellow-400 text-yellow-600">
-                    {" "}
-                    Pending
-                </span>
-            );
-        case "retired":
+        case "deleted":
             return (
                 <span className="ml-[5px] dark:text-red-500 text-red-600">
                     {" "}
-                    Retired
+                    Deleted
                 </span>
             );
     }

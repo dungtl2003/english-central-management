@@ -22,6 +22,8 @@ const buttonVariants = cva(
                 ghost: "hover:bg-slate-300/60 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-slate-50",
                 ghostSuccess:
                     "hover:bg-green-600 hover:text-slate-50 dark:hover:bg-green-800 dark:hover:text-slate-50",
+                ghostMiddle:
+                    "hover:bg-yellow-600 hover:text-slate-50 dark:hover:bg-yellow-800 dark:hover:text-slate-50",
                 ghostDanger:
                     "hover:bg-red-700/80 hover:text-slate-50 dark:hover:bg-red-800 dark:hover:text-slate-50",
                 icon: "hover:text-slate-900 dark:hover:text-slate-50",
