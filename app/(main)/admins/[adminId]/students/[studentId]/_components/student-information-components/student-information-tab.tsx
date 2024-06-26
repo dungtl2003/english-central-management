@@ -50,8 +50,27 @@ const copyToClipboard = (teacherId: string) => {
     navigator.clipboard.writeText(teacherId);
 };
 
+type ButtonVariant =
+    | "ghost"
+    | "icon"
+    | "link"
+    | "default"
+    | "destructive"
+    | "success"
+    | "outline"
+    | "secondary"
+    | "ghostSuccess"
+    | "ghostMiddle"
+    | "ghostDanger"
+    | null
+    | undefined;
+
 const StudentInformationTab = (): ReactElement => {
     const [icon, setIcon] = React.useState<ReactElement>(<FaCopy />);
+    const [editable, setEditable] = React.useState(false);
+    const [btnTitle, setBtnTtile] = React.useState("Edit");
+    const [btnVariant, setbtnVariant] =
+        React.useState<ButtonVariant>("ghostMiddle");
 
     const handleCopyClick = (p: parentPreviewModel) => {
         copyToClipboard(p.id);
@@ -62,6 +81,18 @@ const StudentInformationTab = (): ReactElement => {
     function shortenString(input: string): string {
         const shortened = `${input.slice(0, 18)}.....`;
         return shortened;
+    }
+
+    function handleClickEdit() {
+        if (!editable) {
+            setBtnTtile("Save");
+            setbtnVariant("ghostSuccess");
+            setEditable(true);
+        } else {
+            setBtnTtile("Edit");
+            setbtnVariant("ghostMiddle");
+            setEditable(false);
+        }
     }
 
     return (
@@ -107,7 +138,21 @@ const StudentInformationTab = (): ReactElement => {
                         <Label className="pl-1 text-[14px]">
                             Discount <span className="text-slate-400">($)</span>
                         </Label>
-                        <Input type="text" value={"10%"} readOnly />
+                        <div className="relative">
+                            <Button
+                                variant={btnVariant}
+                                className="min-w-[65px] absolute right-0"
+                                onClick={() => handleClickEdit()}
+                            >
+                                {btnTitle}
+                            </Button>
+                            <Input
+                                type="text"
+                                defaultValue={"10%"}
+                                readOnly={!editable}
+                                className="pr-[68px]"
+                            />
+                        </div>
                     </div>
                     <div className="grid w-full items-center gap-1.5">
                         <Label className="pl-1 flex flex-row items-center text-[14px]">
