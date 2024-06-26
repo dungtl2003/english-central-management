@@ -1,4 +1,4 @@
-import {ClassListModel} from "./types";
+import {ClassListModel, UnitModel} from "./types";
 
 export const classListDummyData: ClassListModel[] = [
     {
@@ -289,4 +289,145 @@ export const classListDummyData: ClassListModel[] = [
         schedule: "Thursday: 7h30 - 9h30, Saturday: 7h30 - 9h30",
         status: "Active",
     },
+];
+
+export const unitDummyData: UnitModel[] = [
+    {
+        unit_year: "U_01 - 2024",
+        maxSessions: "50",
+        maxStudents: "45",
+        studyTime: {
+            hours: "2",
+            minutes: "30",
+            seconds: "00",
+        },
+        pricePerSession: "7$",
+    },
+    {
+        unit_year: "U_02 - 2024",
+        maxSessions: "50",
+        maxStudents: "50",
+        studyTime: {
+            hours: "2",
+            minutes: "00",
+            seconds: "00",
+        },
+        pricePerSession: "7$",
+    },
+    {
+        unit_year: "U_03 - 2024",
+        maxSessions: "45",
+        maxStudents: "40",
+        studyTime: {
+            hours: "2",
+            minutes: "30",
+            seconds: "00",
+        },
+        pricePerSession: "7$",
+    },
+    {
+        unit_year: "U_04 - 2024",
+        maxSessions: "45",
+        maxStudents: "40",
+        studyTime: {
+            hours: "2",
+            minutes: "30",
+            seconds: "00",
+        },
+        pricePerSession: "7$",
+    },
+    {
+        unit_year: "U_05 - 2024",
+        maxSessions: "45",
+        maxStudents: "40",
+        studyTime: {
+            hours: "2",
+            minutes: "30",
+            seconds: "00",
+        },
+        pricePerSession: "7$",
+    },
+    {
+        unit_year: "U_06 - 2024",
+        maxSessions: "45",
+        maxStudents: "40",
+        studyTime: {
+            hours: "2",
+            minutes: "30",
+            seconds: "00",
+        },
+        pricePerSession: "7$",
+    },
+    {
+        unit_year: "U_07 - 2024",
+        maxSessions: "45",
+        maxStudents: "40",
+        studyTime: {
+            hours: "2",
+            minutes: "30",
+            seconds: "00",
+        },
+        pricePerSession: "7$",
+    },
+    {
+        unit_year: "U_08 - 2024",
+        maxSessions: "45",
+        maxStudents: "40",
+        studyTime: {
+            hours: "2",
+            minutes: "30",
+            seconds: "00",
+        },
+        pricePerSession: "7$",
+    },
+    {
+        unit_year: "U_09 - 2024",
+        maxSessions: "45",
+        maxStudents: "40",
+        studyTime: {
+            hours: "2",
+            minutes: "30",
+            seconds: "00",
+        },
+        pricePerSession: "7$",
+    },
+    {
+        unit_year: "U_10 - 2024",
+        maxSessions: "45",
+        maxStudents: "40",
+        studyTime: {
+            hours: "2",
+            minutes: "30",
+            seconds: "00",
+        },
+        pricePerSession: "7$",
+    },
+    {
+        unit_year: "U_11- 2024",
+        maxSessions: "45",
+        maxStudents: "40",
+        studyTime: {
+            hours: "2",
+            minutes: "30",
+            seconds: "00",
+        },
+        pricePerSession: "7$",
+    },
+];
+
+export const teacherDummyData: string[] = [
+    "Nguyễn Minh Đức",
+    "Trần Lưu Dũng",
+    "Nguyễn Hữu Nhật Quang",
+    "Nguyễn Gia Huy",
+    "Nguyễn Quang Minh",
+    "Nguyễn Thảo Chi",
+    "Trịnh Văn Bình",
+    "Bùi Minh Khánh",
+    "Khương Quốc Vượng",
+    "Trần Hồng Vân",
+    "Nguyễn Thị Thảo",
+    "Mai Thanh Nga",
+    "Nguyễn Hoàng Dũng",
+    "Trần Chí Nhật",
 ];

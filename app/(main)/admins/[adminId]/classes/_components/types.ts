@@ -52,3 +52,15 @@ export type ClassStatistics = {
     waiting: number;
     closed: number;
 };
+
+export type UnitModel = {
+    unit_year: string;
+    pricePerSession: string;
+    maxSessions: string;
+    maxStudents: string;
+    studyTime: {
+        hours: string;
+        minutes: string;
+        seconds: string;
+    };
+};

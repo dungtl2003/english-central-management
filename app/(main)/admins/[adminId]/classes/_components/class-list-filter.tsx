@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {Button} from "@/components/ui/button";
 import {ChevronDown} from "lucide-react";
+import ClassListNewClass from "./class-list-new-class";
+import ClassListNewUnit from "./class-list-new-unit";
 
 interface TableFilterProps {
     table: Table<ClassListModel>;
@@ -32,8 +34,8 @@ const ClassListFilter = ({
     stats,
     tableColumns,
 }: TableFilterProps): ReactElement => {
-    const [filterType, _setFilterType] = React.useState("fullName");
-    const [selectedRadio, _setSelectedRadio] = React.useState("fullName");
+    const [filterType, _setFilterType] = React.useState("className");
+    const [selectedRadio, _setSelectedRadio] = React.useState("className");
     const searchBar = React.useRef<HTMLInputElement>(null);
     const handleRadioClick = (
         key: string,
@@ -70,35 +72,39 @@ const ClassListFilter = ({
                     selectedStatus={selectedStatus}
                     handleStatusChange={handleStatusChange}
                 />
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="ml-auto">
-                            Total classes:{" "}
-                            <span className="pl-1.5">{stats.total}</span>{" "}
-                            <ChevronDown className="ml-2 h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="">
-                        <DropdownMenuItem className="flex justify-center items-center">
-                            Active:{" "}
-                            <span className="pl-1.5 text-green-400">
-                                {stats.active}
-                            </span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="flex justify-center items-center">
-                            Waiting:{" "}
-                            <span className="pl-1.5 text-yellow-400">
-                                {stats.waiting}
-                            </span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="flex justify-center items-center">
-                            Closed:{" "}
-                            <span className="pl-1.5 text-red-600">
-                                {stats.closed}
-                            </span>
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <div className="flex gap-x-4 ml-auto">
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="outline">
+                                Total classes:{" "}
+                                <span className="pl-1.5">{stats.total}</span>{" "}
+                                <ChevronDown className="ml-2 h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="">
+                            <DropdownMenuItem className="flex justify-center items-center">
+                                Active:{" "}
+                                <span className="pl-1.5 text-green-400">
+                                    {stats.active}
+                                </span>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="flex justify-center items-center">
+                                Waiting:{" "}
+                                <span className="pl-1.5 text-yellow-400">
+                                    {stats.waiting}
+                                </span>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="flex justify-center items-center">
+                                Closed:{" "}
+                                <span className="pl-1.5 text-red-600">
+                                    {stats.closed}
+                                </span>
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                    <ClassListNewClass />
+                    <ClassListNewUnit />
+                </div>
             </div>
         </div>
     );

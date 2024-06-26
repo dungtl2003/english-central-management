@@ -8,7 +8,7 @@ import {
 import {Button} from "@/components/ui/button";
 import {ChevronDown} from "lucide-react";
 
-export const Status: string[] = ["All", "Teaching", "Pending", "Retired"];
+export const Status: string[] = ["All", "Active", "Waiting", "Closed"];
 
 interface ClassListRowsFilterProps {
     selectedStatus: string[];
