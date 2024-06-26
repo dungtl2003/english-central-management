@@ -2,10 +2,10 @@
 
 import {ReactElement} from "react";
 
-const StudentsLayout: React.FC<{children: React.ReactNode}> = ({
+const ClassesLayout: React.FC<{children: React.ReactNode}> = ({
     children,
 }): ReactElement => {
     return <>{children}</>;
 };
 
-export default StudentsLayout;
+export default ClassesLayout;

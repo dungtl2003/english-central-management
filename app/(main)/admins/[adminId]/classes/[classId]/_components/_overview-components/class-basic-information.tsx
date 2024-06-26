@@ -15,22 +15,11 @@ const ClassBasicInfomation = (): ReactElement => {
                     <CardContent className="px-4">
                         <div className="pb-3 grid grid-cols-4 items-center gap-x-3">
                             <Label htmlFor="className" className="text-left">
-                                Class name
+                                Class
                             </Label>
                             <Input
                                 id="className"
-                                value="3.1"
-                                className="col-span-3"
-                                readOnly
-                            />
-                        </div>
-                        <div className="pb-3 grid grid-cols-4 items-center gap-x-3">
-                            <Label htmlFor="grade" className="text-left">
-                                Grade
-                            </Label>
-                            <Input
-                                id="grade"
-                                value="3"
+                                value="3.1 - 2024"
                                 className="col-span-3"
                                 readOnly
                             />
@@ -53,6 +42,17 @@ const ClassBasicInfomation = (): ReactElement => {
                             <Input
                                 id="endDate"
                                 value="01/02/2024"
+                                className="col-span-3"
+                                readOnly
+                            />
+                        </div>
+                        <div className="pb-3 grid grid-cols-4 items-center gap-x-3">
+                            <Label htmlFor="schedule" className="text-left">
+                                Schedule
+                            </Label>
+                            <Input
+                                id="schedule"
+                                value="Monday: 7h30 - 9h30, Wednesday: 7h30 - 9h30"
                                 className="col-span-3"
                                 readOnly
                             />

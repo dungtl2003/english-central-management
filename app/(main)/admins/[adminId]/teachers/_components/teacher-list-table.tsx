@@ -72,7 +72,7 @@ const TeacherListTable = (): ReactElement => {
     });
 
     return (
-        <div className="w-[80%] pt-[120px]">
+        <div className="w-[80%] pt-[100px]">
             <TeacherListFilter
                 table={table}
                 selectedStatus={selectedStatus}

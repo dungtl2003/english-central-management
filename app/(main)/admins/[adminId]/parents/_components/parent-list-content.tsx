@@ -8,15 +8,15 @@ import {
 } from "@/components/ui/table";
 import {ColumnDef, Table, flexRender} from "@tanstack/react-table";
 import {Table as T} from "@/components/ui/table";
-import {StudentListModel} from "./types";
+import {ParentListModel} from "./types";
 import {FaCheckCircle} from "react-icons/fa";
 
 interface TableContentProps {
-    table: Table<StudentListModel>;
-    columns: ColumnDef<StudentListModel>[];
+    table: Table<ParentListModel>;
+    columns: ColumnDef<ParentListModel>[];
 }
 
-const StudentListContent = ({
+const ParentListContent = ({
     table,
     columns,
 }: TableContentProps): ReactElement => {
@@ -115,4 +115,4 @@ const StudentListContent = ({
     );
 };
 
-export default StudentListContent;
+export default ParentListContent;
