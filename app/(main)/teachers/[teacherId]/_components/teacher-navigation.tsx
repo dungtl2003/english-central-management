@@ -69,16 +69,14 @@ const TeacherNavigation: React.FC<{data: OutputType | undefined}> = ({
                             </Link>
                         </NavigationMenuItem>
                         <NavigationMenuItem className="ml-auto flex items-center gap-x-4">
-                            <Link href="#" legacyBehavior passHref>
-                                <NavigationMenuLink
-                                    className={
-                                        navigationMenuTriggerStyle() +
-                                        " rounded-md border border-slate-200 dark:border-slate-800"
-                                    }
-                                >
-                                    {`Salary: $${data ? data?.baseSalary : 0} / month`}
-                                </NavigationMenuLink>
-                            </Link>
+                            <NavigationMenuLink
+                                className={
+                                    navigationMenuTriggerStyle() +
+                                    " rounded-md border border-slate-200 dark:border-slate-800"
+                                }
+                            >
+                                {`Salary: $${data ? data?.baseSalary : 0} / month`}
+                            </NavigationMenuLink>
                             <ThemeToggle />
                             <UserButton />
                         </NavigationMenuItem>
