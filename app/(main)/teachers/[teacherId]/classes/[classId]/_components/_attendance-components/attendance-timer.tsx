@@ -120,7 +120,6 @@ const AttendanceTimer: React.FC<{
                                         mode="single"
                                         selected={date}
                                         onSelect={setDate}
-                                        initialFocus
                                     />
                                 </PopoverContent>
                             </Popover>

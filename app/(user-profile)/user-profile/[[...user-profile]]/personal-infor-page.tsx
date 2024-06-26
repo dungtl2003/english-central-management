@@ -36,7 +36,7 @@ const FormSchema = z
         phoneNumber: PhoneNumberSchema.optional().or(z.literal("")),
         identityCard: IdentityCardSchema.optional().or(z.literal("")),
         role: z.string(),
-        gender: z.nativeEnum(Gender),
+        gender: z.nativeEnum(Gender).nullable(),
         birthday: BirthdaySchema,
         createDate: z.date().nullable(),
         updateDate: z.date().nullable(),
@@ -139,7 +139,7 @@ export const PersonalInfoPage: React.FC<{
     const identityCardRef = useRef<string | undefined>(
         userData.unsafeMetaData.identityCard
     );
-    const genderRef = useRef<Gender | undefined>(
+    const genderRef = useRef<Gender | undefined | null>(
         userData.unsafeMetaData.gender
     );
     const birthdayRef = useRef<Date | undefined>(birthday);
@@ -148,7 +148,7 @@ export const PersonalInfoPage: React.FC<{
         form.setValue("phoneNumber", phoneNumberRef.current);
         form.setValue("identityCard", identityCardRef.current);
         form.setValue("birthday", birthdayRef.current);
-        form.setValue("gender", genderRef.current);
+        form.setValue("gender", genderRef.current || null);
     };
     return (
         <Form {...form}>
