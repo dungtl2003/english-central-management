@@ -32,6 +32,14 @@ import {
 import {Calendar} from "@/components/ui/calendar";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {format, isValid, parse} from "date-fns";
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/ui/accordion";
+import {FaCopy} from "react-icons/fa";
+import {FaCheck} from "react-icons/fa";
 
 const formSchema = z.object({
     unit: z.string(),
@@ -71,6 +79,7 @@ const ClassListNewClass = (): ReactElement => {
     }
 
     const [open, setOpen] = React.useState(false);
+    const [icon, setIcon] = React.useState<ReactElement>(<FaCopy />);
 
     const handleDateChange = (date: Date | undefined) => {
         if (date && isValid(date)) {
@@ -93,6 +102,21 @@ const ClassListNewClass = (): ReactElement => {
             form.setValue("studyTime.seconds", selectedUnit.studyTime.seconds);
         }
     };
+
+    function shortenString(input: string): string {
+        const shortened = `${input.slice(0, 18)}.....`;
+        return shortened;
+    }
+
+    function copyToClipboard(teacherId: string) {
+        navigator.clipboard.writeText(teacherId);
+    }
+
+    function handleCopyClick(teacherId: string) {
+        copyToClipboard(teacherId);
+        setIcon(<FaCheck color="green" />);
+        setTimeout(() => setIcon(<FaCopy />), 1000);
+    }
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -179,12 +203,63 @@ const ClassListNewClass = (): ReactElement => {
                                                 {teacherDummyData.map(
                                                     (teacher) => {
                                                         return (
-                                                            <SelectItem
-                                                                key={teacher}
-                                                                value={teacher}
+                                                            <Accordion
+                                                                type="single"
+                                                                collapsible
+                                                                key={teacher.id}
                                                             >
-                                                                {teacher}
-                                                            </SelectItem>
+                                                                <AccordionItem value="item-1">
+                                                                    <AccordionTrigger>
+                                                                        <SelectItem
+                                                                            key={
+                                                                                teacher.id
+                                                                            }
+                                                                            value={
+                                                                                teacher.id
+                                                                            }
+                                                                        >
+                                                                            {
+                                                                                teacher.fullName
+                                                                            }
+                                                                        </SelectItem>
+                                                                    </AccordionTrigger>
+                                                                    <AccordionContent>
+                                                                        <div className="pl-8 text-slate-400">
+                                                                            ID:{" "}
+                                                                            {shortenString(
+                                                                                teacher.id
+                                                                            )}
+                                                                            <Button
+                                                                                variant="icon"
+                                                                                size="icon"
+                                                                                onClick={() =>
+                                                                                    handleCopyClick(
+                                                                                        teacher.id
+                                                                                    )
+                                                                                }
+                                                                            >
+                                                                                {
+                                                                                    icon
+                                                                                }
+                                                                            </Button>
+                                                                        </div>
+                                                                        <div className="pl-8 text-slate-400">
+                                                                            {" "}
+                                                                            Birthday:{" "}
+                                                                            {
+                                                                                teacher.birthday
+                                                                            }
+                                                                        </div>
+                                                                        <div className="pl-8 text-slate-400">
+                                                                            Create
+                                                                            date:{" "}
+                                                                            {
+                                                                                teacher.createDate
+                                                                            }
+                                                                        </div>
+                                                                    </AccordionContent>
+                                                                </AccordionItem>
+                                                            </Accordion>
                                                         );
                                                     }
                                                 )}
