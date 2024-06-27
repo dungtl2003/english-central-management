@@ -82,6 +82,15 @@ export async function GET(
                 include: {
                     class: {
                         include: {
+                            unit: true,
+                            students: {
+                                where: {
+                                    NOT: {
+                                        approvedAt: null,
+                                    },
+                                    leftAt: null,
+                                },
+                            },
                             sessions: {
                                 where: {
                                     attendances: {

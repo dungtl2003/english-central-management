@@ -4,7 +4,9 @@ import {
     Parent,
     Session,
     Student,
+    StudentsInClasses,
     Tuition,
+    Unit,
     User,
 } from "@prisma/client";
 import {z} from "zod";
@@ -18,6 +20,8 @@ export type GetResponsePayload = {
         user: User;
     } & Parent)[];
     classes: ({
+        unit: Unit;
+        students: StudentsInClasses[];
         sessions: ({
             attendances: Attendance[];
         } & Session)[];

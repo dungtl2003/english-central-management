@@ -1,5 +1,5 @@
 import {z} from "zod";
 
-export const RequestSchena = z.object({
+export const RequestSchema = z.object({
     studentId: z.string(),
 });
