@@ -5,13 +5,15 @@ import {
     Parent,
     Session,
     Student,
+    StudentsInClasses,
     Tuition,
+    Unit,
     User,
 } from "@prisma/client";
 import {z} from "zod";
-import {RequestSchena} from "./schema";
+import {RequestSchema} from "./schema";
 
-export type InputType = z.infer<typeof RequestSchena>;
+export type InputType = z.infer<typeof RequestSchema>;
 
 export type OutputType = {
     user: User;
@@ -19,6 +21,8 @@ export type OutputType = {
         user: User;
     } & Parent)[];
     classes: ({
+        unit: Unit;
+        students: StudentsInClasses[];
         sessions: ({
             attendances: Attendance[];
         } & Session)[];
