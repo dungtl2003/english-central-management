@@ -1,6 +1,6 @@
-import {GetResponsePayload} from "@/app/api/v2/students/types";
 import {ErrorResponsePayload} from "@/constaints";
 import {OutputType, ReturnType} from "./types";
+import {GetResponsePayload} from "@/app/api/v2/users/students/types";
 
 export async function handler(): Promise<ReturnType> {
     console.log("Timestamp: ", new Date().toLocaleString());
@@ -8,7 +8,7 @@ export async function handler(): Promise<ReturnType> {
     const domain = process.env.NEXT_PUBLIC_DOMAIN;
     const protocol = process.env.NEXT_PUBLIC_PROTOCOL;
 
-    const url = `${protocol}://${domain}/api/v2/students`;
+    const url = `${protocol}://${domain}/api/v2/users/students`;
 
     console.log(`Sending GET request to ${url}`);
 
