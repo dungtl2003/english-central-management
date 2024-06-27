@@ -19,6 +19,7 @@ import {OutputType} from "@/lib/action/admin/get-sessions/types";
 import {SkeletonCalendar} from "./skeleton-calendar";
 import {UseActionOptions, useAction} from "@/hooks/use-action";
 import {toast} from "@/components/ui/use-toast";
+import {concatName} from "@/lib/utils";
 
 const defaultImageUrl = "https://www.gravatar.com/avatar?d=mp";
 
@@ -30,10 +31,11 @@ const formatData = (data: OutputType | undefined): SessionCalendarData[] => {
         const session: SessionCalendarData = {
             id: element.id,
             teacherId: element.class.teacherId,
-            teacher:
-                element.class.teacher.user.lastName +
-                " " +
+            teacher: concatName(
                 element.class.teacher.user.firstName,
+                element.class.teacher.user.lastName,
+                true
+            ),
             birthday: element.class.teacher.user.birthday
                 ? format(element.class.teacher.user.birthday, "dd/MM/yyyy")
                 : "",

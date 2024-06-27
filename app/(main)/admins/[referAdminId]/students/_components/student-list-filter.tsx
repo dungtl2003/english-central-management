@@ -2,8 +2,8 @@ import React, {ReactElement} from "react";
 import {Table} from "@tanstack/react-table";
 import {
     StudentListModel,
-    StudentListInfoArray,
-    StudentListInfoDictionary,
+    studentListInfoArray,
+    studentListInfoDictionary,
 } from "./types";
 import StudentListSearchBar from "./student-list-search-bar";
 import StudentListColumnsFilter from "./student-list-columns-filter";
@@ -11,7 +11,7 @@ import StudentListRowsFilter from "./student-list-rows-filter";
 
 interface TableFilterProps {
     table: Table<StudentListModel>;
-    selectedStatus: string[];
+    selectedStatus: string;
     handleStatusChange: (status: string) => void;
 }
 
@@ -43,13 +43,13 @@ const StudentListFilter = ({
         <div className="flex items-center py-4">
             <div className="flex flex-row gap-x-4">
                 <StudentListSearchBar
-                    classInfoDictionary={StudentListInfoDictionary}
+                    classInfoDictionary={studentListInfoDictionary}
                     searchBar={searchBar}
                     table={table}
                     filterType={filterType}
                 />
                 <StudentListColumnsFilter
-                    tableColumns={StudentListInfoArray}
+                    tableColumns={studentListInfoArray}
                     selectedOptions={selectedRadio}
                     searchBarRef={searchBar}
                     handleOnSelect={handleRadioClick}

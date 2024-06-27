@@ -11,15 +11,13 @@ import {Table as T} from "@/components/ui/table";
 import {StudentListModel} from "./types";
 import {FaCheckCircle} from "react-icons/fa";
 
-interface TableContentProps {
-    table: Table<StudentListModel>;
-    columns: ColumnDef<StudentListModel>[];
-}
-
 const StudentListContent = ({
     table,
     columns,
-}: TableContentProps): ReactElement => {
+}: {
+    table: Table<StudentListModel>;
+    columns: ColumnDef<StudentListModel>[];
+}): ReactElement => {
     function shortenString(input: string): string {
         const shortened = `${input.slice(0, 12)}.....`;
         return shortened;

@@ -8,10 +8,10 @@ import {
 import {Button} from "@/components/ui/button";
 import {ChevronDown} from "lucide-react";
 
-export const Status: string[] = ["All", "Active", "Deleted"];
+export const statuses: string[] = ["All", "Active", "Deleted"];
 
 interface StudentListRowsFilterProps {
-    selectedStatus: string[];
+    selectedStatus: string;
     handleStatusChange: (status: string) => void;
 }
 
@@ -27,15 +27,15 @@ const StudentListRowsFilter = ({
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-                {Status.map((stt) => (
+                {statuses.map((status) => (
                     <DropdownMenuCheckboxItem
-                        key={stt}
-                        checked={selectedStatus.includes(stt)}
+                        key={status}
+                        checked={selectedStatus === status}
                         onCheckedChange={() => {
-                            handleStatusChange(stt);
+                            handleStatusChange(status);
                         }}
                     >
-                        {stt}
+                        {status}
                     </DropdownMenuCheckboxItem>
                 ))}
             </DropdownMenuContent>

@@ -1,4 +1,5 @@
 export type StudentListModel = {
+    studentId: string;
     fullName: string;
     email: string;
     phoneNumber: string;
@@ -16,7 +17,7 @@ export type StudentListDictionary = {
     [key: string]: string;
 };
 
-export const StudentListInfoArray: StudentListInfo[] = [
+export const studentListInfoArray: StudentListInfo[] = [
     {key: "fullName", title: "Full name"},
     {key: "email", title: "Email"},
     {key: "phoneNumber", title: "Phone number"},
@@ -25,7 +26,7 @@ export const StudentListInfoArray: StudentListInfo[] = [
     {key: "hasDesireClass", title: "Desired class"},
 ];
 
-export const StudentListInfoDictionary: StudentListDictionary = {
+export const studentListInfoDictionary: StudentListDictionary = {
     fullName: "Full name",
     email: "Email",
     phoneNumber: "Phone number",

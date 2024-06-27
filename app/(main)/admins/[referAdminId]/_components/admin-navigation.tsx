@@ -100,17 +100,17 @@ const AdminNavigation = () => {
                                             Manage teachers
                                         </DropdownMenuItem>
                                     </Link>
-                                    <Link href="/admins/1/classes">
+                                    <Link href={currentURL + "/classes"}>
                                         <DropdownMenuItem>
                                             Manage classes
                                         </DropdownMenuItem>
                                     </Link>
-                                    <Link href="/admins/1/students">
+                                    <Link href={currentURL + "/students"}>
                                         <DropdownMenuItem>
                                             Manage students
                                         </DropdownMenuItem>
                                     </Link>
-                                    <Link href="/admins/1/parents">
+                                    <Link href={currentURL + "/parents"}>
                                         <DropdownMenuItem>
                                             Manage parents
                                         </DropdownMenuItem>

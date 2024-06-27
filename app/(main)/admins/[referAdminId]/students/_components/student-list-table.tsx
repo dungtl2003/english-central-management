@@ -13,12 +13,12 @@ import {studentListDummyData} from "./student-list-dummy-data";
 import StudentListFilter from "./student-list-filter";
 import StudentListPagination from "./student-list-pagination";
 import StudentListContent from "./student-list-content";
-import {Status} from "./student-list-rows-filter";
-import {StudentListModel, StudentListInfoDictionary} from "./types";
+import {StudentListModel, studentListInfoDictionary} from "./types";
 import {ArrowUpDown} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {FaArrowUpRightFromSquare} from "react-icons/fa6";
 import Link from "next/link";
+import {useUser} from "@clerk/nextjs";
 
 function createColumns(
     key: string,
@@ -40,65 +40,68 @@ function createColumns(
     };
 }
 
-const StudentListColumns: ColumnDef<StudentListModel>[] = [];
-for (const key in StudentListInfoDictionary) {
-    StudentListColumns.push(createColumns(key, StudentListInfoDictionary[key]));
-}
+const createTableColumns = (
+    currentUrl: string
+): ColumnDef<StudentListModel>[] => {
+    const StudentListColumns: ColumnDef<StudentListModel>[] = [];
 
-StudentListColumns.push({
-    id: "actions",
-    enableHiding: false,
-    cell: () => (
-        <Link href="/admins/1/students/1">
-            <Button variant="outline">
-                Detail
-                <span className="pl-2">
-                    <FaArrowUpRightFromSquare size={13} />
-                </span>
-            </Button>
-        </Link>
-    ),
-});
+    for (const key in studentListInfoDictionary) {
+        StudentListColumns.push(
+            createColumns(key, studentListInfoDictionary[key])
+        );
+    }
 
-export const columns: ColumnDef<StudentListModel>[] = StudentListColumns;
+    StudentListColumns.push({
+        id: "actions",
+        enableHiding: false,
+        cell: ({row}) => (
+            <Link href={currentUrl + row.original.studentId}>
+                <Button variant="outline">
+                    Detail
+                    <span className="pl-2">
+                        <FaArrowUpRightFromSquare size={13} />
+                    </span>
+                </Button>
+            </Link>
+        ),
+    });
+
+    return StudentListColumns;
+};
 
 const StudentListTable = (): ReactElement => {
+    const {user} = useUser();
     const data: StudentListModel[] = studentListDummyData;
+    const columns: ColumnDef<StudentListModel>[] = createTableColumns(
+        "/admins/" + user?.id + "/students/"
+    );
     const [sorting, setSorting] = React.useState<SortingState>([
         {id: "hasDesireClass", desc: true},
     ]);
-    const [selectedStatus, setSelectedStatus] = React.useState<string[]>([
-        "All",
-    ]);
+    const [selectedStatus, setSelectedStatus] = React.useState<string>("All");
     const [pagination, setPagination] = React.useState<PaginationState>({
         pageIndex: 0,
         pageSize: 5,
     });
     const handleStatusChange = React.useCallback((status: string) => {
         if (status === "All") {
-            setSelectedStatus(["All"]);
+            setSelectedStatus("All");
         } else {
             setSelectedStatus((prev) => {
-                if (prev.includes(status)) {
-                    const newStatuses = prev.filter((s) => s !== status);
-                    return newStatuses.length === 0 ? ["All"] : newStatuses;
+                if (prev === status) {
+                    return "All";
                 } else {
-                    const newStatuses = [...prev, status].filter(
-                        (s) => s !== "All"
-                    );
-                    return newStatuses.length === Status.length - 1
-                        ? ["All"]
-                        : newStatuses;
+                    return status;
                 }
             });
         }
     }, []);
 
     const filteredData = React.useMemo(() => {
-        if (selectedStatus.includes("All")) {
+        if (selectedStatus === "All") {
             return data;
         }
-        return data.filter((row) => selectedStatus.includes(row.status));
+        return data.filter((row) => selectedStatus === row.status);
     }, [data, selectedStatus]);
 
     const table = useReactTable({
