@@ -3,12 +3,12 @@ import React, {ReactElement} from "react";
 import {TeacherListData, TeacherListDictionary} from "./types";
 import {Table} from "@tanstack/react-table";
 
-type TableSearchBarProps = {
+interface TableSearchBarProps {
     classInfoDictionary: TeacherListDictionary;
     searchBar: React.RefObject<HTMLInputElement>;
     table: Table<TeacherListData>;
     filterType: string;
-};
+}
 
 const TeacherListSearchBar = ({
     classInfoDictionary,
