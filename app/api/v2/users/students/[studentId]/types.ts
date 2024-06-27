@@ -7,6 +7,10 @@ import {
     Tuition,
     User,
 } from "@prisma/client";
+import {z} from "zod";
+import {PatchRequestPayloadSchema} from "./schema";
+
+export type PatchRequestPayload = z.infer<typeof PatchRequestPayloadSchema>;
 
 export type GetResponsePayload = {
     user: User;
@@ -20,3 +24,5 @@ export type GetResponsePayload = {
         tuitions: Tuition[];
     } & Class)[];
 } & Student;
+
+export type PatchResponsePayload = string;
