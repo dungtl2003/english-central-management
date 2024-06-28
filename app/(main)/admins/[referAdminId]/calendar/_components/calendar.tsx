@@ -155,19 +155,21 @@
 //     );
 // }
 
+// Đoạn trên là cái cũ
+
 import {Separator} from "@/components/ui/separator";
 import {Card, CardContent} from "@/components/ui/card";
 import {useState} from "react";
 import CalendarTabLeft from "./calendar-tab-left";
-// import CalendarTabRight from "./calendar-tab-right";
+// import CalendarTabRight from "./calendar-tab-right"; // Cái này cần
 import {
     add,
     eachDayOfInterval,
     endOfMonth,
     format,
-    // isSameDay,
+    // isSameDay, // Cái này cần
     parse,
-    // parseISO,
+    // parseISO, // Cái này cần
     startOfToday,
 } from "date-fns";
 
@@ -239,7 +241,7 @@ export default function Calendar() {
 
     // const selectedDaySessions = sessions.filter((session): boolean =>
     //     isSameDay(parseISO(session.startDateTime), selectedDay)
-    // );
+    // ); // Cái này cần
 
     return (
         <Card className="min-w-[70%] min-h-[430px]">
@@ -263,7 +265,7 @@ export default function Calendar() {
                 {/* <CalendarTabRight
                     selectedDay={selectedDay}
                     selectedDaySessions={selectedDaySessions}
-                /> */}
+                /> // Cái này cần */}
             </CardContent>
         </Card>
     );
