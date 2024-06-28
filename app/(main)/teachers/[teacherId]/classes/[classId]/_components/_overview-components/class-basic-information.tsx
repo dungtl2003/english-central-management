@@ -91,8 +91,7 @@ const ClassBasicInfomation: React.FC<{data: OutputType | undefined}> = ({
             <div className="col-span-3 ">
                 <Card className="min-h-[340px] max-h-[340px]">
                     <CardContent className="flex justify-center items-center">
-                        {/* <ClassChart data={data} /> */}
-                        <ClassChart />
+                        <ClassChart rawData={data} />
                     </CardContent>
                 </Card>
             </div>

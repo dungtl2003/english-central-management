@@ -1,3 +1,5 @@
+import {BulletLegendItemInterface} from "@unovis/ts";
+
 export interface OverviewCardData {
     numberOfStudents: string;
     classProgress: string;
@@ -7,10 +9,11 @@ export interface OverviewCardData {
 
 export interface ClassChartData {
     dateTime: string;
-    x: number;
-    presents: number;
-    lates: number;
-    absents: number;
+    cases: {
+        pr: number;
+        la: number;
+        ab: number;
+    };
 }
 
 export interface ClassBasicInfoData {
@@ -27,3 +30,15 @@ export enum OverviewTitle {
     GOAL = "Class goal",
     PRICE_PER_SESSION = "Price/session",
 }
+
+export enum Status {
+    Present = "pr",
+    Late = "la",
+    Absent = "ab",
+}
+
+export const statuses: Record<Status, BulletLegendItemInterface> = {
+    [Status.Present]: {name: "Present", color: "#00E7B4"},
+    [Status.Late]: {name: "Late", color: "#F39D00"},
+    [Status.Absent]: {name: "Absent", color: "#DA172C"},
+};
