@@ -3,7 +3,7 @@ import {Button} from "@/components/ui/button";
 import {Separator} from "@/components/ui/separator";
 import {FaCopy} from "react-icons/fa";
 import {FaCheck} from "react-icons/fa";
-import UnitDetailNewClass from "./unit-detail-new-class";
+import UnitDetailNewClass from "./new-class/unit-detail-new-class";
 
 interface TeacherDetailHeaderProps {
     studentId: string;
