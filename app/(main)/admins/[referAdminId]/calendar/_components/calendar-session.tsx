@@ -45,7 +45,7 @@ function CalendarSession({
                     </div>
                 </li>
             </HoverCardTrigger>
-            <HoverCardContent className="w-100">
+            <HoverCardContent className="w-100 right-0 top-0 translate-x-[150px] translate-y-[-100px]">
                 Teacher ID: {session.teacherId} <br />
                 Full name: {session.teacher || "___ ___"} <br />
                 Birthday: {session.birthday || "___/___/___"} <br />

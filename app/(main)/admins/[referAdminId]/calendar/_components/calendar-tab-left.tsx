@@ -1,4 +1,4 @@
-import React, {ReactElement, SetStateAction} from "react";
+import {ReactElement, SetStateAction, useState} from "react";
 import {ChevronLeftIcon, ChevronRightIcon} from "lucide-react";
 import {
     format,
@@ -8,14 +8,12 @@ import {
     isSameMonth,
     isToday,
     parseISO,
-    // parse,
-    // endOfMonth,
-    // eachDayOfInterval,
+    parse,
+    add,
 } from "date-fns";
 import {CardHeader, CardTitle} from "@/components/ui/card";
 import {Button} from "@/components/ui/button";
 import {SessionCalendarData} from "./types";
-// import {SessionModel} from "./calendar";
 import {Check, ChevronsUpDown} from "lucide-react";
 import {cn} from "@/lib/utils";
 import {
@@ -57,103 +55,89 @@ const months: {fullLabel: string; label: string; value: string}[] = [
     {fullLabel: "December", label: "Dec", value: "12"},
 ];
 
-const years: string[] = [
-    "2015",
-    "2016",
-    "2017",
-    "2018",
-    "2019",
-    "2020",
-    "2021",
-    "2022",
-    "2023",
-    "2024",
-    "2025",
-    "2026",
-    "2027",
-    "2028",
-    "2029",
-    "2030",
-];
+const createYearsList = (startYear: number, endYear: number): string[] => {
+    if (startYear > endYear) return [];
+    const years: string[] = [];
+    for (let index = startYear; index <= endYear; index++) {
+        years.push(index.toString());
+    }
+    return years;
+};
 
 const CalendarTabLeft = ({
-    previousMonth,
-    nextMonth,
     setSelectedDay,
-    // setFirstDayCurrentMonth,
-    // setCustomMonth,
-    // setCustomYear,
-    // setDays,
+    setFirstDayCurrentMonth,
     sessions,
     days,
     firstDayCurrentMonth,
     selectedDay,
+    minYear,
+    maxYear,
 }: {
     firstDayCurrentMonth: Date;
-    previousMonth: () => void;
-    nextMonth: () => void;
     days: Date[];
-    // setDays: (days: Date[]) => void;
     setSelectedDay: (value: SetStateAction<Date>) => void;
     sessions: SessionCalendarData[];
-    // setFirstDayCurrentMonth: (value: SetStateAction<Date>) => void;
-    // setCustomMonth: (value: SetStateAction<string>) => void;
-    // setCustomYear: (value: SetStateAction<string>) => void;
-    // sessions: SessionModel[];
+    setFirstDayCurrentMonth: (value: SetStateAction<Date>) => void;
     selectedDay: Date;
+    minYear: number;
+    maxYear: number;
 }): ReactElement => {
+    const [years] = useState<string[]>(
+        createYearsList(
+            minYear,
+            maxYear < new Date().getFullYear()
+                ? new Date().getFullYear()
+                : maxYear
+        )
+    );
     const currentMonth = format(firstDayCurrentMonth, "MM");
     const currentYear = format(firstDayCurrentMonth, "yyyy");
+    const [monthOpen, setMonthOpen] = useState(false);
+    const [yearOpen, setYearOpen] = useState(false);
 
-    const [monthOpen, setMonthOpen] = React.useState(false);
-    const [customMonth, setCustomMonthState] = React.useState(currentMonth);
+    const previousMonth = () => {
+        const firstDayPreviousMonth: Date = add(firstDayCurrentMonth, {
+            months: -1,
+        });
+        if (firstDayPreviousMonth.getFullYear() >= Number(years[0])) {
+            setFirstDayCurrentMonth(firstDayPreviousMonth);
+        }
+    };
+    const nextMonth = () => {
+        const firstDayNextMonth: Date = add(firstDayCurrentMonth, {months: 1});
+        if (
+            firstDayNextMonth.getFullYear() <= Number(years[years.length - 1])
+        ) {
+            setFirstDayCurrentMonth(firstDayNextMonth);
+        }
+    };
 
-    const [yearOpen, setYearOpen] = React.useState(false);
-    const [customYear, setCustomYearState] = React.useState(currentYear);
-
-    const handleMonthChange = (newMonth: string) => {
-        // setCustomMonth(newMonth);
-        // const newDate = parse(
-        //     `${customYear}-${newMonth}-01`,
-        //     "yyyy-MM-dd",
-        //     new Date()
-        // );
-        // setFirstDayCurrentMonth(newDate);
-        // const newDays = eachDayOfInterval({
-        //     start: newDate,
-        //     end: endOfMonth(newDate),
-        // });
-        // setDays(newDays);
+    const handleMonthChange = (newMonth: string /* MM */) => {
+        const newDate = parse(
+            `${currentYear}-${newMonth}-01`,
+            "yyyy-MM-dd",
+            new Date()
+        );
+        setFirstDayCurrentMonth(newDate);
         console.debug("month:", newMonth);
     };
 
-    const handleYearChange = (newYear: string) => {
-        // setCustomYear(newYear);
-        // const newDate = parse(
-        //     `${newYear}-${customMonth}-01`,
-        //     "yyyy-MM-dd",
-        //     new Date()
-        // );
-        // setFirstDayCurrentMonth(newDate);
-        // const newDays = eachDayOfInterval({
-        //     start: newDate,
-        //     end: endOfMonth(newDate),
-        // });
-        // setDays(newDays);
-
+    const handleYearChange = (newYear: string /* yyyy */) => {
+        const newDate = parse(
+            `${newYear}-${currentMonth}-01`,
+            "yyyy-MM-dd",
+            new Date()
+        );
+        setFirstDayCurrentMonth(newDate);
         console.debug("year:", newYear);
     };
-
-    React.useEffect(() => {
-        setCustomMonthState(currentMonth);
-        setCustomYearState(currentYear);
-    }, [currentMonth, currentYear]);
 
     return (
         <CardHeader className="col-span-8">
             <div className="flex items-center pb-2.5">
                 <CardTitle className="flex-auto">
-                    {format(firstDayCurrentMonth, "MMMM yyyy")}
+                    {/* {format(firstDayCurrentMonth, "MMMM yyyy")} */}
                     <div className="flex flex-row items-center gap-x-3">
                         <Popover open={monthOpen} onOpenChange={setMonthOpen}>
                             <PopoverTrigger asChild>
@@ -163,11 +147,11 @@ const CalendarTabLeft = ({
                                     aria-expanded={monthOpen}
                                     className="w-fit justify-between"
                                 >
-                                    {customMonth
+                                    {currentMonth
                                         ? months.find(
                                               (month) =>
-                                                  month.value === customMonth
-                                          )?.label
+                                                  month.value === currentMonth
+                                          )?.fullLabel
                                         : "Select month"}
                                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                 </Button>
@@ -196,7 +180,7 @@ const CalendarTabLeft = ({
                                                     <Check
                                                         className={cn(
                                                             "mr-2 h-4 w-4",
-                                                            customMonth ===
+                                                            currentMonth ===
                                                                 month.value
                                                                 ? "opacity-100"
                                                                 : "opacity-0"
@@ -218,7 +202,7 @@ const CalendarTabLeft = ({
                                     aria-expanded={yearOpen}
                                     className="w-fit justify-between"
                                 >
-                                    {customYear ? customYear : "Select year"}
+                                    {currentYear ? currentYear : "Select year"}
                                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                 </Button>
                             </PopoverTrigger>
@@ -246,7 +230,7 @@ const CalendarTabLeft = ({
                                                     <Check
                                                         className={cn(
                                                             "mr-2 h-4 w-4",
-                                                            customYear === year
+                                                            currentYear === year
                                                                 ? "opacity-100"
                                                                 : "opacity-0"
                                                         )}

@@ -11,8 +11,6 @@ import {
     isSameDay,
     parse,
     parseISO,
-    // setMonth,
-    // setYear,
     startOfToday,
 } from "date-fns";
 import {handler} from "@/lib/action/admin/get-sessions";
@@ -25,10 +23,33 @@ import {concatName} from "@/lib/utils";
 
 const defaultImageUrl = "https://www.gravatar.com/avatar?d=mp";
 
-const formatData = (data: OutputType | undefined): SessionCalendarData[] => {
-    if (!data) return [];
+const formatData = (
+    data: OutputType | undefined
+): {
+    sessionCalendarData: SessionCalendarData[];
+    minYear: number;
+    maxYear: number;
+} => {
+    if (!data)
+        return {
+            sessionCalendarData: [],
+            minYear: new Date().getFullYear(),
+            maxYear: new Date().getFullYear(),
+        };
     const sessions: SessionCalendarData[] = [];
+    let minYear: number = data[0].actualStartTime
+        ? new Date(data[0].actualStartTime).getFullYear()
+        : new Date(data[0].estimatedStartTime).getFullYear();
+    let maxYear: number = data[0].actualStartTime
+        ? new Date(data[0].actualStartTime).getFullYear()
+        : new Date(data[0].estimatedStartTime).getFullYear();
     data.forEach((element) => {
+        const elementYear: number = element.actualStartTime
+            ? new Date(element.actualStartTime).getFullYear()
+            : new Date(element.estimatedStartTime).getFullYear();
+        if (elementYear < minYear) minYear = elementYear;
+        if (elementYear > maxYear) maxYear = elementYear;
+
         const session: SessionCalendarData = {
             id: element.id,
             teacherId: element.class.teacherId,
@@ -63,12 +84,18 @@ const formatData = (data: OutputType | undefined): SessionCalendarData[] => {
         };
         sessions.push(session);
     });
-    return sessions;
+    return {
+        sessionCalendarData: sessions,
+        minYear: minYear,
+        maxYear: maxYear,
+    };
 };
 
 export default function Calendar() {
     const [sessions, setSessions] = useState<SessionCalendarData[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [minYear, setMinYear] = useState(new Date().getFullYear());
+    const [maxYear, setMaxYear] = useState(new Date().getFullYear());
 
     const fetchSessions = useCallback(handler, []);
     const event: UseActionOptions<OutputType> = useMemo(() => {
@@ -83,13 +110,19 @@ export default function Calendar() {
                 setIsLoading(false);
             },
             onSuccess: (data: OutputType) => {
-                setSessions(formatData(data));
                 toast({
                     title: "success",
                     variant: "success",
                     description: "Get calendar succeed",
                 });
-
+                const dataFormat: {
+                    sessionCalendarData: SessionCalendarData[];
+                    minYear: number;
+                    maxYear: number;
+                } = formatData(data);
+                setMinYear(dataFormat.minYear);
+                setMaxYear(dataFormat.maxYear);
+                setSessions(dataFormat.sessionCalendarData);
                 setIsLoading(false);
             },
         };
@@ -102,37 +135,16 @@ export default function Calendar() {
 
     const today: Date = startOfToday();
     const [selectedDay, setSelectedDay] = useState(today);
-    const [currentMonth, setCurrentMonth] = useState(format(today, "MMM-yyyy"));
-    const firstDayCurrentMonth: Date = parse(
-        currentMonth,
-        "MMM-yyyy",
-        new Date()
+    const [currentMonth] = useState(format(today, "MMM-yyyy"));
+
+    const [firstDayCurrentMonth, setFirstDayCurrentMonth] = useState<Date>(
+        parse(currentMonth, "MMM-yyyy", new Date())
     );
 
     const days: Date[] = eachDayOfInterval({
         start: firstDayCurrentMonth,
         end: endOfMonth(firstDayCurrentMonth),
     });
-
-    function previousMonth() {
-        const firstDayNextMonth: Date = add(firstDayCurrentMonth, {months: -1});
-        setCurrentMonth(format(firstDayNextMonth, "MMM-yyyy"));
-    }
-
-    function nextMonth() {
-        const firstDayNextMonth: Date = add(firstDayCurrentMonth, {months: 1});
-        setCurrentMonth(format(firstDayNextMonth, "MMM-yyyy"));
-    }
-
-    // function selectedMonth (selectedMonth:number) {
-    //     const firstDaySelectedMonth:Date = setMonth(firstDayCurrentMonth,selectedMonth-1);
-    //     setCurrentMonth(format(firstDaySelectedMonth, "MMM-yyyy"))
-    // }
-
-    // function selectedYear (selectedYear:number) {
-    //     const firstDaySelectedYear:Date = setYear(firstDayCurrentMonth,selectedYear);
-    //     setCurrentMonth(format(firstDaySelectedYear, "MMM-yyyy"))
-    // }
 
     const selectedDaySessions = sessions.filter((session): boolean =>
         isSameDay(parseISO(session.startDateTime), selectedDay)
@@ -147,11 +159,12 @@ export default function Calendar() {
                         <CalendarTabLeft
                             days={days}
                             firstDayCurrentMonth={firstDayCurrentMonth}
-                            nextMonth={nextMonth}
-                            previousMonth={previousMonth}
                             selectedDay={selectedDay}
                             sessions={sessions}
                             setSelectedDay={setSelectedDay}
+                            setFirstDayCurrentMonth={setFirstDayCurrentMonth}
+                            minYear={minYear}
+                            maxYear={maxYear}
                         />
                         <div className="col-span-1 min-h-[430px] flex justify-center">
                             <Separator orientation="vertical" />
