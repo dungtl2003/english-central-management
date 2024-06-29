@@ -21,6 +21,8 @@ export type OutputType = {
         user: User;
     } & Parent)[];
     classes: ({
+        approvedAt: Date | null;
+        rejectedAt: Date | null;
         unit: Unit;
         students: StudentsInClasses[];
         sessions: ({

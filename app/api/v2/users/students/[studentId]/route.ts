@@ -121,7 +121,13 @@ export async function GET(
         const result: GetResponsePayload = {
             ...student,
             parents: parents.map((p) => p.parent),
-            classes: classes.map((c) => c.class),
+            classes: classes.map((c) => {
+                return {
+                    ...c.class,
+                    approvedAt: c.approvedAt,
+                    rejectedAt: c.rejectedAt,
+                };
+            }),
         };
 
         return NextResponse.json<GetResponsePayload>(result, {status: 200});
