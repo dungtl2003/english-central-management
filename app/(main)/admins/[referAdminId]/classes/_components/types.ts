@@ -64,3 +64,10 @@ export type UnitModel = {
         seconds: string;
     };
 };
+
+export type TeacherModel = {
+    fullName: string;
+    id: string;
+    birthday: string;
+    createDate: string;
+};

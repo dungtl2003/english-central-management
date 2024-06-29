@@ -11,6 +11,8 @@ import {
     isSameDay,
     parse,
     parseISO,
+    // setMonth,
+    // setYear,
     startOfToday,
 } from "date-fns";
 import {handler} from "@/lib/action/admin/get-sessions";
@@ -26,7 +28,6 @@ const defaultImageUrl = "https://www.gravatar.com/avatar?d=mp";
 const formatData = (data: OutputType | undefined): SessionCalendarData[] => {
     if (!data) return [];
     const sessions: SessionCalendarData[] = [];
-    data.forEach((e) => console.log(e.class.teacher));
     data.forEach((element) => {
         const session: SessionCalendarData = {
             id: element.id,
@@ -122,6 +123,16 @@ export default function Calendar() {
         const firstDayNextMonth: Date = add(firstDayCurrentMonth, {months: 1});
         setCurrentMonth(format(firstDayNextMonth, "MMM-yyyy"));
     }
+
+    // function selectedMonth (selectedMonth:number) {
+    //     const firstDaySelectedMonth:Date = setMonth(firstDayCurrentMonth,selectedMonth-1);
+    //     setCurrentMonth(format(firstDaySelectedMonth, "MMM-yyyy"))
+    // }
+
+    // function selectedYear (selectedYear:number) {
+    //     const firstDaySelectedYear:Date = setYear(firstDayCurrentMonth,selectedYear);
+    //     setCurrentMonth(format(firstDaySelectedYear, "MMM-yyyy"))
+    // }
 
     const selectedDaySessions = sessions.filter((session): boolean =>
         isSameDay(parseISO(session.startDateTime), selectedDay)

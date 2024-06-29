@@ -105,6 +105,11 @@ const AdminNavigation = () => {
                                             Manage classes
                                         </DropdownMenuItem>
                                     </Link>
+                                    <Link href="/admins/1/units">
+                                        <DropdownMenuItem>
+                                            Manage units
+                                        </DropdownMenuItem>
+                                    </Link>
                                     <Link href={currentURL + "/students"}>
                                         <DropdownMenuItem>
                                             Manage students
