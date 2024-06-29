@@ -2,15 +2,13 @@ import React, {ReactElement} from "react";
 import {Separator} from "@/components/ui/separator";
 import {TabsList, TabsTrigger} from "@/components/ui/tabs";
 
-interface StudentDetailTabslistProps {
-    currentStatus: string;
-    getButtonBasedOnStatus: (currentStatus: string) => ReactElement;
-}
-
 const StudentDetailTabslist = ({
     currentStatus,
     getButtonBasedOnStatus,
-}: StudentDetailTabslistProps): ReactElement => {
+}: {
+    currentStatus: string;
+    getButtonBasedOnStatus: (currentStatus: string) => ReactElement;
+}): ReactElement => {
     return (
         <div className="col-span-1 pl-2 grid grid-cols-10">
             <TabsList className="col-span-9 grid grid-rows-11">

@@ -9,17 +9,17 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import {attendancePopupDummyData} from "./attendance-popup-dummy-data";
 import AttendancePopupFilter from "./attendance-popup-filter";
 import AttendancePopupPagination from "./attendance-popup-pagination";
 import AttendancePopupContent from "./attendance-popup-content";
-import {Status} from "./attendance-popup-rows-filter";
+import {statuses} from "./attendance-popup-rows-filter";
 import {
     AttendancePopupColumns,
     attendancePopupColumnsDictionary,
 } from "./types";
 import {ArrowUpDown} from "lucide-react";
 import {Button} from "@/components/ui/button";
+import {AttendanceOfStudent} from "../types";
 
 function createColumns(
     key: string,
@@ -51,8 +51,19 @@ for (const key in attendancePopupColumnsDictionary) {
 export const columns: ColumnDef<AttendancePopupColumns>[] =
     attendanceTableColumns;
 
-const AttendancePopupTable = (): ReactElement => {
-    const data: AttendancePopupColumns[] = attendancePopupDummyData;
+const AttendancePopupTable = ({
+    attendanceTable,
+}: {
+    attendanceTable: {
+        numberStudentsPresent: string;
+        numberStudentsLate: string;
+        numberStudentsAbsent: string;
+    } & {
+        attendances: AttendanceOfStudent[];
+    };
+}): ReactElement => {
+    const data: AttendancePopupColumns[] =
+        attendanceTable.attendances as AttendancePopupColumns[];
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [selectedStatus, setSelectedStatus] = React.useState<string[]>([
         "All",
@@ -73,7 +84,7 @@ const AttendancePopupTable = (): ReactElement => {
                     const newStatuses = [...prev, status].filter(
                         (s) => s !== "All"
                     );
-                    return newStatuses.length === Status.length - 1
+                    return newStatuses.length === statuses.length - 1
                         ? ["All"]
                         : newStatuses;
                 }
@@ -85,7 +96,9 @@ const AttendancePopupTable = (): ReactElement => {
         if (selectedStatus.includes("All")) {
             return data;
         }
-        return data.filter((row) => selectedStatus.includes(row.status));
+        return data.filter((row) =>
+            selectedStatus.map((v) => v.toUpperCase()).includes(row.status)
+        );
     }, [data, selectedStatus]);
 
     const table = useReactTable({
@@ -109,6 +122,9 @@ const AttendancePopupTable = (): ReactElement => {
                 table={table}
                 selectedStatus={selectedStatus}
                 handleStatusChange={handleStatusChange}
+                numberStudentsAbsent={attendanceTable.numberStudentsAbsent}
+                numberStudentsLate={attendanceTable.numberStudentsLate}
+                numberStudentsPresent={attendanceTable.numberStudentsPresent}
             />
             <AttendancePopupContent table={table} columns={columns} />
             <AttendancePopupPagination table={table} />

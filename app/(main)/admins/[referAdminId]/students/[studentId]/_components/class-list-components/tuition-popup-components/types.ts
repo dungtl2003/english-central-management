@@ -10,7 +10,7 @@ export type ColumnsDictionary = {
 export type TuitionPopupColumns = {
     time: string;
     numberOfSession: string;
-    monthlyPayment: string;
+    amount: string;
     discount: string;
     status: string;
 };
@@ -18,7 +18,7 @@ export type TuitionPopupColumns = {
 export const tuitionPopupColumnsArray: ColumnsModel[] = [
     {key: "time", title: "Time"},
     {key: "numberOfSession", title: "Attendances"},
-    {key: "monthlyPayment", title: "Payment (No discount)"},
+    {key: "amount", title: "Payment (No discount)"},
     {key: "discount", title: "Discount (%)"},
     {key: "status", title: "Status"},
 ];
@@ -26,7 +26,7 @@ export const tuitionPopupColumnsArray: ColumnsModel[] = [
 export const tuitionPopupColumnsDictionary: ColumnsDictionary = {
     time: "Time",
     numberOfSession: "Attendances",
-    monthlyPayment: "Payment (No discount)",
+    amount: "Payment (No discount)",
     discount: "Discount (%)",
     status: "Status",
 };

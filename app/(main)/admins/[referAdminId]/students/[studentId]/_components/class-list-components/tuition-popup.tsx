@@ -2,8 +2,13 @@ import React, {ReactElement} from "react";
 import {Button} from "@/components/ui/button";
 import {Dialog, DialogContent, DialogTrigger} from "@/components/ui/dialog";
 import TuitionPopupTable from "./tuition-popup-components/tuition-popup-table";
+import {TuitionOfStudent} from "./types";
 
-const TuitionPopup = (): ReactElement => {
+const TuitionPopup = ({
+    tuitionOfStudents,
+}: {
+    tuitionOfStudents: TuitionOfStudent[];
+}): ReactElement => {
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -19,7 +24,7 @@ const TuitionPopup = (): ReactElement => {
                 <div className="flex justify-center items-center text-2xl">
                     Tuition table
                 </div>
-                <TuitionPopupTable />
+                <TuitionPopupTable tuitionOfStudents={tuitionOfStudents} />
             </DialogContent>
         </Dialog>
     );

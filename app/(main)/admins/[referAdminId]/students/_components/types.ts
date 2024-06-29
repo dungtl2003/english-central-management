@@ -5,7 +5,7 @@ export type StudentListModel = {
     phoneNumber: string;
     birthday: string;
     status: string;
-    hasDesireClass: string;
+    hasDesireClass: boolean;
 };
 
 export type StudentListInfo = {
@@ -34,3 +34,9 @@ export const studentListInfoDictionary: StudentListDictionary = {
     status: "Status",
     hasDesireClass: "Desired class",
 };
+
+export enum StudentStatus {
+    ALL = "All",
+    ACTIVE = "Active",
+    DELETED = "Deleted",
+}

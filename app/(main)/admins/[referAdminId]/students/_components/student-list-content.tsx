@@ -71,9 +71,7 @@ const StudentListContent = ({
                                         );
                                     } else if (isDesiredClassColumn) {
                                         cellContent =
-                                            cell
-                                                .getValue<string>()
-                                                .toLowerCase() === "true" ? (
+                                            cell.getValue<boolean>() ? (
                                                 <div className="flex items-center justify-center">
                                                     <FaCheckCircle size={25} />
                                                 </div>

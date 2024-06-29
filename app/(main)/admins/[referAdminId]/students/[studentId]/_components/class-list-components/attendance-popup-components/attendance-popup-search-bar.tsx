@@ -19,7 +19,7 @@ const AttendancePopupSearchBar = ({
     return (
         <Input
             placeholder={`Filter by ${classInfoDictionary[
-                "date"
+                "attendanceDate"
             ].toLowerCase()}`}
             ref={searchBar}
             value={

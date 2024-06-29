@@ -4,11 +4,11 @@ import {Table} from "@tanstack/react-table";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 
-interface TablePaginationProps {
+const StudentListPagination = ({
+    table,
+}: {
     table: Table<StudentListModel>;
-}
-
-const StudentListPagination = ({table}: TablePaginationProps): ReactElement => {
+}): ReactElement => {
     const pageIndexInput = React.useRef<HTMLInputElement>(null);
     const pageIndex = table.getState().pagination.pageIndex;
 

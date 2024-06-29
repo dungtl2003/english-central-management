@@ -1,6 +1,6 @@
 "use client";
 
-import React, {ReactElement} from "react";
+import React, {ReactElement, useState} from "react";
 import {Button} from "@/components/ui/button";
 import {Card} from "@/components/ui/card";
 import {Tabs} from "@/components/ui/tabs";
@@ -9,11 +9,12 @@ import StudentDetailTabslist from "./student-detail-tabs-list";
 import StudentInformationTab from "./student-information-components/student-information-tab";
 import StudentClassListTab from "./class-list-components/class-list-tab";
 import DesiredClassTab from "./desired-class-components/desired-class-tab";
+import {StudentClassesData, StudentDetailData, StudentStatus} from "./types";
+import {OutputType} from "@/lib/action/admin/get-student-detail/types";
+//import { OutputType as DeleteOutputType } from "@/lib/action/admin/";
 
-// Đoạn này mô tả ý tưởng về việc nếu chưa được duyệt thì sẽ hiển thị nút nào
-const status: string = "active"; // => trạng thái của học sinh
 const getButtonBasedOnStatus = (currentStatus: string): ReactElement => {
-    if (currentStatus === "active") {
+    if (currentStatus === StudentStatus.ACTIVE) {
         return (
             <>
                 <Button
@@ -25,23 +26,22 @@ const getButtonBasedOnStatus = (currentStatus: string): ReactElement => {
             </>
         );
     }
-    return (
-        <Button className="min-w-[85px]" variant="default">
-            Back to list
-        </Button>
-    );
+    if (currentStatus === StudentStatus.DELETED) {
+        return <></>;
+    }
+    return <></>;
 };
-// Đoạn này mô tả ý tưởng về việc hiển thị status như thế nào
+
 const getStatusColor = (status: string): ReactElement => {
     switch (status) {
-        case "active":
+        case StudentStatus.ACTIVE:
             return (
                 <span className="ml-[5px] dark:text-green-400 text-green-600">
                     {" "}
                     Active
                 </span>
             );
-        case "deleted":
+        case StudentStatus.DELETED:
             return (
                 <span className="ml-[5px] dark:text-red-500 text-red-600">
                     {" "}
@@ -52,17 +52,60 @@ const getStatusColor = (status: string): ReactElement => {
     return <span>Error</span>;
 };
 
-// Đoạn này mô tả ý tưởng về việc copy vào clipboard
-const studentId: string = "0123456789123456789132456789";
+const formatData = (
+    data: OutputType | undefined
+): StudentDetailData | undefined => {
+    if (!data) return undefined;
+    const studentDesiredClasses: StudentClassesData[] = [];
+    const studentaCurrentClasses: StudentClassesData[] = [];
+    data.classes.forEach((element) => {
+        if (element.approvedAt && !element.rejectedAt)
+            studentaCurrentClasses.push(element as StudentClassesData);
+        if (!element.rejectedAt && !element.approvedAt)
+            studentDesiredClasses.push(element as StudentClassesData);
+    });
 
-const StudentDetail = (): ReactElement => {
+    const student: StudentDetailData = {
+        studentInfoData: {
+            id: data.id,
+            discount: data.discount,
+            user: data.user,
+            parents: data.parents,
+        },
+        studentDesiredClassesData: studentDesiredClasses,
+        studentaCurrentClassesData: studentaCurrentClasses,
+    };
+    return student;
+};
+
+const StudentDetail = ({
+    studentDetail,
+}: {
+    studentDetail: OutputType | undefined;
+}): ReactElement => {
+    const {
+        studentInfoData,
+        studentDesiredClassesData,
+        studentaCurrentClassesData,
+    } = (formatData(studentDetail) as StudentDetailData) || null;
+    const [currentDiscount, setCurrentDiscount] = useState<number>(
+        studentInfoData.discount || 0
+    );
+    console.debug(studentDetail);
+
     return (
         <div className="w-[80%] min-h-[680px] pt-[90px]">
             <Card className="min-h-full">
                 <div className="grid grid-rows-6">
                     <StudentDetailHeader
-                        studentId={studentId}
-                        status={status}
+                        studentId={studentInfoData.id!}
+                        firstName={studentInfoData.user.firstName || "___"}
+                        lastName={studentInfoData.user.lastName || "___"}
+                        status={
+                            studentInfoData.user.deletedAt
+                                ? StudentStatus.DELETED
+                                : StudentStatus.ACTIVE
+                        }
                         getStatusColor={getStatusColor}
                     />
                     <div className="row-span-5">
@@ -72,13 +115,31 @@ const StudentDetail = (): ReactElement => {
                             defaultValue="studentInfo"
                         >
                             <StudentDetailTabslist
-                                currentStatus={status}
+                                currentStatus={
+                                    studentInfoData.user.deletedAt
+                                        ? StudentStatus.DELETED
+                                        : StudentStatus.ACTIVE
+                                }
                                 getButtonBasedOnStatus={getButtonBasedOnStatus}
                             />
                             <div className="col-span-3 pr-6">
-                                <StudentInformationTab />
-                                <StudentClassListTab />
-                                <DesiredClassTab />
+                                <StudentInformationTab
+                                    studentInfoData={studentInfoData}
+                                    currentDiscount={currentDiscount}
+                                    setCurrentDiscount={setCurrentDiscount}
+                                />
+                                <StudentClassListTab
+                                    studentClassesData={
+                                        studentaCurrentClassesData
+                                    }
+                                    discount={studentInfoData.discount}
+                                />
+                                <DesiredClassTab
+                                    studentId={studentInfoData.id}
+                                    studentClassesData={
+                                        studentDesiredClassesData
+                                    }
+                                />
                             </div>
                         </Tabs>
                     </div>

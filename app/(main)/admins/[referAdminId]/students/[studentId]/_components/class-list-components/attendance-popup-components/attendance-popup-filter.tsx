@@ -16,19 +16,24 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {Button} from "@/components/ui/button";
 import {ChevronDown} from "lucide-react";
-interface TableFilterProps {
-    table: Table<AttendancePopupColumns>;
-    selectedStatus: string[];
-    handleStatusChange: (status: string) => void;
-}
 
 const AttendancePopupFilter = ({
     table,
     selectedStatus,
     handleStatusChange,
-}: TableFilterProps): ReactElement => {
-    const [filterType, _setFilterType] = React.useState("fullName");
-    const [selectedRadio, _setSelectedRadio] = React.useState("fullName");
+    numberStudentsPresent,
+    numberStudentsLate,
+    numberStudentsAbsent,
+}: {
+    table: Table<AttendancePopupColumns>;
+    selectedStatus: string[];
+    handleStatusChange: (status: string) => void;
+    numberStudentsPresent: string;
+    numberStudentsLate: string;
+    numberStudentsAbsent: string;
+}): ReactElement => {
+    const [filterType, _setFilterType] = React.useState("attendanceDate");
+    const [selectedRadio, _setSelectedRadio] = React.useState("attendanceDate");
     const searchBar = React.useRef<HTMLInputElement>(null);
     const handleRadioClick = (
         key: string,
@@ -45,6 +50,11 @@ const AttendancePopupFilter = ({
         table.setColumnFilters([]);
         table.setRowSelection({});
     };
+
+    const numberOfSession =
+        Number(numberStudentsPresent) +
+        Number(numberStudentsAbsent) +
+        Number(numberStudentsLate);
 
     return (
         <div className="flex items-center py-4">
@@ -71,27 +81,30 @@ const AttendancePopupFilter = ({
                             <Button variant="outline">
                                 {/* số buổi đã học hiện tại / tổng số buổi */}
                                 Current progress:{" "}
-                                <span className="pl-1.5">27 / 50</span>{" "}
+                                <span className="pl-1.5">
+                                    {numberOfSession}
+                                </span>{" "}
                                 <ChevronDown className="ml-2 h-4 w-4" />
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="">
                             <DropdownMenuItem className="flex justify-center items-center">
-                                {/* Cái này là đến đúng giờ, nếu mà đến muộn vẫn tính là "Present" thì tự cộng vào hoặc đổi cái "Present" => "On time" */}
                                 Present:{" "}
                                 <span className="pl-1.5 text-green-400">
-                                    23
+                                    {numberStudentsPresent}
                                 </span>
                             </DropdownMenuItem>
                             <DropdownMenuItem className="flex justify-center items-center">
                                 Late:{" "}
                                 <span className="pl-1.5 text-yellow-400">
-                                    3
+                                    {numberStudentsLate}
                                 </span>
                             </DropdownMenuItem>
                             <DropdownMenuItem className="flex justify-center items-center">
                                 Absent:{" "}
-                                <span className="pl-1.5 text-red-600">1</span>
+                                <span className="pl-1.5 text-red-600">
+                                    {numberStudentsAbsent}
+                                </span>
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>

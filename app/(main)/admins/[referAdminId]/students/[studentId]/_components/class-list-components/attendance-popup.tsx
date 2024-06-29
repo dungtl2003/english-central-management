@@ -2,8 +2,19 @@ import React, {ReactElement} from "react";
 import {Button} from "@/components/ui/button";
 import {Dialog, DialogContent, DialogTrigger} from "@/components/ui/dialog";
 import AttendancePopupTable from "./attendance-popup-components/attendance-popup-table";
+import {AttendanceOfStudent} from "./types";
 
-const AttendancePopup = (): ReactElement => {
+const AttendancePopup = ({
+    attendanceTable,
+}: {
+    attendanceTable: {
+        numberStudentsPresent: string;
+        numberStudentsLate: string;
+        numberStudentsAbsent: string;
+    } & {
+        attendances: AttendanceOfStudent[];
+    };
+}): ReactElement => {
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -19,7 +30,7 @@ const AttendancePopup = (): ReactElement => {
                 <div className="flex justify-center items-center text-2xl">
                     Attendance table
                 </div>
-                <AttendancePopupTable />
+                <AttendancePopupTable attendanceTable={attendanceTable} />
             </DialogContent>
         </Dialog>
     );

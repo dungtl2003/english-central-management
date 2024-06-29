@@ -3,19 +3,17 @@ import React, {ReactElement} from "react";
 import {StudentListModel, StudentListDictionary} from "./types";
 import {Table} from "@tanstack/react-table";
 
-interface TableSearchBarProps {
-    classInfoDictionary: StudentListDictionary;
-    searchBar: React.RefObject<HTMLInputElement>;
-    table: Table<StudentListModel>;
-    filterType: string;
-}
-
 const StudentListSearchBar = ({
     classInfoDictionary,
     filterType,
     searchBar,
     table,
-}: TableSearchBarProps): ReactElement => {
+}: {
+    classInfoDictionary: StudentListDictionary;
+    searchBar: React.RefObject<HTMLInputElement>;
+    table: Table<StudentListModel>;
+    filterType: string;
+}): ReactElement => {
     return (
         <Input
             placeholder={`Filter by ${classInfoDictionary[

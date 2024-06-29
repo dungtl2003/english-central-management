@@ -83,7 +83,6 @@ export default function Calendar() {
             },
             onSuccess: (data: OutputType) => {
                 setSessions(formatData(data));
-                console.log(formatData(data));
                 toast({
                     title: "success",
                     variant: "success",

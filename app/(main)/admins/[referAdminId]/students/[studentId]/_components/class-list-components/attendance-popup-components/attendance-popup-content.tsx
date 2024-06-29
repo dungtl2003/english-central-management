@@ -46,15 +46,15 @@ const AttendancePopupContent = ({
                         table.getRowModel().rows.map((row) => (
                             <TableRow key={row.id}>
                                 {row.getAllCells().map((cell) => {
-                                    const isFullNameColumn =
-                                        cell.column.id === "fullName";
-                                    const cn: string = isFullNameColumn
-                                        ? " text-left pl-7"
-                                        : "";
+                                    // const isFullNameColumn =
+                                    //     cell.column.id === "fullName";
+                                    // const cn: string = isFullNameColumn
+                                    //     ? " text-left pl-7"
+                                    //     : "";
                                     return (
                                         <TableCell
                                             key={cell.id}
-                                            className={"w-2/12" + cn}
+                                            className={"w-2/12" /* + cn */}
                                         >
                                             {flexRender(
                                                 cell.column.columnDef.cell,

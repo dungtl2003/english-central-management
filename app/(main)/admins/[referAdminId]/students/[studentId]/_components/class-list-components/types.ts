@@ -8,23 +8,58 @@ export type ColumnsDictionary = {
 };
 
 export type ClasslistColumns = {
+    classId: string;
     className: string;
     year: string;
-    start: string;
-    end: string;
+    startDate: string;
+    endDate: string;
+    participate: string;
+
+    attendanceTable: {
+        numberStudentsPresent: string;
+        numberStudentsLate: string;
+        numberStudentsAbsent: string;
+    } & {
+        attendances: AttendanceOfStudent[];
+    };
+
+    tuitions: TuitionOfStudent[];
 };
+
+export type AttendanceOfStudent = {
+    attendanceDate: string;
+    startTime: string;
+    endTime: string;
+    attendanceTime: string;
+    status: string;
+};
+
+export type TuitionOfStudent = {
+    time: string;
+    numberOfSession: string;
+    amount: string;
+    discount: string;
+    status: string;
+};
+
+export enum PaymentStatus {
+    PAID = "Paid",
+    DEBT = "Debt",
+}
 
 export const classListColumnsArray: ColumnsModel[] = [
     {key: "className", title: "Class"},
     {key: "year", title: "Year"},
-    {key: "start", title: "Start"},
-    {key: "end", title: "End"},
+    {key: "startDate", title: "Start"},
+    {key: "endDate", title: "End"},
+    {key: "participate", title: "Participate"},
 ];
 
 export const classListColumnsDictionary: ColumnsDictionary = {
     className: "Class",
     year: "Year",
-    start: "Start",
-    end: "End",
+    participate: "Participate",
+    startDate: "Start",
+    endDate: "End",
     actions: "Actions",
 };

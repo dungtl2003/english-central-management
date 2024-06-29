@@ -9,7 +9,6 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import {tuitionPopupDummyData} from "./tuition-popup-dummy-data";
 import TuitionPopupFilter from "./tuition-popup-filter";
 import TuitionPopupPagination from "./tuition-popup-pagination";
 import TuitionPopupContent from "./tuition-popup-content";
@@ -17,6 +16,7 @@ import {Status} from "./tuition-popup-rows-filter";
 import {TuitionPopupColumns, tuitionPopupColumnsDictionary} from "./types";
 import {ArrowUpDown} from "lucide-react";
 import {Button} from "@/components/ui/button";
+import {TuitionOfStudent} from "../types";
 
 function createColumns(
     key: string,
@@ -47,8 +47,13 @@ for (const key in tuitionPopupColumnsDictionary) {
 
 export const columns: ColumnDef<TuitionPopupColumns>[] = tuitionTableColumns;
 
-const TuitionPopupTable = (): ReactElement => {
-    const data: TuitionPopupColumns[] = tuitionPopupDummyData;
+const TuitionPopupTable = ({
+    tuitionOfStudents,
+}: {
+    tuitionOfStudents: TuitionOfStudent[];
+}): ReactElement => {
+    const data: TuitionPopupColumns[] =
+        tuitionOfStudents as TuitionPopupColumns[];
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [selectedStatus, setSelectedStatus] = React.useState<string[]>([
         "All",

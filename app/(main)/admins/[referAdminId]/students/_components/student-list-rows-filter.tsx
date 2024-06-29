@@ -7,8 +7,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {Button} from "@/components/ui/button";
 import {ChevronDown} from "lucide-react";
+import {StudentStatus} from "./types";
 
-export const statuses: string[] = ["All", "Active", "Deleted"];
+export const statuses: string[] = Object.values(StudentStatus);
 
 interface StudentListRowsFilterProps {
     selectedStatus: string;

@@ -8,7 +8,7 @@ import {
 import {Button} from "@/components/ui/button";
 import {ChevronDown} from "lucide-react";
 
-export const Status: string[] = ["All", "Present", "Late", "Absent"];
+export const statuses: string[] = ["All", "Present", "Late", "Absent"];
 
 interface AttendancePopupRowsFilterProps {
     selectedStatus: string[];
@@ -27,15 +27,15 @@ const AttendancePopupRowsFilter = ({
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-                {Status.map((stt) => (
+                {statuses.map((status) => (
                     <DropdownMenuCheckboxItem
-                        key={stt}
-                        checked={selectedStatus.includes(stt)}
+                        key={status}
+                        checked={selectedStatus.includes(status)}
                         onCheckedChange={() => {
-                            handleStatusChange(stt);
+                            handleStatusChange(status);
                         }}
                     >
-                        {stt}
+                        {status}
                     </DropdownMenuCheckboxItem>
                 ))}
             </DropdownMenuContent>

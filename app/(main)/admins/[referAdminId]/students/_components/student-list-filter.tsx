@@ -9,17 +9,15 @@ import StudentListSearchBar from "./student-list-search-bar";
 import StudentListColumnsFilter from "./student-list-columns-filter";
 import StudentListRowsFilter from "./student-list-rows-filter";
 
-interface TableFilterProps {
-    table: Table<StudentListModel>;
-    selectedStatus: string;
-    handleStatusChange: (status: string) => void;
-}
-
 const StudentListFilter = ({
     table,
     selectedStatus,
     handleStatusChange,
-}: TableFilterProps): ReactElement => {
+}: {
+    table: Table<StudentListModel>;
+    selectedStatus: string;
+    handleStatusChange: (status: string) => void;
+}): ReactElement => {
     const [filterType, _setFilterType] = React.useState("fullName");
     const [selectedRadio, _setSelectedRadio] = React.useState("fullName");
     const searchBar = React.useRef<HTMLInputElement>(null);

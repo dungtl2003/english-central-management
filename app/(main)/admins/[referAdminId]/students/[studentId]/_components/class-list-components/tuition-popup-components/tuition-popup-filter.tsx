@@ -20,8 +20,8 @@ const TuitionPopupFilter = ({
     selectedStatus,
     handleStatusChange,
 }: TableFilterProps): ReactElement => {
-    const [filterType, _setFilterType] = React.useState("fullName");
-    const [selectedRadio, _setSelectedRadio] = React.useState("fullName");
+    const [filterType, _setFilterType] = React.useState("time");
+    const [selectedRadio, _setSelectedRadio] = React.useState("time");
     const searchBar = React.useRef<HTMLInputElement>(null);
     const handleRadioClick = (
         key: string,

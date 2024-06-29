@@ -8,7 +8,7 @@ export type ColumnsDictionary = {
 };
 
 export type AttendancePopupColumns = {
-    date: string;
+    attendanceDate: string;
     startTime: string;
     endTime: string;
     attendanceTime: string;
@@ -16,7 +16,7 @@ export type AttendancePopupColumns = {
 };
 
 export const attendancePopupColumnsArray: ColumnsModel[] = [
-    {key: "date", title: "Attendance date"},
+    {key: "attendanceDate", title: "Attendance date"},
     {key: "startTime", title: "Start time"},
     {key: "endTime", title: "End time"},
     {key: "attendanceTime", title: "Enter time"},
@@ -24,7 +24,7 @@ export const attendancePopupColumnsArray: ColumnsModel[] = [
 ];
 
 export const attendancePopupColumnsDictionary: ColumnsDictionary = {
-    date: "Attendance date",
+    attendanceDate: "Attendance date",
     startTime: "Start time",
     endTime: "End time",
     attendanceTime: "Enter time",

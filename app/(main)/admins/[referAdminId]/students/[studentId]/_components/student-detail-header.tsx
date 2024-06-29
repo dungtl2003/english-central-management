@@ -10,21 +10,28 @@ import {Separator} from "@/components/ui/separator";
 import {FaCopy} from "react-icons/fa";
 import {FaCheck} from "react-icons/fa";
 
-interface TeacherDetailHeaderProps {
-    studentId: string;
-    status: string;
-    getStatusColor: (status: string) => ReactElement;
-}
-
 const copyToClipboard = (teacherId: string) => {
     navigator.clipboard.writeText(teacherId);
 };
 
+function shortenString(input: string): string {
+    const shortened = input ? `${input.slice(0, 18)}.....` : "";
+    return shortened;
+}
+
 const StudentDetailHeader = ({
+    firstName,
+    lastName,
     studentId,
     status,
     getStatusColor,
-}: TeacherDetailHeaderProps): ReactElement => {
+}: {
+    studentId: string;
+    firstName: string;
+    lastName: string;
+    status: string;
+    getStatusColor: (status: string) => ReactElement;
+}): ReactElement => {
     const [icon, setIcon] = React.useState<ReactElement>(<FaCopy />);
 
     const handleCopyClick = () => {
@@ -52,10 +59,10 @@ const StudentDetailHeader = ({
                     </div>
                     <div className="col-span-5">
                         <div className="flex items-center text-2xl">
-                            Nguyễn Minh Đức
+                            {lastName + " " + firstName}
                         </div>
                         <div className="flex items-center text-sm text-slate-500">
-                            ID: {studentId}{" "}
+                            ID: {shortenString(studentId)}{" "}
                             <Button
                                 variant="icon"
                                 size="icon"
