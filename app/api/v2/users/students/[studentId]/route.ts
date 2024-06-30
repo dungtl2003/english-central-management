@@ -127,6 +127,7 @@ export async function GET(
                     ...c.class,
                     approvedAt: c.approvedAt,
                     rejectedAt: c.rejectedAt,
+                    leftAt: c.leftAt,
                 };
             }),
         };
