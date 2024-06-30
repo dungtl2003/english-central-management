@@ -9,6 +9,7 @@ import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {Separator} from "@/components/ui/separator";
 import {FaCopy} from "react-icons/fa";
 import {FaCheck} from "react-icons/fa";
+import {DEFAULT_AVATAR_URL} from "@/constaints";
 
 const copyToClipboard = (teacherId: string) => {
     navigator.clipboard.writeText(teacherId);
@@ -25,12 +26,14 @@ const StudentDetailHeader = ({
     studentId,
     status,
     getStatusColor,
+    imageUrl,
 }: {
     studentId: string;
     firstName: string;
     lastName: string;
     status: string;
     getStatusColor: (status: string) => ReactElement;
+    imageUrl: string;
 }): ReactElement => {
     const [icon, setIcon] = React.useState<ReactElement>(<FaCopy />);
 
@@ -48,12 +51,14 @@ const StudentDetailHeader = ({
                         <HoverCard>
                             <HoverCardTrigger>
                                 <Avatar>
-                                    <AvatarImage src="https://github.com/shadcn.png" />
+                                    <AvatarImage
+                                        src={imageUrl || DEFAULT_AVATAR_URL}
+                                    />
                                     <AvatarFallback>CN</AvatarFallback>
                                 </Avatar>
                             </HoverCardTrigger>
                             <HoverCardContent>
-                                Image url: https://github.com/shadcn.png
+                                Image url: {imageUrl || DEFAULT_AVATAR_URL}
                             </HoverCardContent>
                         </HoverCard>
                     </div>

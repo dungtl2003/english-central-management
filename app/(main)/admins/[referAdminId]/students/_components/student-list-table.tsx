@@ -110,7 +110,7 @@ const formatData = (data: OutputType | undefined): StudentListModel[] => {
             status: element.user.deletedAt
                 ? StudentStatus.DELETED
                 : StudentStatus.ACTIVE,
-            hasDesireClass: element.isRequesting,
+            hasDesireClass: element.isRequesting && !element.user.deletedAt,
         };
         students.push(student);
     });

@@ -3,6 +3,7 @@ import {
     AttendanceOfStudent,
     ClasslistColumns,
     classListColumnsDictionary,
+    CurrentClassStatus,
     PaymentStatus,
     TuitionOfStudent,
 } from "./types";
@@ -63,7 +64,7 @@ const formatData = (
                     attendanceDate: format(session.attendedTime, "yyyy-MM-dd"),
                     startTime: format(session.actualStartTime, "h:mm a"),
                     endTime: format(endTimeSession, "h:mm a"),
-                    attendanceTime: format(attendance.createdAt, "h:mm a"),
+                    attendanceTime: format(session.attendedTime, "h:mm a"),
                     status: attendance.status!, //TODO: FIX API STATUS NOT NULL
                 };
                 if (studentAttendance.status === AttendanceStatus.PRESENT)
@@ -133,6 +134,9 @@ const formatData = (
             endDate: format(element.endTime, "yyyy-MM-dd"),
             year: element.unit.year.toString(),
             participate: format(element.approvedAt as Date, "yyyy-MM-dd"),
+            status: element.leftAt
+                ? CurrentClassStatus.LEFT
+                : CurrentClassStatus.LEARNING,
             attendanceTable: {
                 numberStudentsAbsent: numberStudentsAbsent + "",
                 numberStudentsLate: numberStudentsLate + "",

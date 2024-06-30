@@ -313,6 +313,7 @@ const StudentInformationTab = ({
                                     variant={btnVariant}
                                     className="min-w-[65px] absolute right-0"
                                     onClick={() => handleClickEdit()}
+                                    disabled={!!studentInfoData?.user.deletedAt}
                                 >
                                     {btnTitle}
                                 </Button>

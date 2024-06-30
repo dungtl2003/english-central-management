@@ -1,7 +1,6 @@
 "use client";
 
 import React, {ReactElement, useCallback, useMemo, useState} from "react";
-import {Button} from "@/components/ui/button";
 import {Card} from "@/components/ui/card";
 import {Tabs} from "@/components/ui/tabs";
 import StudentDetailHeader from "./student-detail-header";
@@ -15,6 +14,7 @@ import {handler} from "@/lib/action/admin/delete-student";
 import {UseActionOptions, useAction} from "@/hooks/use-action";
 import {OutputType as DeleteOutputType} from "@/lib/action/admin/delete-student/types";
 import {useToast} from "@/components/ui/use-toast";
+import ConfirmDialog from "@/components/comfirm-dialog";
 
 const getButtonBasedOnStatus = (
     currentStatus: string,
@@ -23,13 +23,13 @@ const getButtonBasedOnStatus = (
     if (currentStatus === StudentStatus.ACTIVE) {
         return (
             <>
-                <Button
+                <ConfirmDialog
+                    title="Delete"
                     className="min-w-[85px] max-w-[85px]"
                     variant="destructive"
-                    onClick={deleteStudent}
-                >
-                    Delete
-                </Button>
+                    onConfirm={deleteStudent}
+                    confirmText="Yes"
+                />
             </>
         );
     }
@@ -145,6 +145,7 @@ const StudentDetail = ({
                                 : StudentStatus.ACTIVE
                         }
                         getStatusColor={getStatusColor}
+                        imageUrl={studentInfoData.user.imageUrl || ""}
                     />
                     <div className="row-span-5">
                         <Tabs
@@ -178,6 +179,7 @@ const StudentDetail = ({
                                     studentClassesData={
                                         studentDesiredClassesData
                                     }
+                                    isDeleted={!!studentInfoData.user.deletedAt}
                                 />
                             </div>
                         </Tabs>

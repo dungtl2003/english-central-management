@@ -33,7 +33,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import {StudentClassesData} from "../types";
-import {format} from "date-fns";
+import {format, parse} from "date-fns";
 import {useUser} from "@clerk/nextjs";
 import {UseActionOptions, useAction} from "@/hooks/use-action";
 import {toast} from "@/components/ui/use-toast";
@@ -62,7 +62,8 @@ function createColumns(
 }
 const CreateTableColumns = (
     currentUrl: string,
-    studentId: string
+    studentId: string,
+    isDeleted: boolean
 ): ColumnDef<DesiredClassColumns>[] => {
     const approveEvent: UseActionOptions<OutputType> = useMemo(() => {
         return {
@@ -151,6 +152,15 @@ const CreateTableColumns = (
                                     <Button
                                         className="py-0 px-2 m-0 w-full justify-start"
                                         variant="ghostSuccess"
+                                        disabled={
+                                            isDeleted ||
+                                            new Date() >
+                                                parse(
+                                                    row.original.endDate,
+                                                    "yyyy-MM-dd",
+                                                    new Date()
+                                                )
+                                        }
                                     >
                                         Approve
                                     </Button>
@@ -183,6 +193,15 @@ const CreateTableColumns = (
                                     <Button
                                         className="py-0 px-2 m-0 w-full justify-start"
                                         variant="ghostDanger"
+                                        disabled={
+                                            isDeleted ||
+                                            new Date() >
+                                                parse(
+                                                    row.original.endDate,
+                                                    "yyyy-MM-dd",
+                                                    new Date()
+                                                )
+                                        }
                                     >
                                         Reject
                                     </Button>
@@ -243,8 +262,8 @@ const formatData = (
         const desiredClassData: DesiredClassColumns = {
             classId: element.id,
             className: element.unit.grade + "." + element.index,
-            startDate: format(element.startTime, "yyyy/MM/dd"),
-            endDate: format(element.endTime, "yyyy/MM/dd"),
+            startDate: format(element.startTime, "yyyy-MM-dd"),
+            endDate: format(element.endTime, "yyyy-MM-dd"),
             year: element.unit.year.toString(),
             studentInClass:
                 element.students.length + "/" + element.unit.maxStudents,
@@ -257,9 +276,11 @@ const formatData = (
 const DesiredClassTab = ({
     studentId,
     studentClassesData,
+    isDeleted,
 }: {
     studentId: string;
     studentClassesData: StudentClassesData[];
+    isDeleted: boolean;
 }): ReactElement => {
     const {user} = useUser();
     const domain = process.env.NEXT_PUBLIC_DOMAIN;
@@ -272,7 +293,8 @@ const DesiredClassTab = ({
 
     const columns: ColumnDef<DesiredClassColumns>[] = CreateTableColumns(
         currentUrl,
-        studentId
+        studentId,
+        isDeleted
     );
 
     const [data] = useState<DesiredClassColumns[]>(

@@ -30,6 +30,7 @@ export type StudentInfoData = Student & {
 export type StudentClassesData = Class & {
     rejectedAt: Date | null;
     approvedAt: Date | null;
+    leftAt: Date | null;
     unit: Unit;
     students: StudentsInClasses[];
     sessions: ({

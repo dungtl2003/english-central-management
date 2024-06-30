@@ -14,6 +14,7 @@ export type ClasslistColumns = {
     startDate: string;
     endDate: string;
     participate: string;
+    status: string;
 
     attendanceTable: {
         numberStudentsPresent: string;
@@ -53,6 +54,7 @@ export const classListColumnsArray: ColumnsModel[] = [
     {key: "startDate", title: "Start"},
     {key: "endDate", title: "End"},
     {key: "participate", title: "Participate"},
+    {key: "status", title: "Status"},
 ];
 
 export const classListColumnsDictionary: ColumnsDictionary = {
@@ -61,5 +63,11 @@ export const classListColumnsDictionary: ColumnsDictionary = {
     participate: "Participate",
     startDate: "Start",
     endDate: "End",
+    status: "Status",
     actions: "Actions",
 };
+
+export enum CurrentClassStatus {
+    LEARNING = "Learning",
+    LEFT = "LEFT",
+}
