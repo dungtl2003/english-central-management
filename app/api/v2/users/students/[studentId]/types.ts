@@ -32,3 +32,5 @@ export type GetResponsePayload = {
 } & Student;
 
 export type PatchResponsePayload = string;
+
+export type DeleteResponsePayload = string;
