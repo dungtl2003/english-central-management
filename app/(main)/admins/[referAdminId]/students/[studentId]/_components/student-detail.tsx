@@ -111,7 +111,7 @@ const StudentDetail = ({
                 window.location.reload();
             },
         } as UseActionOptions<DeleteOutputType>;
-    }, []);
+    }, [toast]);
     const {execute} = useAction(memoHandler, memoEvent);
 
     const deleteStudent = () => {

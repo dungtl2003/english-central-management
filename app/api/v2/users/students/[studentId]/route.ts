@@ -249,6 +249,23 @@ export async function DELETE(
             throw new ApiError(400, "This student has already been deleted");
         }
 
+        const studyingClass = await db.studentsInClasses.findFirst({
+            where: {
+                studentId: student.id,
+                NOT: {
+                    approvedAt: null,
+                },
+                leftAt: null,
+            },
+        });
+
+        if (studyingClass) {
+            throw new ApiError(
+                400,
+                "This student is still in some classes, cannot be deleted"
+            );
+        }
+
         await db.$transaction(async () => {
             await db.student.update({
                 where: {
