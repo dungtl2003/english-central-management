@@ -44,45 +44,47 @@ const formatData = (
         ? new Date(data[0].actualStartTime).getFullYear()
         : new Date(data[0].estimatedStartTime).getFullYear();
     data.forEach((element) => {
-        const elementYear: number = element.actualStartTime
-            ? new Date(element.actualStartTime).getFullYear()
-            : new Date(element.estimatedStartTime).getFullYear();
-        if (elementYear < minYear) minYear = elementYear;
-        if (elementYear > maxYear) maxYear = elementYear;
+        if (!element.class.closedAt) {
+            const elementYear: number = element.actualStartTime
+                ? new Date(element.actualStartTime).getFullYear()
+                : new Date(element.estimatedStartTime).getFullYear();
+            if (elementYear < minYear) minYear = elementYear;
+            if (elementYear > maxYear) maxYear = elementYear;
 
-        const session: SessionCalendarData = {
-            id: element.id,
-            teacherId: element.class.teacherId,
-            teacher: concatName(
-                element.class.teacher.user.firstName,
-                element.class.teacher.user.lastName,
-                true
-            ),
-            birthday: element.class.teacher.user.birthday
-                ? format(element.class.teacher.user.birthday, "dd/MM/yyyy")
-                : "",
-            gender: element.class.teacher.user.gender as string,
-            className: element.class.unit.grade + "." + element.class.index,
-            classYear: element.class.unit.year + "",
-            avatar: element.class.teacher.user.imageUrl
-                ? (element.class.teacher.user.imageUrl as string)
-                : defaultImageUrl,
-            startDateTime: element.actualStartTime
-                ? element.actualStartTime.toString()
-                : element.estimatedStartTime.toString(),
-            endDateTime: element.actualStartTime
-                ? add(element.actualStartTime, {
-                      hours: element.class.unit.studyHour,
-                      minutes: element.class.unit.studyMinute,
-                      seconds: element.class.unit.studySecond,
-                  }).toISOString()
-                : add(element.estimatedStartTime, {
-                      hours: element.class.unit.studyHour,
-                      minutes: element.class.unit.studyMinute,
-                      seconds: element.class.unit.studySecond,
-                  }).toISOString(),
-        };
-        sessions.push(session);
+            const session: SessionCalendarData = {
+                id: element.id,
+                teacherId: element.class.teacherId,
+                teacher: concatName(
+                    element.class.teacher.user.firstName,
+                    element.class.teacher.user.lastName,
+                    true
+                ),
+                birthday: element.class.teacher.user.birthday
+                    ? format(element.class.teacher.user.birthday, "dd/MM/yyyy")
+                    : "",
+                gender: element.class.teacher.user.gender as string,
+                className: element.class.unit.grade + "." + element.class.index,
+                classYear: element.class.unit.year + "",
+                avatar: element.class.teacher.user.imageUrl
+                    ? (element.class.teacher.user.imageUrl as string)
+                    : defaultImageUrl,
+                startDateTime: element.actualStartTime
+                    ? element.actualStartTime.toString()
+                    : element.estimatedStartTime.toString(),
+                endDateTime: element.actualStartTime
+                    ? add(element.actualStartTime, {
+                          hours: element.class.unit.studyHour,
+                          minutes: element.class.unit.studyMinute,
+                          seconds: element.class.unit.studySecond,
+                      }).toISOString()
+                    : add(element.estimatedStartTime, {
+                          hours: element.class.unit.studyHour,
+                          minutes: element.class.unit.studyMinute,
+                          seconds: element.class.unit.studySecond,
+                      }).toISOString(),
+            };
+            sessions.push(session);
+        }
     });
     return {
         sessionCalendarData: sessions,
