@@ -16,8 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {Button} from "@/components/ui/button";
 import {ChevronDown} from "lucide-react";
-import ClassListNewClass from "./class-list-new-class";
-import ClassListNewUnit from "./class-list-new-unit";
+import ClassListNewClass from "./new-class/class-list-new-class";
 
 interface TableFilterProps {
     table: Table<ClassListModel>;
@@ -102,8 +101,8 @@ const ClassListFilter = ({
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
+
                     <ClassListNewClass />
-                    <ClassListNewUnit />
                 </div>
             </div>
         </div>

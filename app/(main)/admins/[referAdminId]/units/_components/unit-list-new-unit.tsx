@@ -34,7 +34,7 @@ const formSchema = z.object({
     pricePerSession: z.string(),
 });
 
-const ClassListNewUnit = (): ReactElement => {
+const UnitListNewUnit = (): ReactElement => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -283,4 +283,4 @@ const ClassListNewUnit = (): ReactElement => {
     );
 };
 
-export default ClassListNewUnit;
+export default UnitListNewUnit;
