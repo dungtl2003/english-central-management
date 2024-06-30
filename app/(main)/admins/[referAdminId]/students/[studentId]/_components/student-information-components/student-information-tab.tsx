@@ -30,6 +30,7 @@ import {LoadingUpdate} from "../loading-update-data";
 import {concatName} from "@/lib/utils";
 import Link from "next/link";
 import {useUser} from "@clerk/nextjs";
+import {DEFAULT_AVATAR_URL} from "@/constaints";
 
 const copyToClipboard = (teacherId: string) => {
     navigator.clipboard.writeText(teacherId);
@@ -61,18 +62,18 @@ const formatData = (
             email: "___",
             phoneNumber: "___",
             identityCard: "___",
-            birthday: "___/___/___",
+            birthday: "___",
             role: "___",
             discount: "0",
-            createDate: "___/___/___",
-            deleleDate: "___/___/___",
+            createDate: "___",
+            deleleDate: "___",
             parents: [],
         };
     const parents: ParentPreviewData[] = [];
     studentInfoData.parents.forEach((element) => {
         const parent: ParentPreviewData = {
             id: element.id,
-            imgUrl: element.user.imageUrl || "https://github.com/shadcn.png",
+            imgUrl: element.user.imageUrl || DEFAULT_AVATAR_URL,
             fullName:
                 concatName(
                     element.user.firstName,
@@ -93,16 +94,16 @@ const formatData = (
         phoneNumber: studentInfoData?.user.phoneNumber || "___",
         identityCard: studentInfoData?.user.identifyCard || "___",
         birthday: studentInfoData?.user.birthday
-            ? format(studentInfoData?.user.birthday, "yyyy/MM/dd")
-            : "___/___/___",
+            ? format(studentInfoData?.user.birthday, "yyyy-MM-dd")
+            : "___",
         role: studentInfoData?.user.role as string,
         discount: currentDiscount.toString(),
         createDate: studentInfoData?.user.createdAt
-            ? format(studentInfoData?.user.createdAt, "yyyy/MM/dd")
-            : "___/___/___",
+            ? format(studentInfoData?.user.createdAt, "yyyy-MM-dd")
+            : "___",
         deleleDate: studentInfoData?.user.deletedAt
-            ? format(studentInfoData?.user.deletedAt, "yyyy/MM/dd")
-            : "___/___/___",
+            ? format(studentInfoData?.user.deletedAt, "yyyy-MM-dd")
+            : "___",
         parents: parents,
     };
 
@@ -120,7 +121,7 @@ const StudentInformationTab = ({
 }): ReactElement => {
     const [icon, setIcon] = React.useState<ReactElement>(<FaCopy />);
     const [editable, setEditable] = React.useState(false);
-    const [btnTitle, setBtnTtile] = React.useState("Edit");
+    const [btnTitle, setBtnTitle] = React.useState("Edit");
     const [btnVariant, setbtnVariant] =
         React.useState<ButtonVariant>("ghostMiddle");
 
@@ -148,7 +149,7 @@ const StudentInformationTab = ({
     const eventUpdateDiscount: UseActionOptions<OutputType> = useMemo(() => {
         return {
             onError: (error: string) => {
-                console.log("Error: ", error);
+                console.error("Error: ", error);
                 toast({
                     title: "error",
                     variant: "destructive",
@@ -176,7 +177,7 @@ const StudentInformationTab = ({
 
     function handleClickEdit() {
         if (!editable) {
-            setBtnTtile("Save");
+            setBtnTitle("Save");
             setbtnVariant("ghostSuccess");
             setEditable(true);
         } else {
@@ -198,7 +199,7 @@ const StudentInformationTab = ({
                     description: "Discount must be between 0 and 100",
                 });
             }
-            setBtnTtile("Edit");
+            setBtnTitle("Edit");
             setbtnVariant("ghostMiddle");
             setEditable(false);
         }
@@ -224,7 +225,6 @@ const StudentInformationTab = ({
     const protocol = process.env.NEXT_PUBLIC_PROTOCOL;
     const [currentUrl, setCurrentUrl] = useState("");
     useEffect(() => {
-        console.debug("......................");
         if (!user) return;
         setCurrentUrl(`${protocol}://${domain}/admins/${user!.id}`);
     }, [protocol, domain, user]);

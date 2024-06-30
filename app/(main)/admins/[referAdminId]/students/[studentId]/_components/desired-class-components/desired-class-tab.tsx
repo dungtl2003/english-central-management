@@ -109,7 +109,6 @@ const CreateTableColumns = (
     const {execute: execReject} = useAction(handler, rejectEvent);
 
     const handleApprove = (classId: string) => {
-        console.debug("approve button: ", classId);
         execApprove({
             classId: classId,
             studentId: studentId,
@@ -118,7 +117,6 @@ const CreateTableColumns = (
     };
 
     const handleReject = (classId: string) => {
-        console.debug("reject button: ", classId);
         execReject({
             classId: classId,
             studentId: studentId,
@@ -268,7 +266,6 @@ const DesiredClassTab = ({
     const protocol = process.env.NEXT_PUBLIC_PROTOCOL;
     const [currentUrl, setCurrentUrl] = useState("");
     useEffect(() => {
-        console.debug("......................");
         if (!user) return;
         setCurrentUrl(`${protocol}://${domain}/admins/${user!.id}`);
     }, [protocol, domain, user]);

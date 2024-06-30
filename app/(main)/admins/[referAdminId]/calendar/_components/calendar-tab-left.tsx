@@ -120,7 +120,6 @@ const CalendarTabLeft = ({
             new Date()
         );
         setFirstDayCurrentMonth(newDate);
-        console.debug("month:", newMonth);
     };
 
     const handleYearChange = (newYear: string /* yyyy */) => {
@@ -130,7 +129,6 @@ const CalendarTabLeft = ({
             new Date()
         );
         setFirstDayCurrentMonth(newDate);
-        console.debug("year:", newYear);
     };
 
     return (

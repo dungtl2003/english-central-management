@@ -1,6 +1,6 @@
 "use client";
 
-import React, {ReactElement, useState} from "react";
+import React, {ReactElement, useCallback, useMemo, useState} from "react";
 import {Button} from "@/components/ui/button";
 import {Card} from "@/components/ui/card";
 import {Tabs} from "@/components/ui/tabs";
@@ -10,16 +10,23 @@ import StudentInformationTab from "./student-information-components/student-info
 import StudentClassListTab from "./class-list-components/class-list-tab";
 import DesiredClassTab from "./desired-class-components/desired-class-tab";
 import {StudentClassesData, StudentDetailData, StudentStatus} from "./types";
-import {OutputType} from "@/lib/action/admin/get-student-detail/types";
-//import { OutputType as DeleteOutputType } from "@/lib/action/admin/";
+import {OutputType as GetDetailOutputType} from "@/lib/action/admin/get-student-detail/types";
+import {handler} from "@/lib/action/admin/delete-student";
+import {UseActionOptions, useAction} from "@/hooks/use-action";
+import {OutputType as DeleteOutputType} from "@/lib/action/admin/delete-student/types";
+import {useToast} from "@/components/ui/use-toast";
 
-const getButtonBasedOnStatus = (currentStatus: string): ReactElement => {
+const getButtonBasedOnStatus = (
+    currentStatus: string,
+    deleteStudent: () => void
+): ReactElement => {
     if (currentStatus === StudentStatus.ACTIVE) {
         return (
             <>
                 <Button
                     className="min-w-[85px] max-w-[85px]"
                     variant="destructive"
+                    onClick={deleteStudent}
                 >
                     Delete
                 </Button>
@@ -53,7 +60,7 @@ const getStatusColor = (status: string): ReactElement => {
 };
 
 const formatData = (
-    data: OutputType | undefined
+    data: GetDetailOutputType | undefined
 ): StudentDetailData | undefined => {
     if (!data) return undefined;
     const studentDesiredClasses: StudentClassesData[] = [];
@@ -81,8 +88,40 @@ const formatData = (
 const StudentDetail = ({
     studentDetail,
 }: {
-    studentDetail: OutputType | undefined;
+    studentDetail: GetDetailOutputType | undefined;
 }): ReactElement => {
+    const {toast} = useToast();
+    const memoHandler = useCallback(handler, []);
+    const memoEvent = useMemo(() => {
+        return {
+            onError: (error: string) => {
+                console.error("Error: ", error);
+                toast({
+                    title: "error",
+                    variant: "destructive",
+                    description: error,
+                });
+            },
+            onSuccess: () => {
+                toast({
+                    title: "Success",
+                    variant: "success",
+                    description: "Delete student successful",
+                });
+                window.location.reload();
+            },
+        } as UseActionOptions<DeleteOutputType>;
+    }, [toast]);
+    const {execute} = useAction(memoHandler, memoEvent);
+
+    const deleteStudent = () => {
+        if (!studentDetail) return;
+
+        execute({
+            studentId: studentDetail.id,
+        });
+    };
+
     const {
         studentInfoData,
         studentDesiredClassesData,
@@ -91,7 +130,6 @@ const StudentDetail = ({
     const [currentDiscount, setCurrentDiscount] = useState<number>(
         studentInfoData.discount || 0
     );
-    console.debug(studentDetail);
 
     return (
         <div className="w-[80%] min-h-[680px] pt-[90px]">
@@ -121,6 +159,7 @@ const StudentDetail = ({
                                         : StudentStatus.ACTIVE
                                 }
                                 getButtonBasedOnStatus={getButtonBasedOnStatus}
+                                deleteStudent={deleteStudent}
                             />
                             <div className="col-span-3 pr-6">
                                 <StudentInformationTab

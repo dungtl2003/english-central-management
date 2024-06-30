@@ -60,7 +60,7 @@ const formatData = (
                     seconds: element.unit.studySecond,
                 });
                 const studentAttendance: AttendanceOfStudent = {
-                    attendanceDate: format(session.attendedTime, "yyyy/MM/dd"),
+                    attendanceDate: format(session.attendedTime, "yyyy-MM-dd"),
                     startTime: format(session.actualStartTime, "h:mm a"),
                     endTime: format(endTimeSession, "h:mm a"),
                     attendanceTime: format(attendance.createdAt, "h:mm a"),
@@ -129,10 +129,10 @@ const formatData = (
         const currentClassData: ClasslistColumns = {
             classId: element.id,
             className: element.unit.grade + "." + element.index,
-            startDate: format(element.startTime, "yyyy/MM/dd"),
-            endDate: format(element.endTime, "yyyy/MM/dd"),
+            startDate: format(element.startTime, "yyyy-MM-dd"),
+            endDate: format(element.endTime, "yyyy-MM-dd"),
             year: element.unit.year.toString(),
-            participate: format(element.approvedAt as Date, "yyyy/MM/dd"),
+            participate: format(element.approvedAt as Date, "yyyy-MM-dd"),
             attendanceTable: {
                 numberStudentsAbsent: numberStudentsAbsent + "",
                 numberStudentsLate: numberStudentsLate + "",
@@ -234,7 +234,6 @@ const StudentClassListTab = ({
     const protocol = process.env.NEXT_PUBLIC_PROTOCOL;
     const [currentUrl, setCurrentUrl] = useState("");
     useEffect(() => {
-        console.debug("......................");
         if (!user) return;
         setCurrentUrl(`${protocol}://${domain}/admins/${user!.id}`);
     }, [protocol, domain, user]);

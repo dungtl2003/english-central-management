@@ -5,9 +5,14 @@ import {TabsList, TabsTrigger} from "@/components/ui/tabs";
 const StudentDetailTabslist = ({
     currentStatus,
     getButtonBasedOnStatus,
+    deleteStudent,
 }: {
     currentStatus: string;
-    getButtonBasedOnStatus: (currentStatus: string) => ReactElement;
+    getButtonBasedOnStatus: (
+        currentStatus: string,
+        deleteStudent: () => void
+    ) => ReactElement;
+    deleteStudent: () => void;
 }): ReactElement => {
     return (
         <div className="col-span-1 pl-2 grid grid-cols-10">
@@ -38,7 +43,7 @@ const StudentDetailTabslist = ({
                 </div>
                 <div className="row-span-6"></div>
                 <div className="row-span-2 flex items-center justify-evenly	">
-                    {getButtonBasedOnStatus(currentStatus)}
+                    {getButtonBasedOnStatus(currentStatus, deleteStudent)}
                 </div>
             </TabsList>
             <div className="flex justify-center pt-1">
