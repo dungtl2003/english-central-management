@@ -240,6 +240,10 @@ export async function teacherDeleteHandler(
         throw new ApiError(401, `Account not found`);
     }
 
+    if (user.deletedAt) {
+        throw new ApiError(400, "This teacher has already been deleted");
+    }
+
     await db.$transaction(async () => {
         await db.user.update({
             where: {
@@ -306,6 +310,10 @@ export async function adminDeleteHandler(
 
     if (!teacher) {
         throw new ApiError(400, "Teacher not found");
+    }
+
+    if (teacher.user.deletedAt) {
+        throw new ApiError(400, "This teacher has already been deleted");
     }
 
     await db.$transaction(async () => {

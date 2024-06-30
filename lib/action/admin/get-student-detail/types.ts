@@ -23,6 +23,7 @@ export type OutputType = {
     classes: ({
         approvedAt: Date | null;
         rejectedAt: Date | null;
+        leftAt: Date | null;
         unit: Unit;
         students: StudentsInClasses[];
         sessions: ({

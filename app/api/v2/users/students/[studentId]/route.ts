@@ -1,10 +1,11 @@
 import {db} from "@/lib/db";
 import {buildErrorNextResponse, getClerkRole} from "@/lib/helper";
-import {auth} from "@clerk/nextjs/server";
+import {auth, clerkClient} from "@clerk/nextjs/server";
 import {UserRole} from "@prisma/client";
 import {ApiError} from "next/dist/server/api-utils";
 import {NextRequest, NextResponse} from "next/server";
 import {
+    DeleteResponsePayload,
     GetResponsePayload,
     PatchRequestPayload,
     PatchResponsePayload,
@@ -126,6 +127,7 @@ export async function GET(
                     ...c.class,
                     approvedAt: c.approvedAt,
                     rejectedAt: c.rejectedAt,
+                    leftAt: c.leftAt,
                 };
             }),
         };
@@ -190,6 +192,99 @@ export async function PATCH(
         });
 
         return NextResponse.json<PatchResponsePayload>("Updated student", {
+            status: 200,
+        });
+    } catch (error) {
+        return buildErrorNextResponse(error);
+    }
+}
+
+/**
+ * Delete student account.
+ * Only admin can access this api.
+ */
+export async function DELETE(
+    req: NextRequest,
+    {params}: {params: {studentId: string}}
+): Promise<NextResponse<DeleteResponsePayload | ErrorResponsePayload>> {
+    console.log("Timestamp: ", new Date().toLocaleString());
+    console.log("DELETE ", req.nextUrl.pathname);
+
+    try {
+        const clerkUserId = auth().userId;
+        const role: UserRole | null = getClerkRole();
+
+        if (!clerkUserId) {
+            throw new ApiError(401, "No signed in user");
+        }
+
+        if (!role || role !== UserRole.ADMIN) {
+            throw new ApiError(401, "No right permission");
+        }
+
+        const user = await db.user.findFirst({
+            where: {
+                referId: clerkUserId,
+                role: UserRole.ADMIN,
+            },
+        });
+
+        if (!user) {
+            throw new ApiError(401, `Account not found`);
+        }
+
+        const student = await db.student.findFirst({
+            where: {
+                id: params.studentId,
+            },
+            include: {
+                user: true,
+            },
+        });
+
+        if (!student) {
+            throw new ApiError(400, "Student not found");
+        }
+
+        if (student.user.deletedAt) {
+            throw new ApiError(400, "This student has already been deleted");
+        }
+
+        const studyingClass = await db.studentsInClasses.findFirst({
+            where: {
+                studentId: student.id,
+                NOT: {
+                    approvedAt: null,
+                },
+                leftAt: null,
+            },
+        });
+
+        if (studyingClass) {
+            throw new ApiError(
+                400,
+                "This student is still in some classes, cannot be deleted"
+            );
+        }
+
+        await db.$transaction(async () => {
+            await db.student.update({
+                where: {
+                    id: params.studentId,
+                },
+                data: {
+                    user: {
+                        update: {
+                            deletedAt: new Date(),
+                        },
+                    },
+                },
+            });
+            student.user.referId &&
+                (await clerkClient.users.deleteUser(student.user.referId));
+        });
+
+        return NextResponse.json<PatchResponsePayload>("Deleted student", {
             status: 200,
         });
     } catch (error) {

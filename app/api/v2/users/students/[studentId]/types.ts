@@ -22,6 +22,7 @@ export type GetResponsePayload = {
     classes: ({
         approvedAt: Date | null;
         rejectedAt: Date | null;
+        leftAt: Date | null;
         unit: Unit;
         students: StudentsInClasses[];
         sessions: ({
@@ -32,3 +33,5 @@ export type GetResponsePayload = {
 } & Student;
 
 export type PatchResponsePayload = string;
+
+export type DeleteResponsePayload = string;
