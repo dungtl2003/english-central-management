@@ -99,7 +99,7 @@ const StudentDetail = ({
                 toast({
                     title: "error",
                     variant: "destructive",
-                    description: "Failed to delete this student",
+                    description: error,
                 });
             },
             onSuccess: () => {
