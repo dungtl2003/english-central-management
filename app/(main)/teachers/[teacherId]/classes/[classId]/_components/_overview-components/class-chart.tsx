@@ -3,42 +3,69 @@ import {CurveType, NumericAccessor} from "@unovis/ts";
 import {VisXYContainer, VisAxis, VisArea, VisBulletLegend} from "@unovis/react";
 import {OutputType} from "@/lib/action/teacher/get-class-detail/types";
 import {ClassChartData, Status, statuses} from "./types";
-import {format} from "date-fns";
+// import {format} from "date-fns";
+import {GoAlertFill} from "react-icons/go";
+import {Card, CardContent} from "@/components/ui/card";
 
 const formatData = (rawData: OutputType | undefined): ClassChartData[] => {
     const records: ClassChartData[] = [];
     if (!rawData) return records;
 
-    rawData.sessions
-        .filter((session) => session.attendedTime)
-        .sort(
-            (session1, session2) =>
-                new Date(session1.actualStartTime!).getTime() -
-                new Date(session2.actualStartTime!).getTime()
-        )
-        .forEach((session) => {
-            const presents = session.attendances.filter(
-                (attendance) => attendance.status === "PRESENT"
-            ).length;
-            const absents = session.attendances.filter(
-                (attendance) => attendance.status === "ABSENT"
-            ).length;
-            const lates = session.attendances.filter(
-                (attendance) => attendance.status === "LATE"
-            ).length;
+    // rawData.sessions
+    //     .filter((session) => session.attendedTime)
+    //     .sort(
+    //         (session1, session2) =>
+    //             new Date(session1.actualStartTime!).getTime() -
+    //             new Date(session2.actualStartTime!).getTime()
+    //     )
+    //     .forEach((session) => {
+    //         const presents = session.attendances.filter(
+    //             (attendance) => attendance.status === "PRESENT"
+    //         ).length;
+    //         const absents = session.attendances.filter(
+    //             (attendance) => attendance.status === "ABSENT"
+    //         ).length;
+    //         const lates = session.attendances.filter(
+    //             (attendance) => attendance.status === "LATE"
+    //         ).length;
 
-            records.push({
-                dateTime: `${format(session.actualStartTime!, "dd/MM/yyyy")}\n${format(session.actualStartTime!, "HH:mm:ss")}`,
-                cases: {
-                    pr: presents,
-                    la: lates,
-                    ab: absents,
-                },
-            });
-        });
+    //         records.push({
+    //             dateTime: `${format(session.actualStartTime!, "dd/MM/yyyy")}\n${format(session.actualStartTime!, "HH:mm:ss")}`,
+    //             cases: {
+    //                 pr: presents,
+    //                 la: lates,
+    //                 ab: absents,
+    //             },
+    //         });
+    //     });
 
     return records;
 };
+
+function dataNotEnough(data: ClassChartData[]): ReactElement {
+    if (data.length < 10) {
+        return (
+            <>
+                <div className="w-full h-full bg-black absolute top-0 left-0 opacity-70"></div>
+                <Card className="w-fit p-3 absolute left-[23%] top-[45%] ">
+                    <CardContent className="text-2xl flex">
+                        <span className="flex items-center pr-2">
+                            <GoAlertFill color="yellow" />
+                        </span>{" "}
+                        <span className="text-cyan">
+                            Not enough data to display
+                        </span>{" "}
+                        <span className="flex items-center pl-2">
+                            <GoAlertFill color="yellow" />
+                        </span>
+                    </CardContent>
+                </Card>
+            </>
+        );
+    }
+
+    return <></>;
+}
 
 const ClassChart: React.FC<{rawData: OutputType | undefined}> = ({
     rawData,
@@ -70,8 +97,12 @@ const ClassChart: React.FC<{rawData: OutputType | undefined}> = ({
     };
 
     return (
-        <div className="w-full p-0 pt-5 px-2 m-0 text-black">
-            <VisXYContainer data={data} height="280px" className="custom-area">
+        <div className="w-full p-0 pt-5 px-2 m-0 text-black relative">
+            <VisXYContainer
+                data={data.length > 10 ? data : []}
+                height="280px"
+                className="custom-area"
+            >
                 <VisBulletLegend
                     className="flex items-center justify-center"
                     items={Object.values(statuses)}
@@ -97,6 +128,7 @@ const ClassChart: React.FC<{rawData: OutputType | undefined}> = ({
                 <VisAxis type="x" gridLine={false} tickFormat={xTicks} />
                 <VisAxis type="y" tickFormat={yTicks} />
             </VisXYContainer>
+            {dataNotEnough(data)}
         </div>
     );
 };
