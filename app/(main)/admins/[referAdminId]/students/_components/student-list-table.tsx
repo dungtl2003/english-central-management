@@ -91,10 +91,10 @@ const createTableColumns = (
 
 const formatData = (data: OutputType | undefined): StudentListModel[] => {
     if (!data) return [];
-    const teachers: StudentListModel[] = [];
+    const students: StudentListModel[] = [];
 
     data.forEach((element) => {
-        const teacher: StudentListModel = {
+        const student: StudentListModel = {
             studentId: element.id,
             fullName:
                 concatName(
@@ -105,17 +105,17 @@ const formatData = (data: OutputType | undefined): StudentListModel[] => {
             email: element.user.email,
             phoneNumber: element.user.phoneNumber || "___",
             birthday: element.user.birthday
-                ? format(element.user.birthday, "yyyy/MM/dd")
-                : "___/___/___",
+                ? format(element.user.birthday, "yyyy-MM-dd")
+                : "___",
             status: element.user.deletedAt
                 ? StudentStatus.DELETED
                 : StudentStatus.ACTIVE,
             hasDesireClass: element.isRequesting,
         };
-        teachers.push(teacher);
+        students.push(student);
     });
 
-    return teachers;
+    return students;
 };
 
 const StudentListTable = (): ReactElement => {

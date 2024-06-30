@@ -1,5 +1,8 @@
 import {Gender} from "@prisma/client";
 
+export const DEFAULT_AVATAR_URL =
+    "https://avatars.githubusercontent.com/u/124599?v=4";
+
 export interface ErrorResponsePayload {
     error: string;
 }

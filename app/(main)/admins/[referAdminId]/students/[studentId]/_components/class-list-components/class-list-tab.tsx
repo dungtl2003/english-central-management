@@ -234,7 +234,6 @@ const StudentClassListTab = ({
     const protocol = process.env.NEXT_PUBLIC_PROTOCOL;
     const [currentUrl, setCurrentUrl] = useState("");
     useEffect(() => {
-        console.debug("......................");
         if (!user) return;
         setCurrentUrl(`${protocol}://${domain}/admins/${user!.id}`);
     }, [protocol, domain, user]);
