@@ -16,6 +16,7 @@ const MainLayout: React.FC<{children: React.ReactNode}> = ({
     );
 
     useEffect(() => {
+        return;
         if (!isLoaded) return;
 
         if (!isSignedIn) {
