@@ -1,21 +1,21 @@
 export const dynamic = "force-dynamic";
 
+import {db} from "@/lib/db";
+import {buildErrorNextResponse, getClerkRole} from "@/lib/helper";
+import {auth} from "@clerk/nextjs/server";
+import {Prisma, UserRole} from "@prisma/client";
+import {ApiError} from "next/dist/server/api-utils";
 import {NextRequest, NextResponse} from "next/server";
 import {
     GetResponsePayload,
     PostRequestPayload,
     PostResponsePayload,
 } from "./types";
-import {ErrorResponsePayload, UserRole} from "@/constaints";
-import {buildErrorNextResponse, getClerkRole} from "@/lib/helper";
-import {auth} from "@clerk/nextjs/server";
-import {ApiError} from "next/dist/server/api-utils";
-import {db} from "@/lib/db";
 import {PostRequestPayloadSchema} from "./schema";
-import {addStudent} from "./helper";
+import {ErrorResponsePayload} from "@/constaints";
 
 /**
- * Get students.
+ * Get units.
  * Only admin can access this api.
  */
 export async function GET(
@@ -47,46 +47,47 @@ export async function GET(
             throw new ApiError(401, `Account not found`);
         }
 
-        const students = await db.student.findMany({
-            include: {
-                user: true,
-                classes: {
-                    where: {
-                        approvedAt: null,
-                        rejectedAt: null,
-                    },
-                },
-            },
-        });
+        const units = await db.unit.findMany({});
 
-        const result: GetResponsePayload = students.map((s) => {
-            return {
-                ...s,
-                isRequesting: s.classes.length > 0,
-            };
+        return NextResponse.json<GetResponsePayload>(units, {
+            status: 200,
         });
-
-        return NextResponse.json<GetResponsePayload>(result, {status: 200});
     } catch (error) {
         return buildErrorNextResponse(error);
     }
 }
 
 /**
- * Add student.
- * Only user who chose student role can use this api.
+ * Add unit.
+ * Only admin can access this api.
  */
-export async function POST(
-    req: NextRequest
-): Promise<NextResponse<PostResponsePayload | ErrorResponsePayload>> {
+export async function POST(req: NextRequest): Promise<NextResponse> {
     console.log("Timestamp: ", new Date().toLocaleString());
     console.log("POST ", req.nextUrl.pathname);
 
     try {
         const clerkUserId = auth().userId;
+        const role: UserRole | null = getClerkRole();
+
         if (!clerkUserId) {
             throw new ApiError(401, "No signed in user");
         }
+
+        if (!role || role !== UserRole.ADMIN) {
+            throw new ApiError(401, "No right permission");
+        }
+
+        const admin = await db.user.findFirst({
+            where: {
+                referId: clerkUserId,
+                role: UserRole.ADMIN,
+            },
+        });
+
+        if (!admin) {
+            throw new ApiError(401, `Account not found`);
+        }
+
         const body: PostRequestPayload = await req.json();
         const validBody = PostRequestPayloadSchema.safeParse(body);
         if (validBody.error) {
@@ -96,15 +97,22 @@ export async function POST(
             );
         }
 
-        if (clerkUserId !== validBody.data.id) {
-            return NextResponse.json(
-                {error: "Cannot create student with different ID"},
-                {status: 400}
-            );
-        }
+        await db.unit.create({
+            data: {
+                year: validBody.data!.year,
+                grade: validBody.data!.grade,
+                maxSessions: validBody.data!.maxSessions,
+                maxStudents: validBody.data!.maxStudents,
+                studyHour: validBody.data!.studyHour,
+                studyMinute: validBody.data!.studyMinute,
+                studySecond: validBody.data!.studySecond,
+                pricePerSession: new Prisma.Decimal(
+                    validBody.data!.pricePerSession
+                ),
+            },
+        });
 
-        await addStudent(clerkUserId);
-        return NextResponse.json<PostResponsePayload>("Added student", {
+        return NextResponse.json<PostResponsePayload>("Added unit", {
             status: 200,
         });
     } catch (error) {

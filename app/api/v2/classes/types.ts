@@ -1,7 +1,21 @@
 import {z} from "zod";
-import {AdminGetQueryParamsSchema} from "./schema";
-import {Class} from "@prisma/client";
+import {
+    AdminGetQueryParamsSchema,
+    PostRequestPayloadSchema,
+    ScheduleSchema,
+} from "./schema";
+import {Class, Unit} from "@prisma/client";
+
+export type Schedule = z.infer<typeof ScheduleSchema>;
 
 export type AdminGetQueryParams = z.infer<typeof AdminGetQueryParamsSchema>;
 
-export type AdminGetResponsePayload = Class[];
+export type PostRequestPayload = z.infer<typeof PostRequestPayloadSchema>;
+
+export type AdminGetResponsePayload = ({
+    unit: Unit;
+    numOfJoinedStudents: number;
+    numOfPendingStudents: number;
+} & Class)[];
+
+export type PostResponsePayload = string;

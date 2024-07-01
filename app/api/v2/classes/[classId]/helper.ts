@@ -34,6 +34,23 @@ export async function adminGetHandler(
         where: {
             id: classId,
         },
+        include: {
+            unit: true,
+            students: {
+                include: {
+                    student: {
+                        include: {
+                            user: true,
+                        },
+                    },
+                },
+            },
+            sessions: {
+                include: {
+                    attendances: true,
+                },
+            },
+        },
     });
 
     if (!cls) {
