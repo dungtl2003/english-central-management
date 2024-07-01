@@ -84,7 +84,7 @@ const formatData = (data: SessionTableModel): AttendanceTableModel[] => {
     return formattedData;
 };
 
-const AttendanceTable2: React.FC<{
+const AttendanceTable: React.FC<{
     data: SessionTableModel;
     canSaveAttendances: boolean;
 }> = ({data, canSaveAttendances}): ReactElement => {
@@ -167,14 +167,14 @@ const AttendanceTable2: React.FC<{
             <Table>
                 <AttendanceTableHeader table={table} />
                 <AttendanceTableBody table={table} columns={columns} />
-                <AttendanceTableFooter
-                    onConfirmHandler={onConfirmHandler}
-                    canSaveAttendances={canSaveAttendances}
-                    isLoading={isLoading}
-                />
             </Table>
+            <AttendanceTableFooter
+                onConfirmHandler={onConfirmHandler}
+                canSaveAttendances={canSaveAttendances}
+                isLoading={isLoading}
+            />
         </div>
     );
 };
 
-export default AttendanceTable2;
+export default AttendanceTable;

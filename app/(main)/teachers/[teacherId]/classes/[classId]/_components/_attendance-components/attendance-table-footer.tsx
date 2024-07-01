@@ -8,17 +8,19 @@ const AttendanceTableFooter: React.FC<{
     onConfirmHandler: () => void;
 }> = ({canSaveAttendances, onConfirmHandler, isLoading}): ReactElement => {
     return (
-        <DialogFooter>
-            {canSaveAttendances ? (
-                <ConfirmDialog
-                    onConfirm={onConfirmHandler}
-                    title="Save attendance"
-                    isLoading={isLoading}
-                />
-            ) : (
-                ""
-            )}
-        </DialogFooter>
+        <div className="mt-5">
+            <DialogFooter className="min-w-full flex items-center justify-center">
+                {canSaveAttendances ? (
+                    <ConfirmDialog
+                        onConfirm={onConfirmHandler}
+                        title="Save attendance"
+                        isLoading={isLoading}
+                    />
+                ) : (
+                    ""
+                )}
+            </DialogFooter>
+        </div>
     );
 };
 
