@@ -12,14 +12,14 @@ import {
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import {OutputType} from "@/lib/action/teacher/get-teacher-detail/types";
-import {parse} from "date-fns";
+import {format, parse} from "date-fns";
 import {roundUp} from "@/lib/utils";
 
 const TeacherNavigation: React.FC<{data: OutputType | undefined}> = ({
     data,
 }): ReactElement => {
     const acceptedDate =
-        data && data.acceptedAt ? data!.acceptedAt!.toString() : null;
+        data && data.acceptedAt ? format(data.acceptedAt, "dd/MM/yyyy") : null;
     const seniority: number = acceptedDate
         ? new Date().getFullYear() -
           parse(acceptedDate, "dd/MM/yyyy", new Date()).getFullYear()
