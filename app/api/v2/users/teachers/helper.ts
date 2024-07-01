@@ -21,11 +21,15 @@ export function addTeacher(clerkUserId: string) {
             },
         });
 
-        await clerkClient.users.updateUser(clerkUserId, {
-            publicMetadata: {
-                role: UserRole.TEACHER,
-            },
-        });
+        try {
+            await clerkClient.users.updateUser(clerkUserId, {
+                publicMetadata: {
+                    role: UserRole.TEACHER,
+                },
+            });
+        } catch (error) {
+            console.error("Cannot find clerk user");
+        }
     });
 }
 
