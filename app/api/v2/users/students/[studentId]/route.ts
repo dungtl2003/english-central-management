@@ -40,7 +40,7 @@ export async function GET(
             case UserRole.ADMIN:
                 result = await adminGetHandler(params.studentId);
                 break;
-            case UserRole.TEACHER:
+            case UserRole.STUDENT:
                 result = await studentGetHandler(params.studentId);
                 break;
             default:
