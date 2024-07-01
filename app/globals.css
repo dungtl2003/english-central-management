@@ -68,6 +68,11 @@
 
         --text-color: #fff;
     }
+    .custom-area {
+        --vis-area-fill-opacity: 0.4;
+        --vis-area-hover-fill-opacity: 1;
+        --vis-area-stroke-width: 1px;
+    }
 }
 
 @layer base {

@@ -6,7 +6,6 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import ConfirmDialog from "@/components/comfirm-dialog";
 import {Button} from "@/components/ui/button";
 import PayingPopupContent from "./paying-popup-content";
 import {DialogDescription} from "@radix-ui/react-dialog";
@@ -41,7 +40,7 @@ const PayingPopup: React.FC<{data: StudentInfoData}> = ({
                 </Button>
             </DialogTrigger>
             <DialogContent
-                className="max-w-[70%] min-h-[70%]"
+                className="max-w-[70%] min-h-[60%]"
                 onInteractOutside={(e) => e.preventDefault()}
             >
                 <DialogHeader className="justify-center items-center">
@@ -51,9 +50,6 @@ const PayingPopup: React.FC<{data: StudentInfoData}> = ({
                     <DialogDescription>{data.id}</DialogDescription>
                 </DialogHeader>
                 <PayingPopupContent data={data} />
-                <div className="flex items-center justify-center">
-                    <ConfirmDialog customClass="w-[150px]" title="Save" />
-                </div>
             </DialogContent>
         </Dialog>
     );
