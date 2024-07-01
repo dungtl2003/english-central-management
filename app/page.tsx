@@ -4,6 +4,7 @@ import {ReactElement} from "react";
 import PreLogin from "@/components/pre-login";
 import Logo from "@/components/logo";
 import {UserButton, useUser} from "@clerk/nextjs";
+import {ParallaxTest} from "@/components/home_page/homepage";
 
 const HomePage: React.FC = (): ReactElement => {
     const {isSignedIn} = useUser();
@@ -13,6 +14,7 @@ const HomePage: React.FC = (): ReactElement => {
                 <Logo />
                 {isSignedIn ? <UserButton /> : <PreLogin />}
             </nav>
+            <ParallaxTest />
         </div>
     );
 };
