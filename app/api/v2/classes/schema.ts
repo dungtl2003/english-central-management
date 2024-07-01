@@ -84,7 +84,7 @@ export const PostRequestPayloadSchema = z
             })
             .refine(
                 (tz) =>
-                    tz === "Asia/Saigon" ||
+                    tz === "Asia/Ho_Chi_Minh" ||
                     Intl.supportedValuesOf("timeZone").includes(tz),
                 "Unknown time zone"
             ),
