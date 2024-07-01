@@ -2,71 +2,52 @@ export const dynamic = "force-dynamic";
 
 import {NextRequest, NextResponse} from "next/server";
 import {
-    GetResponsePayload,
+    AdminGetResponsePayload,
     PostRequestPayload,
     PostResponsePayload,
+    StudentGetResponsePayload,
 } from "./types";
 import {ErrorResponsePayload, UserRole} from "@/constaints";
 import {buildErrorNextResponse, getClerkRole} from "@/lib/helper";
 import {auth} from "@clerk/nextjs/server";
 import {ApiError} from "next/dist/server/api-utils";
-import {db} from "@/lib/db";
 import {PostRequestPayloadSchema} from "./schema";
-import {addStudent} from "./helper";
+import {addStudent, adminGetHandler, studentGetHandler} from "./helper";
 
 /**
  * Get students.
- * Only admin can access this api.
+ * Admin can access this api.
+ * Student with right ID can access this api, only get by refer ID.
  */
 export async function GET(
     req: NextRequest
-): Promise<NextResponse<GetResponsePayload | ErrorResponsePayload>> {
+): Promise<
+    NextResponse<
+        | AdminGetResponsePayload
+        | StudentGetResponsePayload
+        | ErrorResponsePayload
+    >
+> {
     console.log("Timestamp: ", new Date().toLocaleString());
     console.log("GET ", req.nextUrl.pathname);
 
+    const role: UserRole | null = getClerkRole();
+    let result: AdminGetResponsePayload | StudentGetResponsePayload;
     try {
-        const clerkUserId = auth().userId;
-        const role: UserRole | null = getClerkRole();
-
-        if (!clerkUserId) {
-            throw new ApiError(401, "No signed in user");
+        switch (role) {
+            case UserRole.ADMIN:
+                result = await adminGetHandler();
+                break;
+            case UserRole.STUDENT:
+                result = await studentGetHandler();
+                break;
+            default:
+                throw new ApiError(400, "No right permission");
         }
 
-        if (!role || role !== UserRole.ADMIN) {
-            throw new ApiError(401, "No right permission");
-        }
-
-        const admin = await db.user.findFirst({
-            where: {
-                referId: clerkUserId,
-                role: UserRole.ADMIN,
-            },
-        });
-
-        if (!admin) {
-            throw new ApiError(401, `Account not found`);
-        }
-
-        const students = await db.student.findMany({
-            include: {
-                user: true,
-                classes: {
-                    where: {
-                        approvedAt: null,
-                        rejectedAt: null,
-                    },
-                },
-            },
-        });
-
-        const result: GetResponsePayload = students.map((s) => {
-            return {
-                ...s,
-                isRequesting: s.classes.length > 0,
-            };
-        });
-
-        return NextResponse.json<GetResponsePayload>(result, {status: 200});
+        return NextResponse.json<
+            AdminGetResponsePayload | StudentGetResponsePayload
+        >(result, {status: 200});
     } catch (error) {
         return buildErrorNextResponse(error);
     }
