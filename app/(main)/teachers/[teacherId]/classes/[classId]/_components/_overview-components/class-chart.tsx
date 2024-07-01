@@ -104,7 +104,7 @@ const ClassChart: React.FC<{rawData: OutputType | undefined}> = ({
                     />
                     <VisArea
                         minHeight1Px={true}
-                        {...Accessors(Status.Absent)}
+                        {...Accessors(Status.Present)}
                         x={x}
                         curveType={CurveType.Basis}
                     />
@@ -116,7 +116,7 @@ const ClassChart: React.FC<{rawData: OutputType | undefined}> = ({
                     />
                     <VisArea
                         minHeight1Px={true}
-                        {...Accessors(Status.Present)}
+                        {...Accessors(Status.Absent)}
                         x={x}
                         curveType={CurveType.Basis}
                     />

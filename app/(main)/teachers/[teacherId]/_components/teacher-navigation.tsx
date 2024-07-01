@@ -12,10 +12,19 @@ import {
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import {OutputType} from "@/lib/action/teacher/get-teacher-detail/types";
+import {parse} from "date-fns";
+import {roundUp} from "@/lib/utils";
 
 const TeacherNavigation: React.FC<{data: OutputType | undefined}> = ({
     data,
 }): ReactElement => {
+    const acceptedDate =
+        data && data.acceptedAt ? data!.acceptedAt!.toString() : null;
+    const seniority: number = acceptedDate
+        ? new Date().getFullYear() -
+          parse(acceptedDate, "dd/MM/yyyy", new Date()).getFullYear()
+        : 0;
+
     return (
         <div>
             <NavigationMenu className="bg-white dark:bg-black fixed w-full h-16 p-4 border-b shadow-sm flex items-center">
@@ -75,7 +84,7 @@ const TeacherNavigation: React.FC<{data: OutputType | undefined}> = ({
                                     " rounded-md border border-slate-200 dark:border-slate-800"
                                 }
                             >
-                                {`Base salary: $${data ? data?.baseSalary : 0} / month`}
+                                {`Salary: $${data ? roundUp(Number(data.baseSalary) * (1 + seniority / 10), 2) : 0} / month`}
                             </NavigationMenuLink>
                             <ThemeToggle />
                             <UserButton />

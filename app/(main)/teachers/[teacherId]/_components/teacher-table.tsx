@@ -38,8 +38,8 @@ const formatData = (fetchedData: OutputType): ClassInfo[] | undefined => {
             classId: data.id,
             className: `${data.unit.grade}.${data.index}`,
             teacher: concatName(
-                data.teacher.user.lastName,
                 data.teacher.user.firstName,
+                data.teacher.user.lastName,
                 true
             ),
             year: String(data.unit.year),
