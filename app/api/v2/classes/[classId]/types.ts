@@ -11,7 +11,18 @@ import {
     User,
 } from "@prisma/client";
 
-export type AdminGetResponsePayload = Class;
+export type AdminGetResponsePayload = {
+    unit: Unit;
+    sessions: ({
+        attendances: Attendance[];
+    } & Session)[];
+    students: ({
+        student: {
+            user: User;
+        } & Student;
+    } & StudentsInClasses)[];
+} & Class;
+
 export type TeacherGetResponsePayload = {
     unit: Unit;
     sessions: ({
