@@ -4,7 +4,7 @@ import {ApiError} from "next/dist/server/api-utils";
 import {NextRequest, NextResponse} from "next/server";
 import {AdminGetResponsePayload, ParentGetResponsePayload} from "./types";
 import {ErrorResponsePayload} from "@/constaints";
-import {parentGetHandler} from "./helper";
+import {adminGetHandler, parentGetHandler} from "./helper";
 
 /**
  * Get parent's detail.
@@ -28,9 +28,9 @@ export async function GET(
     let result: AdminGetResponsePayload | ParentGetResponsePayload;
     try {
         switch (role) {
-            //case UserRole.ADMIN:
-            //    result = await adminGetHandler(params.parentId);
-            //    break;
+            case UserRole.ADMIN:
+                result = await adminGetHandler(params.parentId);
+                break;
             case UserRole.PARENT:
                 result = await parentGetHandler(params.parentId);
                 break;
