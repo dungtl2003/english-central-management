@@ -83,7 +83,9 @@ export const PostRequestPayloadSchema = z
                 description: "Time zone of class",
             })
             .refine(
-                (tz) => Intl.supportedValuesOf("timeZone").includes(tz),
+                (tz) =>
+                    tz === "Asia/Ho_Chi_Minh" ||
+                    Intl.supportedValuesOf("timeZone").includes(tz),
                 "Unknown time zone"
             ),
         schedules: z
