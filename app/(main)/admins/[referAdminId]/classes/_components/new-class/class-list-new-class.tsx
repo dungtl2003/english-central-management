@@ -1,4 +1,4 @@
-import React, {ReactElement} from "react";
+import React, {ReactElement, useState} from "react";
 import {
     Dialog,
     DialogContent,
@@ -10,7 +10,6 @@ import {Button} from "@/components/ui/button";
 import {FaPlusCircle} from "react-icons/fa";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useForm} from "react-hook-form";
-import {z} from "zod";
 import {Form} from "@/components/ui/form";
 import {
     Carousel,
@@ -21,21 +20,8 @@ import {
 } from "@/components/ui/carousel";
 import NewClassBasicInfo from "./new-class-basic-info";
 import NewClassSchedule from "./new-class-schedule";
-
-const formSchema = z.object({
-    unit: z.string(),
-    teacher: z.string(),
-    index: z.string(),
-    pricePerSession: z.string(),
-    maxSessions: z.string(),
-    maxStudents: z.string(),
-    studyTime: z.object({
-        hours: z.string(),
-        minutes: z.string(),
-        seconds: z.string(),
-    }),
-    startDate: z.string(),
-});
+import {FormSchema, FormType, TeacherModel, UnitModel} from "./types";
+import {teacherDummyData, unitDummyData} from "../class-list-dummy-data";
 
 const daysOfWeek: string[] = [
     "Monday",
@@ -48,28 +34,20 @@ const daysOfWeek: string[] = [
 ];
 
 const ClassListNewClass = (): ReactElement => {
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            unit: "",
-            teacher: "",
-            index: "",
-            pricePerSession: "",
-            maxSessions: "",
-            maxStudents: "",
-            studyTime: {
-                hours: "",
-                minutes: "",
-                seconds: "",
-            },
-            startDate: "",
-        },
+    const form = useForm<FormType>({
+        resolver: zodResolver(FormSchema),
     });
-    function onSubmit(values: z.infer<typeof formSchema>) {
+
+    function onSubmit(values: FormType) {
+        console.debug("submit");
         console.log(values);
     }
 
     const [open, setOpen] = React.useState(false);
+
+    const [unitsData /* setUnitsData */] = useState<UnitModel[]>(unitDummyData);
+    const [teachersData /* setTeachersData */] =
+        useState<TeacherModel[]>(teacherDummyData);
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -92,45 +70,59 @@ const ClassListNewClass = (): ReactElement => {
                 </DialogHeader>
                 <Form {...form}>
                     <form
-                        onSubmit={form.handleSubmit(onSubmit)}
+                        // onSubmit={() => {
+                        //     () => console.log("hello");
+                        // }}
                         className="flex items-center justify-center"
                     >
-                        <Carousel className="w-[90%]">
-                            <CarouselContent className="p-1">
-                                <CarouselItem
-                                    key={"info"}
-                                    className="space-y-5"
+                        <div>
+                            <div className="flex items-center justify-center">
+                                <Carousel className="w-[90%]">
+                                    <CarouselContent className="p-1">
+                                        <CarouselItem
+                                            key={"info"}
+                                            className="space-y-5"
+                                        >
+                                            <NewClassBasicInfo
+                                                form={form}
+                                                unitsData={unitsData}
+                                                teachersData={teachersData}
+                                            />
+                                        </CarouselItem>
+
+                                        <CarouselItem key={"schedule"}>
+                                            <NewClassSchedule
+                                                form={form}
+                                                daysOfWeek={daysOfWeek}
+                                            />
+                                        </CarouselItem>
+                                    </CarouselContent>
+                                    <CarouselPrevious />
+                                    <CarouselNext />
+                                </Carousel>
+                            </div>
+                            <div className="w-full flex place-content-evenly pt-3">
+                                <Button
+                                    variant="success"
+                                    type="button"
+                                    onClick={() => {
+                                        onSubmit(form.getValues());
+                                        setOpen(false);
+                                    }}
                                 >
-                                    <NewClassBasicInfo form={form} />
-                                </CarouselItem>
-                                <CarouselItem key={"schedule"}>
-                                    <NewClassSchedule
-                                        form={form}
-                                        daysOfWeek={daysOfWeek}
-                                    />
-                                </CarouselItem>
-                            </CarouselContent>
-                            <CarouselPrevious />
-                            <CarouselNext />
-                        </Carousel>
+                                    Create
+                                </Button>
+                                <Button
+                                    variant="destructive"
+                                    type="button"
+                                    onClick={() => setOpen(false)}
+                                >
+                                    Cancel
+                                </Button>
+                            </div>
+                        </div>
                     </form>
                 </Form>
-                <div className="w-full flex place-content-evenly">
-                    <Button
-                        variant="success"
-                        type="submit"
-                        onClick={() => setOpen(false)}
-                    >
-                        Create
-                    </Button>
-                    <Button
-                        variant="destructive"
-                        type="button"
-                        onClick={() => setOpen(false)}
-                    >
-                        Cancel
-                    </Button>
-                </div>
             </DialogContent>
         </Dialog>
     );

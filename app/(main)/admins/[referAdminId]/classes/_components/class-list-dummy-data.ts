@@ -1,9 +1,10 @@
-import {ClassListModel, UnitModel, TeacherModel} from "./types";
+import {TeacherModel, UnitModel} from "./new-class/types";
+import {ClassListModel} from "./types";
 
 export const classListDummyData: ClassListModel[] = [
     {
         className: "1.1",
-        grade: "1",
+        year: "1",
         students: "0/50",
         waiting: "10",
         progress: "0/50",
@@ -15,7 +16,7 @@ export const classListDummyData: ClassListModel[] = [
     },
     {
         className: "1.2",
-        grade: "1",
+        year: "1",
         students: "45/50",
         waiting: "5",
         progress: "3/50",
@@ -27,7 +28,7 @@ export const classListDummyData: ClassListModel[] = [
     },
     {
         className: "1.3",
-        grade: "1",
+        year: "1",
         students: "45/50",
         waiting: "8",
         progress: "3/50",
@@ -39,7 +40,7 @@ export const classListDummyData: ClassListModel[] = [
     },
     {
         className: "1.4",
-        grade: "1",
+        year: "1",
         students: "45/50",
         waiting: "12",
         progress: "3/50",
@@ -51,7 +52,7 @@ export const classListDummyData: ClassListModel[] = [
     },
     {
         className: "2.1",
-        grade: "2",
+        year: "2",
         students: "45/50",
         waiting: "5",
         progress: "3/50",
@@ -63,7 +64,7 @@ export const classListDummyData: ClassListModel[] = [
     },
     {
         className: "2.2",
-        grade: "2",
+        year: "2",
         students: "0/50",
         waiting: "20",
         progress: "0/50",
@@ -75,7 +76,7 @@ export const classListDummyData: ClassListModel[] = [
     },
     {
         className: "2.3",
-        grade: "2",
+        year: "2",
         students: "45/50",
         waiting: "7",
         progress: "3/50",
@@ -87,7 +88,7 @@ export const classListDummyData: ClassListModel[] = [
     },
     {
         className: "2.4",
-        grade: "2",
+        year: "2",
         students: "45/50",
         waiting: "10",
         progress: "3/50",
@@ -99,7 +100,7 @@ export const classListDummyData: ClassListModel[] = [
     },
     {
         className: "3.1",
-        grade: "3",
+        year: "3",
         students: "45/50",
         waiting: "15",
         progress: "3/50",
@@ -111,7 +112,7 @@ export const classListDummyData: ClassListModel[] = [
     },
     {
         className: "3.2",
-        grade: "3",
+        year: "3",
         students: "45/50",
         waiting: "5",
         progress: "3/50",
@@ -123,7 +124,7 @@ export const classListDummyData: ClassListModel[] = [
     },
     {
         className: "3.3",
-        grade: "3",
+        year: "3",
         students: "45/50",
         waiting: "12",
         progress: "3/50",
@@ -135,7 +136,7 @@ export const classListDummyData: ClassListModel[] = [
     },
     {
         className: "3.4",
-        grade: "3",
+        year: "3",
         students: "45/50",
         waiting: "6",
         progress: "3/50",
@@ -147,7 +148,7 @@ export const classListDummyData: ClassListModel[] = [
     },
     {
         className: "4.1",
-        grade: "4",
+        year: "4",
         students: "0/50",
         waiting: "10",
         progress: "0/50",
@@ -159,7 +160,7 @@ export const classListDummyData: ClassListModel[] = [
     },
     {
         className: "4.2",
-        grade: "4",
+        year: "4",
         students: "45/50",
         waiting: "5",
         progress: "3/50",
@@ -171,7 +172,7 @@ export const classListDummyData: ClassListModel[] = [
     },
     {
         className: "4.3",
-        grade: "4",
+        year: "4",
         students: "45/50",
         waiting: "8",
         progress: "3/50",
@@ -183,7 +184,7 @@ export const classListDummyData: ClassListModel[] = [
     },
     {
         className: "4.4",
-        grade: "4",
+        year: "4",
         students: "45/50",
         waiting: "12",
         progress: "3/50",
@@ -195,7 +196,7 @@ export const classListDummyData: ClassListModel[] = [
     },
     {
         className: "5.1",
-        grade: "5",
+        year: "5",
         students: "45/50",
         waiting: "15",
         progress: "3/50",
@@ -207,7 +208,7 @@ export const classListDummyData: ClassListModel[] = [
     },
     {
         className: "5.2",
-        grade: "5",
+        year: "5",
         students: "45/50",
         waiting: "5",
         progress: "3/50",
@@ -219,7 +220,7 @@ export const classListDummyData: ClassListModel[] = [
     },
     {
         className: "5.3",
-        grade: "5",
+        year: "5",
         students: "0/50",
         waiting: "18",
         progress: "0/50",
@@ -231,7 +232,7 @@ export const classListDummyData: ClassListModel[] = [
     },
     {
         className: "5.4",
-        grade: "5",
+        year: "5",
         students: "45/50",
         waiting: "10",
         progress: "3/50",
@@ -243,7 +244,7 @@ export const classListDummyData: ClassListModel[] = [
     },
     {
         className: "6.1",
-        grade: "6",
+        year: "6",
         students: "0/50",
         waiting: "20",
         progress: "0/50",
@@ -255,7 +256,7 @@ export const classListDummyData: ClassListModel[] = [
     },
     {
         className: "6.2",
-        grade: "6",
+        year: "6",
         students: "45/50",
         waiting: "5",
         progress: "3/50",
@@ -267,7 +268,7 @@ export const classListDummyData: ClassListModel[] = [
     },
     {
         className: "6.3",
-        grade: "6",
+        year: "6",
         students: "45/50",
         waiting: "8",
         progress: "3/50",
@@ -279,7 +280,7 @@ export const classListDummyData: ClassListModel[] = [
     },
     {
         className: "6.4",
-        grade: "6",
+        year: "6",
         students: "45/50",
         waiting: "12",
         progress: "3/50",
@@ -293,7 +294,7 @@ export const classListDummyData: ClassListModel[] = [
 
 export const unitDummyData: UnitModel[] = [
     {
-        unit_year: "U_01 - 2024",
+        year: "U_01 - 2024",
         maxSessions: "50",
         maxStudents: "45",
         studyTime: {
@@ -302,9 +303,11 @@ export const unitDummyData: UnitModel[] = [
             seconds: "00",
         },
         pricePerSession: "7$",
+        unitId: "",
+        grade: "",
     },
     {
-        unit_year: "U_02 - 2024",
+        year: "U_02 - 2024",
         maxSessions: "50",
         maxStudents: "50",
         studyTime: {
@@ -313,9 +316,11 @@ export const unitDummyData: UnitModel[] = [
             seconds: "00",
         },
         pricePerSession: "7$",
+        unitId: "",
+        grade: "",
     },
     {
-        unit_year: "U_03 - 2024",
+        year: "U_03 - 2024",
         maxSessions: "45",
         maxStudents: "40",
         studyTime: {
@@ -324,9 +329,11 @@ export const unitDummyData: UnitModel[] = [
             seconds: "00",
         },
         pricePerSession: "7$",
+        unitId: "",
+        grade: "",
     },
     {
-        unit_year: "U_04 - 2024",
+        year: "U_04 - 2024",
         maxSessions: "45",
         maxStudents: "40",
         studyTime: {
@@ -335,9 +342,11 @@ export const unitDummyData: UnitModel[] = [
             seconds: "00",
         },
         pricePerSession: "7$",
+        unitId: "",
+        grade: "",
     },
     {
-        unit_year: "U_05 - 2024",
+        year: "U_05 - 2024",
         maxSessions: "45",
         maxStudents: "40",
         studyTime: {
@@ -346,9 +355,11 @@ export const unitDummyData: UnitModel[] = [
             seconds: "00",
         },
         pricePerSession: "7$",
+        unitId: "",
+        grade: "",
     },
     {
-        unit_year: "U_06 - 2024",
+        year: "U_06 - 2024",
         maxSessions: "45",
         maxStudents: "40",
         studyTime: {
@@ -357,9 +368,11 @@ export const unitDummyData: UnitModel[] = [
             seconds: "00",
         },
         pricePerSession: "7$",
+        unitId: "",
+        grade: "",
     },
     {
-        unit_year: "U_07 - 2024",
+        year: "U_07 - 2024",
         maxSessions: "45",
         maxStudents: "40",
         studyTime: {
@@ -368,9 +381,11 @@ export const unitDummyData: UnitModel[] = [
             seconds: "00",
         },
         pricePerSession: "7$",
+        unitId: "",
+        grade: "",
     },
     {
-        unit_year: "U_08 - 2024",
+        year: "U_08 - 2024",
         maxSessions: "45",
         maxStudents: "40",
         studyTime: {
@@ -379,9 +394,11 @@ export const unitDummyData: UnitModel[] = [
             seconds: "00",
         },
         pricePerSession: "7$",
+        unitId: "",
+        grade: "",
     },
     {
-        unit_year: "U_09 - 2024",
+        year: "U_09 - 2024",
         maxSessions: "45",
         maxStudents: "40",
         studyTime: {
@@ -390,9 +407,11 @@ export const unitDummyData: UnitModel[] = [
             seconds: "00",
         },
         pricePerSession: "7$",
+        unitId: "",
+        grade: "",
     },
     {
-        unit_year: "U_10 - 2024",
+        year: "U_10 - 2024",
         maxSessions: "45",
         maxStudents: "40",
         studyTime: {
@@ -401,9 +420,11 @@ export const unitDummyData: UnitModel[] = [
             seconds: "00",
         },
         pricePerSession: "7$",
+        unitId: "",
+        grade: "",
     },
     {
-        unit_year: "U_11- 2024",
+        year: "U_11- 2024",
         maxSessions: "45",
         maxStudents: "40",
         studyTime: {
@@ -412,97 +433,99 @@ export const unitDummyData: UnitModel[] = [
             seconds: "00",
         },
         pricePerSession: "7$",
+        unitId: "",
+        grade: "",
     },
 ];
 
 export const teacherDummyData: TeacherModel[] = [
     {
         fullName: "Nguyễn Minh Đức",
-        id: "123456789123456789123456879a",
+        teacherId: "123456789123456789123456879a",
         birthday: "01/01/2003",
         createDate: "01/01/2022",
     },
     {
         fullName: "Trần Lưu Dũng",
-        id: "123456789123456789123456879b",
+        teacherId: "123456789123456789123456879b",
         birthday: "02/01/2003",
         createDate: "02/01/2022",
     },
     {
         fullName: "Trần Lưu Dũng",
-        id: "123456789123456789123456879o",
+        teacherId: "123456789123456789123456879o",
         birthday: "02/01/2003",
         createDate: "02/01/2022",
     },
     {
         fullName: "Nguyễn Hữu Nhật Quang",
-        id: "123456789123456789123456879c",
+        teacherId: "123456789123456789123456879c",
         birthday: "03/01/2003",
         createDate: "03/01/2022",
     },
     {
         fullName: "Nguyễn Gia Huy",
-        id: "123456789123456789123456879d",
+        teacherId: "123456789123456789123456879d",
         birthday: "04/01/2003",
         createDate: "04/01/2022",
     },
     {
         fullName: "Nguyễn Quang Minh",
-        id: "123456789123456789123456879e",
+        teacherId: "123456789123456789123456879e",
         birthday: "05/01/2003",
         createDate: "05/01/2022",
     },
     {
         fullName: "Nguyễn Thảo Chi",
-        id: "123456789123456789123456879f",
+        teacherId: "123456789123456789123456879f",
         birthday: "06/01/2003",
         createDate: "06/01/2022",
     },
     {
         fullName: "Trịnh Văn Bình",
-        id: "123456789123456789123456879g",
+        teacherId: "123456789123456789123456879g",
         birthday: "07/01/2003",
         createDate: "07/01/2022",
     },
     {
         fullName: "Bùi Minh Khánh",
-        id: "123456789123456789123456879h",
+        teacherId: "123456789123456789123456879h",
         birthday: "08/01/2003",
         createDate: "08/01/2022",
     },
     {
         fullName: "Khương Quốc Vượng",
-        id: "123456789123456789123456879i",
+        teacherId: "123456789123456789123456879i",
         birthday: "09/01/2003",
         createDate: "09/01/2022",
     },
     {
         fullName: "Nguyễn Thị Thảo",
-        id: "123456789123456789123456879j",
+        teacherId: "123456789123456789123456879j",
         birthday: "10/01/2003",
         createDate: "10/01/2022",
     },
     {
         fullName: "Trần Hồng Vân",
-        id: "123456789123456789123456879k",
+        teacherId: "123456789123456789123456879k",
         birthday: "11/01/2003",
         createDate: "11/01/2022",
     },
     {
         fullName: "Mai Thanh Nga",
-        id: "123456789123456789123456879l",
+        teacherId: "123456789123456789123456879l",
         birthday: "12/01/2003",
         createDate: "12/01/2022",
     },
     {
         fullName: "Nguyễn Hoàng Dũng",
-        id: "123456789123456789123456879m",
+        teacherId: "123456789123456789123456879m",
         birthday: "13/01/2003",
         createDate: "13/01/2022",
     },
     {
         fullName: "Trần Chí Nhật",
-        id: "123456789123456789123456879n",
+        teacherId: "123456789123456789123456879n",
         birthday: "13/01/2003",
         createDate: "13/01/2022",
     },

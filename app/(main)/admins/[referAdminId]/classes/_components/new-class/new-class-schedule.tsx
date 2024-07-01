@@ -17,32 +17,15 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import {ScrollArea} from "@/components/ui/scroll-area";
-
-interface NewClassScheduleProps {
-    form: UseFormReturn<
-        {
-            unit: string;
-            teacher: string;
-            index: string;
-            pricePerSession: string;
-            maxSessions: string;
-            maxStudents: string;
-            studyTime: {
-                hours: string;
-                minutes: string;
-                seconds: string;
-            };
-            startDate: string;
-        },
-        undefined
-    >;
-    daysOfWeek: string[];
-}
+import {FormType} from "./types";
 
 const NewClassSchedule = ({
     form,
     daysOfWeek,
-}: NewClassScheduleProps): ReactElement => {
+}: {
+    form: UseFormReturn<FormType, undefined>;
+    daysOfWeek: string[];
+}): ReactElement => {
     const sessionRef = React.useRef<HTMLInputElement>(null);
     const [numberOfSessions, setNumberOfSessions] = React.useState<number>(0);
 
@@ -55,37 +38,31 @@ const NewClassSchedule = ({
 
     return (
         <ScrollArea className=" h-[350px]">
-            <FormField
-                control={form.control}
-                name="index"
-                render={() => (
-                    <FormItem className="px-1 mb-4">
-                        <FormLabel className="pl-1 dark:text-white text-black">
-                            Number of sesion per week
-                        </FormLabel>
-                        <FormControl>
-                            <div className="flex gap-x-4">
-                                <Input
-                                    className="dark:text-white text-black appearance-none"
-                                    autoComplete="off"
-                                    placeholder="Write in a number... "
-                                    type="number"
-                                    ref={sessionRef}
-                                    min={1}
-                                />
-                                <Button
-                                    variant="outline"
-                                    onClick={handleOnSchedule}
-                                >
-                                    Schedule
-                                </Button>
-                            </div>
-                        </FormControl>
-                        <FormMessage />
-                    </FormItem>
-                )}
-            />
-            <div className="flex flex-col gap-y-5">
+            <FormLabel className="pl-2 dark:text-white text-black">
+                Number of sesion per week
+            </FormLabel>
+            <FormControl>
+                <div className="flex gap-x-4 pl-1">
+                    <Input
+                        className="dark:text-white text-black appearance-none"
+                        autoComplete="off"
+                        placeholder="Write in a number... "
+                        type="number"
+                        ref={sessionRef}
+                        min={1}
+                    />
+                    <Button
+                        variant="outline"
+                        type="button"
+                        onClick={handleOnSchedule}
+                    >
+                        Schedule
+                    </Button>
+                </div>
+            </FormControl>
+            <FormMessage />
+
+            <div className="flex flex-col gap-y-5 pt-4">
                 {Array.from({length: numberOfSessions}, (_, index) => (
                     <div key={index} className="grid grid-cols-2 gap-x-4 pr-1">
                         <FormField

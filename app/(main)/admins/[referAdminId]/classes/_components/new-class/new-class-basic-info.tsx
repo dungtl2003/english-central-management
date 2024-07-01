@@ -9,7 +9,6 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
-import {teacherDummyData, unitDummyData} from "./new-class-dummy-data";
 import {CalendarIcon} from "lucide-react";
 import {
     Select,
@@ -28,28 +27,17 @@ import {
     AccordionTrigger,
 } from "@/components/ui/accordion";
 import {FaCheck, FaCopy} from "react-icons/fa6";
+import {FormType, TeacherModel, UnitModel} from "./types";
 
-interface NewClassBasicInfoProps {
-    form: UseFormReturn<
-        {
-            unit: string;
-            teacher: string;
-            index: string;
-            pricePerSession: string;
-            maxSessions: string;
-            maxStudents: string;
-            studyTime: {
-                hours: string;
-                minutes: string;
-                seconds: string;
-            };
-            startDate: string;
-        },
-        undefined
-    >;
-}
-
-const NewClassBasicInfo = ({form}: NewClassBasicInfoProps): ReactElement => {
+const NewClassBasicInfo = ({
+    unitsData,
+    teachersData,
+    form,
+}: {
+    unitsData: UnitModel[];
+    teachersData: TeacherModel[];
+    form: UseFormReturn<FormType, undefined>;
+}): ReactElement => {
     const [icon, setIcon] = React.useState<ReactElement>(<FaCopy />);
 
     function shortenString(input: string): string {
@@ -76,9 +64,7 @@ const NewClassBasicInfo = ({form}: NewClassBasicInfoProps): ReactElement => {
     };
 
     const handleUnitChange = (unitYear: string) => {
-        const selectedUnit = unitDummyData.find(
-            (unit) => unit.unit_year === unitYear
-        );
+        const selectedUnit = unitsData.find((unit) => unit.year === unitYear);
         if (selectedUnit) {
             form.setValue("pricePerSession", selectedUnit.pricePerSession);
             form.setValue("maxSessions", selectedUnit.maxSessions);
@@ -92,34 +78,16 @@ const NewClassBasicInfo = ({form}: NewClassBasicInfoProps): ReactElement => {
     return (
         <>
             <div className="grid grid-cols-2 gap-x-4">
-                {/* <FormField
-                    control={form.control}
-                    name="unit"
-                    render={() => (
-                        <FormItem>
-                            <FormLabel className="pl-1 dark:text-white text-black">
-                                Unit
-                            </FormLabel>
-                            <FormControl>
-                                <Input
-                                    className="dark:text-white text-black pr-[45px]"
-                                    value={"U01 - 2024"}
-                                    readOnly
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                /> */}
                 <FormField
                     control={form.control}
-                    name="unit"
+                    name="unitId"
                     render={({field}) => (
                         <FormItem>
                             <FormLabel className="pl-1 dark:text-white text-black">
                                 Unit
                             </FormLabel>
                             <Select
+                                {...form.register("unitId")}
                                 onValueChange={(value) => {
                                     field.onChange(value);
                                     handleUnitChange(value);
@@ -132,13 +100,13 @@ const NewClassBasicInfo = ({form}: NewClassBasicInfoProps): ReactElement => {
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    {unitDummyData.map((unit) => {
+                                    {unitsData.map((unit) => {
                                         return (
                                             <SelectItem
-                                                key={unit.unit_year}
-                                                value={unit.unit_year}
+                                                key={unit.unitId}
+                                                value={unit.unitId || "select"}
                                             >
-                                                {unit.unit_year}
+                                                {unit.year}
                                             </SelectItem>
                                         );
                                     })}
@@ -150,7 +118,7 @@ const NewClassBasicInfo = ({form}: NewClassBasicInfoProps): ReactElement => {
                 />
                 <FormField
                     control={form.control}
-                    name="teacher"
+                    name="teacherId"
                     render={({field}) => (
                         <FormItem>
                             <FormLabel className="pl-1 dark:text-white text-black">
@@ -166,18 +134,22 @@ const NewClassBasicInfo = ({form}: NewClassBasicInfoProps): ReactElement => {
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    {teacherDummyData.map((teacher) => {
+                                    {teachersData.map((teacher) => {
                                         return (
                                             <Accordion
                                                 type="single"
                                                 collapsible
-                                                key={teacher.id}
+                                                key={teacher.teacherId}
                                             >
                                                 <AccordionItem value="item-1">
                                                     <AccordionTrigger>
                                                         <SelectItem
-                                                            key={teacher.id}
-                                                            value={teacher.id}
+                                                            key={
+                                                                teacher.teacherId
+                                                            }
+                                                            value={
+                                                                teacher.teacherId
+                                                            }
                                                         >
                                                             {teacher.fullName}
                                                         </SelectItem>
@@ -186,14 +158,14 @@ const NewClassBasicInfo = ({form}: NewClassBasicInfoProps): ReactElement => {
                                                         <div className="pl-8 text-slate-400">
                                                             ID:{" "}
                                                             {shortenString(
-                                                                teacher.id
+                                                                teacher.teacherId
                                                             )}
                                                             <Button
                                                                 variant="icon"
                                                                 size="icon"
                                                                 onClick={() =>
                                                                     handleCopyClick(
-                                                                        teacher.id
+                                                                        teacher.teacherId
                                                                     )
                                                                 }
                                                             >
@@ -216,49 +188,6 @@ const NewClassBasicInfo = ({form}: NewClassBasicInfoProps): ReactElement => {
                                     })}
                                 </SelectContent>
                             </Select>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-            </div>
-            <div className="grid grid-cols-2 gap-x-4">
-                <FormField
-                    control={form.control}
-                    name="index"
-                    render={({field}) => (
-                        <FormItem>
-                            <FormLabel className="pl-1 dark:text-white text-black">
-                                Class index
-                            </FormLabel>
-                            <FormControl>
-                                <Input
-                                    className="dark:text-white text-black appearance-none"
-                                    autoComplete="off"
-                                    placeholder="Write a name ... "
-                                    type="number"
-                                    {...field}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="pricePerSession"
-                    render={({field}) => (
-                        <FormItem>
-                            <FormLabel className="pl-1 dark:text-white text-black">
-                                Price per session{" "}
-                                <span className="text-slate-400">($)</span>
-                            </FormLabel>
-                            <FormControl>
-                                <Input
-                                    className="dark:text-white text-black pr-[45px]"
-                                    readOnly
-                                    {...field}
-                                />
-                            </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
@@ -291,6 +220,49 @@ const NewClassBasicInfo = ({form}: NewClassBasicInfoProps): ReactElement => {
                         <FormItem>
                             <FormLabel className="pl-1 dark:text-white text-black">
                                 Max students
+                            </FormLabel>
+                            <FormControl>
+                                <Input
+                                    className="dark:text-white text-black pr-[45px]"
+                                    readOnly
+                                    {...field}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+            </div>
+            <div className="grid grid-cols-2 gap-x-4">
+                {/* <FormField
+                    control={form.control}
+                    name="index"
+                    render={({field}) => (
+                        <FormItem>
+                            <FormLabel className="pl-1 dark:text-white text-black">
+                                Class index
+                            </FormLabel>
+                            <FormControl>
+                                <Input
+                                    className="dark:text-white text-black appearance-none"
+                                    autoComplete="off"
+                                    placeholder="Write a name ... "
+                                    type="number"
+                                    {...field}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                /> */}
+                <FormField
+                    control={form.control}
+                    name="pricePerSession"
+                    render={({field}) => (
+                        <FormItem>
+                            <FormLabel className="pl-1 dark:text-white text-black">
+                                Price per session{" "}
+                                <span className="text-slate-400">($)</span>
                             </FormLabel>
                             <FormControl>
                                 <Input
@@ -392,11 +364,15 @@ const NewClassBasicInfo = ({form}: NewClassBasicInfoProps): ReactElement => {
                                         <PopoverContent className="w-auto p-0">
                                             <Calendar
                                                 mode="single"
-                                                selected={parse(
-                                                    field.value,
-                                                    "yyyy-MM-dd",
-                                                    new Date()
-                                                )}
+                                                selected={
+                                                    field.value
+                                                        ? parse(
+                                                              field.value,
+                                                              "yyyy-MM-dd",
+                                                              new Date()
+                                                          )
+                                                        : new Date()
+                                                }
                                                 onSelect={(date) => {
                                                     handleDateChange(date);
                                                 }}

@@ -81,7 +81,7 @@ const statistics: ClassStatistics = getClassListStatistics(classListDummyData);
 
 export const tableFields: string[] = [
     "className",
-    "grade",
+    "year",
     "students",
     "waiting",
     "teacher",
