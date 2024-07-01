@@ -1,6 +1,6 @@
 import {ErrorResponsePayload} from "@/constaints";
 import {InputType, OutputType, ReturnType} from "./types";
-import {GetResponsePayload} from "@/app/api/v2/users/students/[studentId]/types";
+import {AdminGetResponsePayload} from "@/app/api/v2/users/students/[studentId]/types";
 
 export async function handler(data: InputType): Promise<ReturnType> {
     console.log("Timestamp: ", new Date().toLocaleString());
@@ -20,7 +20,7 @@ export async function handler(data: InputType): Promise<ReturnType> {
         }
 
         return {
-            data: (<GetResponsePayload>getStudentPayload) as OutputType,
+            data: (<AdminGetResponsePayload>getStudentPayload) as OutputType,
         };
     } catch (error) {
         return {error: (<Error>error).message};

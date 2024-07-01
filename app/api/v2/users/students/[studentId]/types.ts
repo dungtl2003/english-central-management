@@ -14,7 +14,7 @@ import {PatchRequestPayloadSchema} from "./schema";
 
 export type PatchRequestPayload = z.infer<typeof PatchRequestPayloadSchema>;
 
-export type GetResponsePayload = {
+export type AdminGetResponsePayload = {
     user: User;
     parents: ({
         user: User;
@@ -30,6 +30,10 @@ export type GetResponsePayload = {
         } & Session)[];
         tuitions: Tuition[];
     } & Class)[];
+} & Student;
+
+export type StudentGetResponsePayload = {
+    user: User;
 } & Student;
 
 export type PatchResponsePayload = string;
