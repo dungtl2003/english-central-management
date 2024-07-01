@@ -1,14 +1,36 @@
 export type ClassListModel = {
+    classId: string;
     className: string;
     year: string;
     students: string;
     waiting: string;
     teacher: string;
     status: string;
-    schedule: string;
-    progress: string;
+    // schedule: string;
+    // progress: string;
     startDate: string;
     endDate: string;
+};
+
+export type UnitModel = {
+    unitId: string;
+    grade: string;
+    year: string;
+    pricePerSession: string;
+    maxSessions: string;
+    maxStudents: string;
+    studyTime: {
+        hours: string;
+        minutes: string;
+        seconds: string;
+    };
+};
+
+export type TeacherModel = {
+    teacherId: string;
+    fullName: string;
+    birthday: string;
+    createDate: string;
 };
 
 export type ClassListInfo = {
@@ -27,10 +49,10 @@ export const classListInfoArray: ClassListInfo[] = [
     {key: "waiting", title: "Waiting"},
     {key: "teacher", title: "Teacher"},
     {key: "status", title: "Status"},
-    {key: "progress", title: "Progress"},
+    // {key: "progress", title: "Progress"},
     {key: "startDate", title: "Start"},
     {key: "endDate", title: "End"},
-    {key: "schedule", title: "Schedule"},
+    // {key: "schedule", title: "Schedule"},
 ];
 
 export const classListInfoDictionary: ClassListDictionary = {
@@ -40,8 +62,8 @@ export const classListInfoDictionary: ClassListDictionary = {
     waiting: "Waiting",
     teacher: "Teacher",
     status: "Status",
-    schedule: "Schedule",
-    progress: "Progress",
+    // schedule: "Schedule",
+    // progress: "Progress",
     startDate: "Start",
     endDate: "End",
 };

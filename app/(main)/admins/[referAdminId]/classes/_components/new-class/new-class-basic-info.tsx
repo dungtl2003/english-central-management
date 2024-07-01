@@ -27,7 +27,8 @@ import {
     AccordionTrigger,
 } from "@/components/ui/accordion";
 import {FaCheck, FaCopy} from "react-icons/fa6";
-import {FormType, TeacherModel, UnitModel} from "./types";
+import {FormType} from "./types";
+import {TeacherModel, UnitModel} from "../types";
 
 const NewClassBasicInfo = ({
     unitsData,
@@ -63,8 +64,8 @@ const NewClassBasicInfo = ({
         }
     };
 
-    const handleUnitChange = (unitYear: string) => {
-        const selectedUnit = unitsData.find((unit) => unit.year === unitYear);
+    const handleUnitChange = (unitId: string) => {
+        const selectedUnit = unitsData.find((unit) => unit.unitId === unitId);
         if (selectedUnit) {
             form.setValue("pricePerSession", selectedUnit.pricePerSession);
             form.setValue("maxSessions", selectedUnit.maxSessions);
@@ -87,12 +88,10 @@ const NewClassBasicInfo = ({
                                 Unit
                             </FormLabel>
                             <Select
-                                {...form.register("unitId")}
                                 onValueChange={(value) => {
                                     field.onChange(value);
                                     handleUnitChange(value);
                                 }}
-                                defaultValue={field.value}
                             >
                                 <FormControl>
                                     <SelectTrigger>
@@ -104,9 +103,15 @@ const NewClassBasicInfo = ({
                                         return (
                                             <SelectItem
                                                 key={unit.unitId}
-                                                value={unit.unitId || "select"}
+                                                value={
+                                                    unit.unitId ||
+                                                    "Select unit ..."
+                                                }
                                             >
-                                                {unit.year}
+                                                {"Grade " +
+                                                    unit.grade +
+                                                    "-" +
+                                                    unit.year}
                                             </SelectItem>
                                         );
                                     })}

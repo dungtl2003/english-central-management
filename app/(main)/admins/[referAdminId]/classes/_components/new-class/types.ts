@@ -1,26 +1,5 @@
 import {z} from "zod";
 
-export type UnitModel = {
-    unitId: string;
-    grade: string;
-    year: string;
-    pricePerSession: string;
-    maxSessions: string;
-    maxStudents: string;
-    studyTime: {
-        hours: string;
-        minutes: string;
-        seconds: string;
-    };
-};
-
-export type TeacherModel = {
-    teacherId: string;
-    fullName: string;
-    birthday: string;
-    createDate: string;
-};
-
 export const ClassBasicInfoSchema = z.object({
     unitId: z.string(), //need
     teacherId: z.string(), //need
@@ -53,3 +32,9 @@ export type ClassBasicInfoType = z.infer<typeof ClassBasicInfoSchema>;
 export type ClassScheduleType = z.infer<typeof ClassScheduleSchema>;
 
 export type FormType = z.infer<typeof FormSchema>;
+
+export enum ClassStatus {
+    WAITING = "Waiting",
+    ACTIVE = "Active",
+    CLOSED = "Closed",
+}

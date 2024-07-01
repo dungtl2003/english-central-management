@@ -1,4 +1,4 @@
-import React, {ReactElement, useState} from "react";
+import React, {ReactElement, useMemo, useRef} from "react";
 import {
     Dialog,
     DialogContent,
@@ -20,34 +20,82 @@ import {
 } from "@/components/ui/carousel";
 import NewClassBasicInfo from "./new-class-basic-info";
 import NewClassSchedule from "./new-class-schedule";
-import {FormSchema, FormType, TeacherModel, UnitModel} from "./types";
-import {teacherDummyData, unitDummyData} from "../class-list-dummy-data";
+import {FormSchema, FormType} from "./types";
+import {UseActionOptions, useAction} from "@/hooks/use-action";
+import {OutputType} from "@/lib/action/admin/add-class/types";
+import {toast} from "@/components/ui/use-toast";
+import {handler} from "@/lib/action/admin/add-class";
+import {parse} from "date-fns";
+import {TeacherModel, UnitModel} from "../types";
 
-const daysOfWeek: string[] = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
+const daysOfWeek: {key: string; value: number}[] = [
+    {key: "Monday", value: 1},
+    {key: "Tuesday", value: 2},
+    {key: "Wednesday", value: 3},
+    {key: "Thursday", value: 4},
+    {key: "Friday", value: 5},
+    {key: "Saturday", value: 6},
+    {key: "Sunday", value: 7},
 ];
 
-const ClassListNewClass = (): ReactElement => {
+const ClassListNewClass = ({
+    units,
+    teachers,
+}: {
+    units: UnitModel[];
+    teachers: TeacherModel[];
+}): ReactElement => {
     const form = useForm<FormType>({
         resolver: zodResolver(FormSchema),
     });
 
+    const event: UseActionOptions<OutputType> = useMemo(() => {
+        return {
+            onError: (error: string) => {
+                console.error("Error: ", error);
+                toast({
+                    title: "error",
+                    variant: "destructive",
+                    description: `Fail to update status this teacher`,
+                });
+            },
+            onSuccess: () => {
+                toast({
+                    title: "Success",
+                    variant: "success",
+                    description: `Update status this teacher successful`,
+                });
+                window.location.reload();
+            },
+        };
+    }, []);
+    const {execute} = useAction(handler, event);
+    const schedule = useRef<
+        {
+            dayOfWeek: string;
+            startHour: number;
+            startMinute: number;
+            startSecond: number;
+        }[]
+    >([]);
+
     function onSubmit(values: FormType) {
-        console.debug("submit");
-        console.log(values);
+        form.setValue("schedule", schedule.current);
+        execute({
+            unitId: values.unitId,
+            teacherId: values.teacherId,
+            startDate: parse(values.startDate, "yyyy-MM-dd", new Date()),
+            schedules: schedule.current.map((value) => {
+                return {
+                    dayOfWeek: Number(value.dayOfWeek),
+                    startHour: value.startHour,
+                    startMinute: value.startMinute,
+                    startSecond: value.startSecond,
+                };
+            }),
+        });
     }
-
     const [open, setOpen] = React.useState(false);
-
-    const [unitsData /* setUnitsData */] = useState<UnitModel[]>(unitDummyData);
-    const [teachersData /* setTeachersData */] =
-        useState<TeacherModel[]>(teacherDummyData);
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -85,13 +133,14 @@ const ClassListNewClass = (): ReactElement => {
                                         >
                                             <NewClassBasicInfo
                                                 form={form}
-                                                unitsData={unitsData}
-                                                teachersData={teachersData}
+                                                unitsData={units}
+                                                teachersData={teachers}
                                             />
                                         </CarouselItem>
 
                                         <CarouselItem key={"schedule"}>
                                             <NewClassSchedule
+                                                schedule={schedule.current}
                                                 form={form}
                                                 daysOfWeek={daysOfWeek}
                                             />
@@ -107,7 +156,7 @@ const ClassListNewClass = (): ReactElement => {
                                     type="button"
                                     onClick={() => {
                                         onSubmit(form.getValues());
-                                        setOpen(false);
+                                        //setOpen(false);
                                     }}
                                 >
                                     Create
