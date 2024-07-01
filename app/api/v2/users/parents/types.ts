@@ -4,7 +4,11 @@ import {Parent, User} from "@prisma/client";
 
 export type PostRequestPayload = z.infer<typeof PostRequestPayloadSchema>;
 
-export type GetResponsePayload = ({
+export type ParentGetResponsePayload = {
+    parent: Parent | null;
+} & User;
+
+export type AdminGetResponsePayload = ({
     user: User;
     numberOfChildren: number;
 } & Parent)[];
