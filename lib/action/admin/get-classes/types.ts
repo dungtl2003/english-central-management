@@ -1,10 +1,13 @@
 import {ActionState} from "@/lib/create-safe-action";
-import {Class, Unit} from "@prisma/client";
+import {Class, Teacher, Unit, User} from "@prisma/client";
 
 export type InputType = void;
 
 export type OutputType = ({
     unit: Unit;
+    teacher: {
+        user: User;
+    } & Teacher;
     numOfJoinedStudents: number;
     numOfPendingStudents: number;
 } & Class)[];

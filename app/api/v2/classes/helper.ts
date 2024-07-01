@@ -47,6 +47,11 @@ export async function adminGetHandler(
         },
         include: {
             unit: true,
+            teacher: {
+                include: {
+                    user: true,
+                },
+            },
             students: true,
         },
     });
