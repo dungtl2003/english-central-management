@@ -1,14 +1,36 @@
 export type ClassListModel = {
+    classId: string;
     className: string;
-    grade: string;
-    students?: string;
-    waiting?: string;
-    progress?: string;
+    year: string;
+    students: string;
+    waiting: string;
+    teacher: string;
+    status: string;
+    // schedule: string;
+    // progress: string;
     startDate: string;
     endDate: string;
-    teacher?: string;
-    schedule: string;
-    status: string;
+};
+
+export type UnitModel = {
+    unitId: string;
+    grade: string;
+    year: string;
+    pricePerSession: string;
+    maxSessions: string;
+    maxStudents: string;
+    studyTime: {
+        hours: string;
+        minutes: string;
+        seconds: string;
+    };
+};
+
+export type TeacherModel = {
+    teacherId: string;
+    fullName: string;
+    birthday: string;
+    createDate: string;
 };
 
 export type ClassListInfo = {
@@ -22,28 +44,28 @@ export type ClassListDictionary = {
 
 export const classListInfoArray: ClassListInfo[] = [
     {key: "className", title: "Class"},
-    {key: "grade", title: "Grade"},
+    {key: "year", title: "Year"},
     {key: "students", title: "Students"},
     {key: "waiting", title: "Waiting"},
-    {key: "progress", title: "Progress"},
+    {key: "teacher", title: "Teacher"},
+    {key: "status", title: "Status"},
+    // {key: "progress", title: "Progress"},
     {key: "startDate", title: "Start"},
     {key: "endDate", title: "End"},
-    {key: "teacher", title: "Teacher"},
-    {key: "schedule", title: "Schedule"},
-    {key: "status", title: "Status"},
+    // {key: "schedule", title: "Schedule"},
 ];
 
 export const classListInfoDictionary: ClassListDictionary = {
     className: "Class",
-    grade: "Grade",
+    year: "Year",
     students: "Students",
     waiting: "Waiting",
-    progress: "Progress",
+    teacher: "Teacher",
+    status: "Status",
+    // schedule: "Schedule",
+    // progress: "Progress",
     startDate: "Start",
     endDate: "End",
-    teacher: "Teacher",
-    schedule: "Schedule",
-    status: "Status",
 };
 
 export type ClassStatistics = {
@@ -51,23 +73,4 @@ export type ClassStatistics = {
     active: number;
     waiting: number;
     closed: number;
-};
-
-export type UnitModel = {
-    unit_year: string;
-    pricePerSession: string;
-    maxSessions: string;
-    maxStudents: string;
-    studyTime: {
-        hours: string;
-        minutes: string;
-        seconds: string;
-    };
-};
-
-export type TeacherModel = {
-    fullName: string;
-    id: string;
-    birthday: string;
-    createDate: string;
 };

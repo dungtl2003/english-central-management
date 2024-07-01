@@ -4,6 +4,8 @@ import {
     ClassListModel,
     classListInfoDictionary,
     ClassStatistics,
+    UnitModel,
+    TeacherModel,
 } from "./types";
 import ClassListSearchBar from "./class-list-search-bar";
 import ClassListColumnsFilter from "./class-list-columns-filter";
@@ -18,21 +20,23 @@ import {Button} from "@/components/ui/button";
 import {ChevronDown} from "lucide-react";
 import ClassListNewClass from "./new-class/class-list-new-class";
 
-interface TableFilterProps {
-    table: Table<ClassListModel>;
-    selectedStatus: string[];
-    handleStatusChange: (status: string) => void;
-    stats: ClassStatistics;
-    tableColumns: string[];
-}
-
 const ClassListFilter = ({
     table,
     selectedStatus,
     handleStatusChange,
     stats,
     tableColumns,
-}: TableFilterProps): ReactElement => {
+    units,
+    teachers,
+}: {
+    table: Table<ClassListModel>;
+    selectedStatus: string[];
+    handleStatusChange: (status: string) => void;
+    stats: ClassStatistics;
+    tableColumns: string[];
+    units: UnitModel[];
+    teachers: TeacherModel[];
+}): ReactElement => {
     const [filterType, _setFilterType] = React.useState("className");
     const [selectedRadio, _setSelectedRadio] = React.useState("className");
     const searchBar = React.useRef<HTMLInputElement>(null);
@@ -102,7 +106,7 @@ const ClassListFilter = ({
                         </DropdownMenuContent>
                     </DropdownMenu>
 
-                    <ClassListNewClass />
+                    <ClassListNewClass units={units} teachers={teachers} />
                 </div>
             </div>
         </div>
