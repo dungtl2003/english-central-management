@@ -1,15 +1,5 @@
 import {z} from "zod";
 
-const BaseGetQueryParamsSchema = z
-    .object({
-        teacherId: z.string({
-            invalid_type_error: "Teacher ID must be a string",
-            description: "Refer teacher ID of class",
-        }),
-    })
-    .partial()
-    .strict();
-
 export const ScheduleSchema = z
     .object({
         dayOfWeek: z
@@ -39,15 +29,6 @@ export const ScheduleSchema = z
             .int("Start minute must be an integer")
             .gte(0, "Start minute must be between 0 and 59")
             .lte(59, "Start minute must be between 0 and 59"),
-        startSecond: z
-            .number({
-                required_error: "Start second is required",
-                invalid_type_error: "Start second must be a number",
-                description: "The start second of the schedule",
-            })
-            .int("Start second must be an integer")
-            .gte(0, "Start second must be between 0 and 59")
-            .lte(59, "Start second must be between 0 and 59"),
         location: z.string({
             required_error: "Location is required",
             invalid_type_error: "Location must be a string",
@@ -76,20 +57,8 @@ export const PostRequestPayloadSchema = z
             required_error: "Start date is required",
             description: "Start date of class",
         }),
-        timeZone: z
-            .string({
-                invalid_type_error: "Time zone must be a string",
-                required_error: "Time zone is required",
-                description: "Time zone of class",
-            })
-            .refine(
-                (tz) => Intl.supportedValuesOf("timeZone").includes(tz),
-                "Unknown time zone"
-            ),
         schedules: z
             .array(ScheduleSchema)
             .min(1, "There must be at least 1 schedule"),
     })
     .strict();
-
-export const AdminGetQueryParamsSchema = BaseGetQueryParamsSchema;

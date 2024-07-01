@@ -1,14 +1,32 @@
+export const dynamic = "force-dynamic";
+
 import {NextRequest, NextResponse} from "next/server";
-import {adminGetHandler} from "./helper";
+import {
+    adminGetHandler,
+    buildScheduleCreateManyClassInputEnvelopeObject,
+    buildSessionCreateManyClassInputEnvelopeObject,
+    buildSortedSessionDates,
+    groupAndSortScheduleTimesInSameDay,
+    validateScheduleTime,
+} from "./helper";
 import {UserRole} from "@prisma/client";
 import {
     buildErrorNextResponse,
     convertQueryParamsToJsonObject,
     getClerkRole,
 } from "@/lib/helper";
-import {Json} from "@/constaints";
-import {AdminGetResponsePayload} from "./types";
+import {ErrorResponsePayload, Json} from "@/constaints";
+import {
+    AdminGetResponsePayload,
+    PostRequestPayload,
+    PostResponsePayload,
+} from "./types";
 import {ApiError} from "next/dist/server/api-utils";
+import {PostRequestPayloadSchema} from "./schema";
+import {auth} from "@clerk/nextjs/server";
+import {db} from "@/lib/db";
+import {Time} from "@/lib/time";
+import {add} from "date-fns";
 
 /**
  * Get classes.
@@ -16,7 +34,9 @@ import {ApiError} from "next/dist/server/api-utils";
  * Student gets all classes.
  * Parent gets all classes.
  */
-export async function GET(req: NextRequest) {
+export async function GET(
+    req: NextRequest
+): Promise<NextResponse<AdminGetResponsePayload | ErrorResponsePayload>> {
     console.log("Timestamp: ", new Date().toLocaleString());
     console.log("GET ", req.url);
 
@@ -35,6 +55,124 @@ export async function GET(req: NextRequest) {
         }
 
         return NextResponse.json<AdminGetResponsePayload>(result, {
+            status: 200,
+        });
+    } catch (error) {
+        return buildErrorNextResponse(error);
+    }
+}
+
+/**
+ * Add class.
+ * Only admin can use this api.
+ */
+export async function POST(
+    req: NextRequest
+): Promise<NextResponse<PostResponsePayload | ErrorResponsePayload>> {
+    console.log("Timestamp: ", new Date().toLocaleString());
+    console.log("POST ", req.nextUrl.pathname);
+
+    try {
+        const clerkUserId = auth().userId;
+        const role: UserRole | null = getClerkRole();
+
+        if (!clerkUserId) {
+            throw new ApiError(401, "No signed in user");
+        }
+
+        if (!role || role !== UserRole.ADMIN) {
+            throw new ApiError(401, "No right permission");
+        }
+
+        const admin = await db.user.findFirst({
+            where: {
+                referId: clerkUserId,
+                role: UserRole.ADMIN,
+            },
+        });
+
+        if (!admin) {
+            throw new ApiError(401, `Account not found`);
+        }
+
+        const body: PostRequestPayload = await req.json();
+        const validBody = PostRequestPayloadSchema.safeParse(body);
+        if (validBody.error) {
+            throw new ApiError(
+                400,
+                JSON.stringify(validBody.error.flatten().fieldErrors)
+            );
+        }
+
+        const unit = await db.unit.findFirst({
+            where: {
+                id: validBody.data!.unitId,
+            },
+        });
+
+        const teacher = await db.teacher.findFirst({
+            where: {
+                id: validBody.data!.teacherId,
+            },
+        });
+
+        const classes = await db.class.findMany({
+            where: {
+                unitId: validBody.data!.unitId,
+            },
+        });
+        const numberOfClasses = classes.length;
+
+        const studyTime = new Time(
+            unit!.studyHour,
+            unit!.studyMinute,
+            unit!.studySecond
+        );
+        const sortedScheduleTimesSameDay = groupAndSortScheduleTimesInSameDay(
+            validBody.data!.schedules
+        );
+
+        const startDate = new Date(validBody.data!.startDate);
+        startDate.setUTCHours(0);
+        startDate.setUTCMinutes(0);
+        startDate.setUTCSeconds(0);
+        startDate.setUTCMilliseconds(0);
+
+        validateScheduleTime(sortedScheduleTimesSameDay, studyTime.toSeconds());
+        const sortedSessionDates = buildSortedSessionDates(
+            sortedScheduleTimesSameDay,
+            unit!.maxSessions,
+            startDate,
+            validBody.data!.timeZone
+        );
+        const endDate = add(sortedSessionDates[sortedSessionDates.length - 1], {
+            hours: unit!.studyHour,
+            minutes: unit!.studyMinute,
+        });
+
+        await db.class.create({
+            data: {
+                unitId: validBody.data!.unitId,
+                teacherId: teacher!.id,
+                startTime: startDate,
+                endTime: endDate,
+                index: numberOfClasses + 1,
+                timeZone: validBody.data!.timeZone,
+                schedules: {
+                    createMany: buildScheduleCreateManyClassInputEnvelopeObject(
+                        validBody.data!.schedules
+                    ),
+                },
+                sessions: {
+                    createMany:
+                        buildSessionCreateManyClassInputEnvelopeObject(
+                            sortedSessionDates
+                        ),
+                },
+            },
+        });
+
+        return NextResponse.json<PostResponsePayload>("Added class", {
             status: 200,
         });
     } catch (error) {

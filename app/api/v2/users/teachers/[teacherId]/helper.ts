@@ -240,6 +240,10 @@ export async function teacherDeleteHandler(
         throw new ApiError(401, `Account not found`);
     }
 
+    if (user.deletedAt) {
+        throw new ApiError(400, "This teacher has already been deleted");
+    }
+
     await db.$transaction(async () => {
         await db.user.update({
             where: {
@@ -254,7 +258,11 @@ export async function teacherDeleteHandler(
                 deletedAt: new Date(),
             },
         });
-        await clerkClient.users.deleteUser(clerkUserId);
+        try {
+            await clerkClient.users.deleteUser(clerkUserId);
+        } catch (error) {
+            console.error("Cannot find clerk user");
+        }
     });
 
     return "Deleted teacher";
@@ -308,6 +316,10 @@ export async function adminDeleteHandler(
         throw new ApiError(400, "Teacher not found");
     }
 
+    if (teacher.user.deletedAt) {
+        throw new ApiError(400, "This teacher has already been deleted");
+    }
+
     await db.$transaction(async () => {
         await db.teacher.update({
             where: {
@@ -322,8 +334,12 @@ export async function adminDeleteHandler(
                 },
             },
         });
-        teacher.user.referId &&
-            (await clerkClient.users.deleteUser(teacher.user.referId));
+        try {
+            teacher.user.referId &&
+                (await clerkClient.users.deleteUser(teacher.user.referId));
+        } catch (error) {
+            console.error("Cannot find clerk user");
+        }
     });
 
     return "Deleted teacher";

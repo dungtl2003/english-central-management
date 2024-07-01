@@ -1,0 +1,10 @@
+import {z} from "zod";
+import {PostRequestPayloadSchema, ScheduleSchema} from "./schema";
+import {ActionState} from "@/lib/create-safe-action";
+
+export type Schedule = z.infer<typeof ScheduleSchema>;
+export type InputType = z.infer<typeof PostRequestPayloadSchema>;
+
+export type OutputType = string;
+
+export type ReturnType = ActionState<InputType, OutputType>;

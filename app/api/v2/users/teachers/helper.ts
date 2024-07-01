@@ -9,7 +9,7 @@ import {TeacherGetQueryParamsSchema} from "./schema";
 
 export function addTeacher(clerkUserId: string) {
     return db.$transaction(async () => {
-        const teacher = await db.user.update({
+        await db.user.update({
             where: {
                 referId: clerkUserId,
             },
@@ -19,18 +19,17 @@ export function addTeacher(clerkUserId: string) {
                     create: {},
                 },
             },
-            include: {
-                teacher: true,
-            },
         });
 
-        const clerkUser = await clerkClient.users.updateUser(clerkUserId, {
-            publicMetadata: {
-                role: UserRole.TEACHER,
-            },
-        });
-
-        return [teacher, clerkUser];
+        try {
+            await clerkClient.users.updateUser(clerkUserId, {
+                publicMetadata: {
+                    role: UserRole.TEACHER,
+                },
+            });
+        } catch (error) {
+            console.error("Cannot find clerk user");
+        }
     });
 }
 
