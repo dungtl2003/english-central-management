@@ -1,5 +1,6 @@
 import type {Config} from "tailwindcss";
 import {fontFamily} from "tailwindcss/defaultTheme";
+import {PluginAPI} from "tailwindcss/types/config";
 
 const config = {
     darkMode: ["class"],
@@ -91,7 +92,20 @@ const config = {
             },
         },
     },
-    plugins: [require("tailwindcss-animate")],
+    plugins: [
+        require("tailwindcss-animate"),
+        function ({addBase}: PluginAPI) {
+            addBase({
+                'input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button':
+                    {
+                        "@apply appearance-none": {},
+                    },
+                'input[type="number"]': {
+                    "-moz-appearance": "textfield",
+                },
+            });
+        },
+    ],
 } satisfies Config;
 
 export default config;

@@ -11,7 +11,7 @@ import {RadioGroupItem} from "@/components/ui/radio-group";
 import {Label} from "@radix-ui/react-label";
 import {TeacherListInfo} from "./types";
 
-type TableFilterOptionsProps = {
+interface TableFilterOptionsProps {
     tableColumns: TeacherListInfo[];
     selectedOptions: string;
     searchBarRef: React.RefObject<HTMLInputElement>;
@@ -20,7 +20,7 @@ type TableFilterOptionsProps = {
         filterTitle: string,
         searchBarRef: React.RefObject<HTMLInputElement>
     ) => void;
-};
+}
 
 const TeacherListColumnsFilter = ({
     handleOnSelect,

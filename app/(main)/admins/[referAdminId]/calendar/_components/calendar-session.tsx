@@ -26,11 +26,12 @@ function CalendarSession({
                     </Avatar>
                     <div className="flex-auto ">
                         <p className="font-medium">
-                            {session.teacher +
-                                " - " +
-                                session.className +
-                                " - " +
-                                session.classYear}
+                            {session.teacher ||
+                                "___ ___" +
+                                    " - " +
+                                    session.className +
+                                    " - " +
+                                    session.classYear}
                         </p>
                         <p className="mt-0.5 font-normal">
                             <time dateTime={session.startDateTime}>
@@ -44,8 +45,8 @@ function CalendarSession({
                     </div>
                 </li>
             </HoverCardTrigger>
-            <HoverCardContent className="w-100">
-                TeacherId: {session.teacherId} <br />
+            <HoverCardContent className="w-100 right-0 top-0 translate-x-[150px] translate-y-[-100px]">
+                Teacher ID: {session.teacherId} <br />
                 Full name: {session.teacher || "___ ___"} <br />
                 Birthday: {session.birthday || "___/___/___"} <br />
                 Gender: {session.gender || "___"} <br />
