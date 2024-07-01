@@ -110,16 +110,9 @@ export async function POST(
             },
         });
 
-        const user = await db.user.findFirst({
+        const teacher = await db.teacher.findFirst({
             where: {
-                referId: validBody.data!.teacherId,
-            },
-            select: {
-                teacher: {
-                    select: {
-                        id: true,
-                    },
-                },
+                id: validBody.data!.teacherId,
             },
         });
 
@@ -160,7 +153,7 @@ export async function POST(
         await db.class.create({
             data: {
                 unitId: validBody.data!.unitId,
-                teacherId: user!.teacher!.id,
+                teacherId: teacher!.id,
                 startTime: startDate,
                 endTime: endDate,
                 index: numberOfClasses + 1,
