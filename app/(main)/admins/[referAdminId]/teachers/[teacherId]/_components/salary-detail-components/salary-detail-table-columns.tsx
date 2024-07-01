@@ -5,6 +5,7 @@ import {SalaryDetailTableData, SalaryDetailColumnsDictionary} from "./types";
 import {ColumnDef} from "@tanstack/react-table";
 import {Button} from "@/components/ui/button";
 import {Checkbox} from "@/components/ui/checkbox";
+import {ArrowUpDown} from "lucide-react";
 
 function createColumns(
     key: string,
@@ -12,7 +13,17 @@ function createColumns(
 ): ColumnDef<SalaryDetailTableData> {
     return {
         accessorKey: key,
-        header: () => <Button variant="ghost">{title}</Button>,
+        header: ({column}) => (
+            <Button
+                variant="ghost"
+                onClick={() =>
+                    column.toggleSorting(column.getIsSorted() !== "desc")
+                }
+            >
+                {title}
+                <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+        ),
     };
 }
 
