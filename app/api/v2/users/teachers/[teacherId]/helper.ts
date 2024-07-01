@@ -258,7 +258,11 @@ export async function teacherDeleteHandler(
                 deletedAt: new Date(),
             },
         });
-        await clerkClient.users.deleteUser(clerkUserId);
+        try {
+            await clerkClient.users.deleteUser(clerkUserId);
+        } catch (error) {
+            console.error("Cannot find clerk user");
+        }
     });
 
     return "Deleted teacher";
@@ -330,8 +334,12 @@ export async function adminDeleteHandler(
                 },
             },
         });
-        teacher.user.referId &&
-            (await clerkClient.users.deleteUser(teacher.user.referId));
+        try {
+            teacher.user.referId &&
+                (await clerkClient.users.deleteUser(teacher.user.referId));
+        } catch (error) {
+            console.error("Cannot find clerk user");
+        }
     });
 
     return "Deleted teacher";

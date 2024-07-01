@@ -196,8 +196,13 @@ export async function DELETE(
                     },
                 },
             });
-            student.user.referId &&
-                (await clerkClient.users.deleteUser(student.user.referId));
+
+            try {
+                student.user.referId &&
+                    (await clerkClient.users.deleteUser(student.user.referId));
+            } catch (error) {
+                console.error("Cannot find clerk user");
+            }
         });
 
         return NextResponse.json<PatchResponsePayload>("Deleted student", {
