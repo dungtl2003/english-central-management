@@ -34,20 +34,40 @@ export async function adminGetHandler(
     }
 
     const queryParams: AdminGetQueryParams = params;
-    const result = AdminGetQueryParamsSchema.safeParse(queryParams);
-    if (!result.success) {
+    const validParams = AdminGetQueryParamsSchema.safeParse(queryParams);
+    if (!validParams.success) {
         throw new ApiError(
             400,
-            JSON.stringify(result.error.flatten().fieldErrors)
+            JSON.stringify(validParams.error.flatten().fieldErrors)
         );
     }
     const classes = await db.class.findMany({
         where: {
             teacherId: queryParams.teacherId,
         },
+        include: {
+            unit: true,
+            students: true,
+        },
     });
 
-    return classes;
+    const result: AdminGetResponsePayload = classes.map((c) => {
+        return {
+            ...c,
+            numOfJoinedStudents: c.students.filter(
+                (s) => s.approvedAt && !s.leftAt
+            ).length,
+            numOfPendingStudents: c.students.filter(
+                (s) =>
+                    s.registeredAt &&
+                    !s.leftAt &&
+                    !s.approvedAt &&
+                    !s.rejectedAt
+            ).length,
+        };
+    });
+
+    return result;
 }
 
 export interface ScheduleTimesSameDay {
