@@ -37,7 +37,7 @@ const dummyData: {fullName: string; id: string}[] = [
 ];
 
 const formatData = (
-    studentInfoData: StudentInfoData | undefined,
+    studentInfoData: StudentInfoData,
     currentDiscount: number
 ): StudentInfoFormatData => {
     if (!studentInfoData)
@@ -47,6 +47,7 @@ const formatData = (
             email: "___",
             phoneNumber: "___",
             identityCard: "___",
+            gender: "___",
             birthday: "___",
             role: "___",
             discount: "0",
@@ -55,22 +56,24 @@ const formatData = (
             parents: [],
         };
     const parents: ParentPreviewData[] = [];
-    studentInfoData.parents.forEach((element) => {
-        const parent: ParentPreviewData = {
-            id: element.id,
-            imgUrl: element.user.imageUrl || DEFAULT_AVATAR_URL,
-            fullName:
-                concatName(
-                    element.user.firstName,
-                    element.user.lastName,
-                    true
-                ) || "___ ___",
-            email: element.user.email,
-            phoneNumber: element.user.phoneNumber || "___",
-            identityCard: element.user.identifyCard || "___",
-        };
-        parents.push(parent);
-    });
+    if (studentInfoData.parents) {
+        studentInfoData.parents.forEach((element) => {
+            const parent: ParentPreviewData = {
+                id: element.id,
+                imgUrl: element.user.imageUrl || DEFAULT_AVATAR_URL,
+                fullName:
+                    concatName(
+                        element.user.firstName,
+                        element.user.lastName,
+                        true
+                    ) || "___ ___",
+                email: element.user.email,
+                phoneNumber: element.user.phoneNumber || "___",
+                identityCard: element.user.identifyCard || "___",
+            };
+            parents.push(parent);
+        });
+    }
 
     const studentInfo: StudentInfoFormatData = {
         firstName: studentInfoData?.user.firstName || "___",
@@ -78,6 +81,7 @@ const formatData = (
         email: studentInfoData?.user.email,
         phoneNumber: studentInfoData?.user.phoneNumber || "___",
         identityCard: studentInfoData?.user.identifyCard || "___",
+        gender: studentInfoData.user.gender || "___",
         birthday: studentInfoData?.user.birthday
             ? format(studentInfoData?.user.birthday, "yyyy-MM-dd")
             : "___",
@@ -99,7 +103,7 @@ const StudentInformationTab = ({
     studentInfoData,
     currentDiscount,
 }: {
-    studentInfoData: StudentInfoData | undefined;
+    studentInfoData: StudentInfoData;
     currentDiscount: number;
 }): ReactElement => {
     const [studentInfo, setStudentInfo] = useState<StudentInfoFormatData>(
@@ -184,6 +188,19 @@ const StudentInformationTab = ({
                         </div>
                         <div className="grid w-full items-center gap-1.5">
                             <Label className="pl-1 flex flex-row items-center text-[14px]">
+                                Gender
+                                <span className="ml-1 text-slate-400">
+                                    <CalendarIcon className="mr-2 h-4 w-4" />
+                                </span>
+                            </Label>
+                            <Input
+                                type="text"
+                                value={studentInfo.gender}
+                                readOnly
+                            />
+                        </div>
+                        <div className="grid w-full items-center gap-1.5">
+                            <Label className="pl-1 flex flex-row items-center text-[14px]">
                                 Birthday{" "}
                                 <span className="ml-1 text-slate-400">
                                     <CalendarIcon className="mr-2 h-4 w-4" />
@@ -225,19 +242,6 @@ const StudentInformationTab = ({
                             <Input
                                 type="text"
                                 value={studentInfo.createDate}
-                                readOnly
-                            />
-                        </div>
-                        <div className="grid w-full items-center gap-1.5">
-                            <Label className="pl-1 flex flex-row items-center text-[14px]">
-                                Delete date
-                                <span className="ml-1 text-slate-400">
-                                    <CalendarIcon className="mr-2 h-4 w-4" />
-                                </span>
-                            </Label>
-                            <Input
-                                type="text"
-                                value={studentInfo.deleleDate}
                                 readOnly
                             />
                         </div>

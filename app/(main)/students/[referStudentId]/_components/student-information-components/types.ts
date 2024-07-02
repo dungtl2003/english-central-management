@@ -4,6 +4,7 @@ export type StudentInfoFormatData = {
     email: string;
     phoneNumber: string;
     identityCard: string;
+    gender: string;
     birthday: string;
     role: string;
     discount: string;

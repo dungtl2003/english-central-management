@@ -1,11 +1,13 @@
 "use client";
 
-import React, {ReactElement, useState} from "react";
+import React, {ReactElement} from "react";
 import {Card} from "@/components/ui/card";
 import {Tabs} from "@/components/ui/tabs";
 import StudentDetailHeader from "./student-detail-header";
 import StudentDetailTabslist from "./student-detail-tabs-list";
 import StudentInformationTab from "./student-information-components/student-information-tab";
+import {OutputType} from "@/lib/action/admin/get-student-detail/types";
+
 // import {StudentClassesData, StudentDetailData} from "./types";
 // import {OutputType as GetDetailOutputType} from "@/lib/action/admin/get-student-detail/types";
 // import {handler} from "@/lib/action/admin/delete-student";
@@ -39,23 +41,20 @@ import StudentInformationTab from "./student-information-components/student-info
 //     return student;
 // };
 
-const StudentDetail = (): ReactElement => {
-    // const {
-    //     studentInfoData,
-    //     studentDesiredClassesData,
-    //     studentaCurrentClassesData,
-    // } = (formatData(studentDetail) as StudentDetailData) || null;
-    const [currentDiscount] = useState<number>(0);
-
+const StudentDetail = ({
+    studentDetail,
+}: {
+    studentDetail: OutputType | undefined;
+}): ReactElement => {
     return (
         <div className="w-[80%] min-h-[680px] pt-[90px]">
             <Card className="min-h-full">
                 <div className="grid grid-rows-6">
                     <StudentDetailHeader
-                        studentId={"3123123123123123123"}
-                        firstName={"___"}
-                        lastName={"___"}
-                        imageUrl={""}
+                        studentId={studentDetail?.id || "___"}
+                        firstName={studentDetail?.user.firstName || "___"}
+                        lastName={studentDetail?.user.lastName || "___"}
+                        imageUrl={studentDetail?.user.imageUrl}
                     />
                     <div className="row-span-5">
                         <Tabs
@@ -66,8 +65,32 @@ const StudentDetail = (): ReactElement => {
                             <StudentDetailTabslist />
                             <div className="col-span-3 pr-6">
                                 <StudentInformationTab
-                                    studentInfoData={undefined}
-                                    currentDiscount={currentDiscount}
+                                    studentInfoData={
+                                        studentDetail || {
+                                            discount: 0,
+                                            id: "___",
+                                            parents: [],
+                                            user: {
+                                                id: "___",
+                                                referId: "___",
+                                                email: "___",
+                                                createdAt: new Date(),
+                                                role: "STUDENT",
+                                                birthday: null,
+                                                deletedAt: null,
+                                                firstName: null,
+                                                gender: null,
+                                                identifyCard: null,
+                                                imageUrl: null,
+                                                lastName: null,
+                                                phoneNumber: null,
+                                                updatedAt: null,
+                                            },
+                                        }
+                                    }
+                                    currentDiscount={
+                                        studentDetail?.discount || 0
+                                    }
                                 />
                             </div>
                         </Tabs>

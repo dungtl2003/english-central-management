@@ -29,7 +29,7 @@ const StudentDetailHeader = ({
     studentId: string;
     firstName: string;
     lastName: string;
-    imageUrl: string;
+    imageUrl: string | null | undefined;
 }): ReactElement => {
     const [icon, setIcon] = React.useState<ReactElement>(<FaCopy />);
 
