@@ -47,7 +47,11 @@ export async function GET(
             throw new ApiError(401, `Account not found`);
         }
 
-        const units = await db.unit.findMany({});
+        const units = await db.unit.findMany({
+            include: {
+                classes: true,
+            },
+        });
 
         return NextResponse.json<GetResponsePayload>(units, {
             status: 200,

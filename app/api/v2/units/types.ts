@@ -1,8 +1,10 @@
 import {z} from "zod";
 import {PostRequestPayloadSchema} from "./schema";
-import {Unit} from "@prisma/client";
+import {Class, Unit} from "@prisma/client";
 
-export type GetResponsePayload = Unit[];
+export type GetResponsePayload = (Unit & {
+    classes: Class[];
+})[];
 
 export type PostResponsePayload = string;
 
