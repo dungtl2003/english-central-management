@@ -14,8 +14,8 @@ interface TableFilterProps {
 }
 
 const UnitListFilter = ({table}: TableFilterProps): ReactElement => {
-    const [filterType, _setFilterType] = React.useState("fullName");
-    const [selectedRadio, _setSelectedRadio] = React.useState("fullName");
+    const [filterType, _setFilterType] = React.useState("year");
+    const [selectedRadio, _setSelectedRadio] = React.useState("year");
     const searchBar = React.useRef<HTMLInputElement>(null);
     const handleRadioClick = (
         key: string,

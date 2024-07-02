@@ -9,7 +9,6 @@ import {
 import {ColumnDef, Table, flexRender} from "@tanstack/react-table";
 import {Table as T} from "@/components/ui/table";
 import {UnitListModel} from "./types";
-import {FaCheckCircle} from "react-icons/fa";
 
 interface TableContentProps {
     table: Table<UnitListModel>;
@@ -17,11 +16,6 @@ interface TableContentProps {
 }
 
 const UnitListContent = ({table, columns}: TableContentProps): ReactElement => {
-    function shortenString(input: string): string {
-        const shortened = `${input.slice(0, 12)}.....`;
-        return shortened;
-    }
-
     return (
         <div className="rounded-md border">
             <T>
@@ -49,48 +43,16 @@ const UnitListContent = ({table, columns}: TableContentProps): ReactElement => {
                         table.getRowModel().rows.map((row) => (
                             <TableRow key={row.id}>
                                 {row.getAllCells().map((cell) => {
-                                    const isFullNameColumn =
-                                        cell.column.id === "fullName";
-                                    const cn: string = isFullNameColumn
-                                        ? " text-left pl-7"
-                                        : "";
-                                    const isEmailColumn =
-                                        cell.column.id === "email";
-                                    const isDesiredClassColumn =
-                                        cell.column.id === "hasDesireClass";
-
-                                    let cellContent = flexRender(
+                                    const cellContent = flexRender(
                                         cell.column.columnDef.cell,
                                         cell.getContext()
                                     );
-
-                                    if (isEmailColumn) {
-                                        cellContent = shortenString(
-                                            cell.getValue() as string
-                                        );
-                                    } else if (isDesiredClassColumn) {
-                                        cellContent =
-                                            cell
-                                                .getValue<string>()
-                                                .toLowerCase() === "true" ? (
-                                                <div className="flex items-center justify-center">
-                                                    <FaCheckCircle size={25} />
-                                                </div>
-                                            ) : (
-                                                ""
-                                            );
-                                    }
                                     return (
                                         <TableCell
                                             key={cell.id}
-                                            className={"w-2/12" + cn}
+                                            className={"w-2/12"}
                                         >
-                                            {
-                                                /* {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext()
-                                            )} */ cellContent
-                                            }
+                                            {cellContent}
                                         </TableCell>
                                     );
                                 })}

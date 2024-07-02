@@ -1,4 +1,4 @@
-import React, {ReactElement} from "react";
+import React, {ReactElement, useMemo} from "react";
 import {
     Dialog,
     DialogContent,
@@ -20,6 +20,10 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
+import {UseActionOptions, useAction} from "@/hooks/use-action";
+import {OutputType} from "@/lib/action/admin/add-unit/types";
+import {toast} from "@/components/ui/use-toast";
+import {handler} from "@/lib/action/admin/add-unit/route";
 
 const formSchema = z.object({
     year: z.string(),
@@ -35,23 +39,48 @@ const formSchema = z.object({
 });
 
 const UnitListNewUnit = (): ReactElement => {
+    const event: UseActionOptions<OutputType> = useMemo(() => {
+        return {
+            onError: (error: string) => {
+                console.error("Error: ", error);
+                toast({
+                    title: "error",
+                    variant: "destructive",
+                    description: `Fail to create unit this teacher`,
+                });
+            },
+            onSuccess: () => {
+                toast({
+                    title: "Success",
+                    variant: "success",
+                    description: `Create unit successful`,
+                });
+                window.location.reload();
+            },
+        };
+    }, []);
+    const {execute} = useAction(handler, event);
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             year: new Date().getFullYear().toString(),
-            grade: "",
-            maxSessions: "",
-            maxStudents: "",
-            studyTime: {
-                hours: "",
-                minutes: "",
-                seconds: "",
-            },
-            pricePerSession: "",
         },
     });
+
     function onSubmit(values: z.infer<typeof formSchema>) {
         console.log(values);
+        const payloadData = {
+            year: Number(values.year),
+            grade: Number(values.grade),
+            maxSessions: Number(values.maxSessions),
+            maxStudents: Number(values.maxStudents),
+            pricePerSession: Number(values.pricePerSession),
+            studyHour: Number(values.studyTime.hours),
+            studyMinute: Number(values.studyTime.minutes),
+        };
+        console.debug(payloadData);
+        execute(payloadData);
     }
 
     const [open, setOpen] = React.useState(false);
@@ -77,7 +106,7 @@ const UnitListNewUnit = (): ReactElement => {
                 </DialogHeader>
                 <Form {...form}>
                     <form
-                        onSubmit={form.handleSubmit(onSubmit)}
+                        // onSubmit={form.handleSubmit(onSubmit)}
                         className="space-y-5"
                     >
                         <div className="grid grid-cols-2 gap-x-4">
@@ -112,6 +141,7 @@ const UnitListNewUnit = (): ReactElement => {
                                             <Input
                                                 className="dark:text-white text-black"
                                                 autoComplete="off"
+                                                type="number"
                                                 {...field}
                                             />
                                         </FormControl>
@@ -210,26 +240,6 @@ const UnitListNewUnit = (): ReactElement => {
                                                         </div>
                                                     )}
                                                 />
-                                                <div className="col-span-1 flex items-center justify-center text-xl font-bold">
-                                                    :
-                                                </div>
-                                                <Controller
-                                                    name="studyTime.seconds"
-                                                    control={form.control}
-                                                    render={({field}) => (
-                                                        <div className="col-span-3">
-                                                            <Input
-                                                                className="dark:text-white text-black text-right appearance-none"
-                                                                autoComplete="off"
-                                                                placeholder="00"
-                                                                type="number"
-                                                                min={0}
-                                                                max={59}
-                                                                {...field}
-                                                            />
-                                                        </div>
-                                                    )}
-                                                />
                                             </div>
                                         </FormControl>
                                         <FormMessage />
@@ -265,8 +275,12 @@ const UnitListNewUnit = (): ReactElement => {
                 <div className="flex place-content-evenly">
                     <Button
                         variant="success"
-                        type="submit"
-                        onClick={() => setOpen(false)}
+                        type="button"
+                        onClick={() => {
+                            console.debug("hello");
+                            onSubmit(form.getValues());
+                            //setOpen(false)
+                        }}
                     >
                         Create
                     </Button>

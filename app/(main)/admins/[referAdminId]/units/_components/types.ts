@@ -1,4 +1,5 @@
 export type UnitListModel = {
+    unitId: string;
     year: string;
     grade: string;
     maxSessions: string;
