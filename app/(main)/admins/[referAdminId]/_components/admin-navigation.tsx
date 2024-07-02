@@ -60,7 +60,7 @@ const AdminNavigation = () => {
                             </Link>
                             <Link
                                 className="mr-auto flex gap-x-2 "
-                                href="#"
+                                href="/admins/1/dashboard"
                                 legacyBehavior
                                 passHref
                             >
@@ -100,19 +100,24 @@ const AdminNavigation = () => {
                                             Manage teachers
                                         </DropdownMenuItem>
                                     </Link>
-                                    <Link href="/teachers/1/classes/1">
+                                    <Link href={currentURL + "/classes"}>
                                         <DropdownMenuItem>
                                             Manage classes
                                         </DropdownMenuItem>
                                     </Link>
-                                    <Link href="#">
+                                    <Link href="/admins/1/units">
                                         <DropdownMenuItem>
-                                            Manage parents
+                                            Manage units
                                         </DropdownMenuItem>
                                     </Link>
-                                    <Link href="#">
+                                    <Link href={currentURL + "/students"}>
                                         <DropdownMenuItem>
                                             Manage students
+                                        </DropdownMenuItem>
+                                    </Link>
+                                    <Link href={currentURL + "/parents"}>
+                                        <DropdownMenuItem>
+                                            Manage parents
                                         </DropdownMenuItem>
                                     </Link>
                                 </DropdownMenuContent>

@@ -17,6 +17,7 @@ export async function handler(data: InputType): Promise<ReturnType> {
             studyHour: data.studyHour,
             studyMinute: data.studyMinute,
             studySecond: 0,
+            pricePerSession: data.pricePerSession,
         } as PostRequestPayload;
 
         console.log(`Sending POST request to ${addUnitUrl}`);

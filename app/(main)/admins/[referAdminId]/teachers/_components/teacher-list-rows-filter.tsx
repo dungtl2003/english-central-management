@@ -10,10 +10,10 @@ import {ChevronDown} from "lucide-react";
 
 export const Status: string[] = ["All", "Teaching", "Pending", "Retired"];
 
-type TeacherListRowsFilterProps = {
+interface TeacherListRowsFilterProps {
     selectedStatus: string[];
     handleStatusChange: (status: string) => void;
-};
+}
 
 const TeacherListRowsFilter = ({
     selectedStatus,
