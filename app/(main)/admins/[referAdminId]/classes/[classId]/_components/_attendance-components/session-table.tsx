@@ -16,6 +16,7 @@ import {
 } from "@tanstack/react-table";
 import {SessionTableModel, SessionTableDictionary} from "./types";
 import {Button} from "@/components/ui/button";
+import {ArrowUpDown} from "lucide-react";
 
 function createColumns(
     key: string,
@@ -23,7 +24,17 @@ function createColumns(
 ): ColumnDef<SessionTableModel> {
     return {
         accessorKey: key,
-        header: () => <Button variant="ghost">{title}</Button>,
+        header: ({column}) => (
+            <Button
+                variant="ghost"
+                onClick={() =>
+                    column.toggleSorting(column.getIsSorted() !== "desc")
+                }
+            >
+                {title}
+                <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+        ),
     };
 }
 
