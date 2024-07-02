@@ -5,63 +5,48 @@ import {auth} from "@clerk/nextjs/server";
 import {ApiError} from "next/dist/server/api-utils";
 import {NextRequest, NextResponse} from "next/server";
 import {
-    GetResponsePayload,
+    AdminGetResponsePayload,
+    ParentGetResponsePayload,
     PostRequestPayload,
     PostResponsePayload,
 } from "./types";
 import {ErrorResponsePayload, UserRole} from "@/constaints";
 import {PostRequestPayloadSchema} from "./schema";
-import {addParent} from "./helper";
-import {db} from "@/lib/db";
+import {addParent, adminGetHandler, parentGetHandler} from "./helper";
 
 /**
- * Get students.
+ * Get parents.
  * Only admin can access this api.
  */
 export async function GET(
     req: NextRequest
-): Promise<NextResponse<GetResponsePayload | ErrorResponsePayload>> {
+): Promise<
+    NextResponse<
+        | AdminGetResponsePayload
+        | ParentGetResponsePayload
+        | ErrorResponsePayload
+    >
+> {
     console.log("Timestamp: ", new Date().toLocaleString());
     console.log("GET ", req.nextUrl.pathname);
 
+    const role: UserRole | null = getClerkRole();
+    let result: AdminGetResponsePayload | ParentGetResponsePayload;
     try {
-        const clerkUserId = auth().userId;
-        const role: UserRole | null = getClerkRole();
-
-        if (!clerkUserId) {
-            throw new ApiError(401, "No signed in user");
+        switch (role) {
+            case UserRole.ADMIN:
+                result = await adminGetHandler();
+                break;
+            case UserRole.PARENT:
+                result = await parentGetHandler();
+                break;
+            default:
+                throw new ApiError(400, "No right permission");
         }
 
-        if (!role || role !== UserRole.ADMIN) {
-            throw new ApiError(401, "No right permission");
-        }
-
-        const admin = await db.user.findFirst({
-            where: {
-                referId: clerkUserId,
-                role: UserRole.ADMIN,
-            },
-        });
-
-        if (!admin) {
-            throw new ApiError(401, `Account not found`);
-        }
-
-        const parents = await db.parent.findMany({
-            include: {
-                user: true,
-                children: true,
-            },
-        });
-
-        const result: GetResponsePayload = parents.map((s) => {
-            return {
-                ...s,
-                numberOfChildren: s.children.length,
-            };
-        });
-
-        return NextResponse.json<GetResponsePayload>(result, {status: 200});
+        return NextResponse.json<
+            AdminGetResponsePayload | ParentGetResponsePayload
+        >(result, {status: 200});
     } catch (error) {
         return buildErrorNextResponse(error);
     }
